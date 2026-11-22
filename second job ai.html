@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F6F8">
+<meta name="description" content="AI副业测试 —— 30 道题，用心理学六个维度，找到最适合你的 AI 副业路径。">
+<title>AI副业测试</title>
+<style>
+  :root{
+    --bg:#F4F6F8;
+    --surface:#FFFFFF;
+    --ink:#1F2B3A;
+    --muted:#74808E;
+    --line:#DFE6ED;
+    --accent:#2D547F;
+    --accent-soft:#E8F0F7;
+    --gold:#A88455;
+    --gold-soft:#F7F0E3;
+    --shadow:0 12px 34px rgba(70,56,38,.06);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(900px 520px at 12% -10%,#FFFFFF 0%,rgba(255,255,255,0) 62%),var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;position:relative;overflow-x:hidden;
+  }
+  .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(72px);opacity:.38;animation:drift 22s ease-in-out infinite alternate}
+  .orb.a{width:300px;height:300px;background:#DCE8F4;top:-110px;left:-100px}
+  .orb.b{width:250px;height:250px;background:#DFE8F0;bottom:6%;right:-120px;animation-delay:-7s}
+  .orb.c{width:200px;height:200px;background:#DDE6EF;top:44%;left:-140px;animation-delay:-13s}
+  @keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(28px,34px,0) scale(1.13)}}
+  button{font:inherit;cursor:pointer}
+  .app{position:relative;z-index:1;max-width:520px;min-height:100vh;margin:0 auto;padding:0 22px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+  .topbar{height:66px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--ink)}
+  .brand-mark{width:25px;height:25px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:0;animation:breathe 4.4s ease-in-out infinite;font-family:"Noto Serif SC","Songti SC",serif}
+  @keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(45,84,127,.22)}50%{transform:scale(1.07);box-shadow:0 0 0 7px rgba(45,84,127,0)}}
+  .top-hint{font-size:11px;color:var(--muted);letter-spacing:.1em}
+  main{flex:1 1 auto;padding-top:26px}
+  .screen{display:none}
+  .screen.active{display:block;animation:rise .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  #intro > *{animation:staggerIn .68s cubic-bezier(.22,1,.36,1) backwards}
+  #intro > *:nth-child(1){animation-delay:.04s}
+  #intro > *:nth-child(2){animation-delay:.10s}
+  #intro > *:nth-child(3){animation-delay:.16s}
+  #intro > *:nth-child(4){animation-delay:.22s}
+  #intro > *:nth-child(5){animation-delay:.28s}
+  #intro > *:nth-child(6){animation-delay:.34s}
+  #intro > *:nth-child(7){animation-delay:.40s}
+  #intro > *:nth-child(8){animation-delay:.46s}
+  @keyframes staggerIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  #intro > .title-rule{animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+
+  /* 首页 */
+  .eyebrow{font-size:10px;letter-spacing:.24em;color:var(--accent);margin:34px 0 18px}
+  .title{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-size:42px;line-height:1.24;font-weight:600;letter-spacing:.03em;margin:0}
+  .title-rule{width:42px;height:2px;background:var(--accent);margin:22px 0 20px;transform-origin:left center;animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes growRule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .lead{font-size:14px;line-height:1.9;color:var(--muted);margin:0;max-width:350px}
+  .meta{display:flex;gap:16px;margin:26px 0 40px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .meta span{display:flex;align-items:center;gap:6px}
+  .meta i{width:3px;height:3px;border-radius:50%;background:var(--accent);display:inline-block}
+  .promise{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 26px}
+  .promise .ph{font-size:11px;letter-spacing:.16em;color:var(--accent);margin-bottom:10px}
+  .promise p{margin:0 0 8px;font-size:12.5px;line-height:1.8;color:#5A6775}
+  .promise p:last-child{margin-bottom:0}
+  .primary{width:100%;height:56px;border:0;border-radius:14px;background:var(--ink);color:#fff;font-size:14px;letter-spacing:.18em;transition:transform .18s,opacity .18s}
+  .primary:active{transform:scale(.985)}
+  .primary:disabled{opacity:.36;cursor:not-allowed}
+  .fine-print{font-size:11px;line-height:1.8;color:#9AA5B0;text-align:center;margin-top:16px}
+
+  /* 答题 */
+  .progress-track{height:3px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:6px}
+  .progress-fill{position:relative;overflow:hidden;height:100%;width:0;background:var(--accent);border-radius:9px;transition:width .42s cubic-bezier(.22,1,.36,1)}
+  .progress-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:sheen 2.4s linear infinite}
+  @keyframes sheen{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .quiz-head{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
+  .step{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+  .step strong{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;color:var(--ink);font-weight:600}
+  .dim-chip{font-size:11px;color:var(--accent);background:var(--accent-soft);padding:6px 11px;border-radius:20px;letter-spacing:.04em}
+  .question{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;line-height:1.62;font-weight:600;margin:6px 0 26px}
+  .question.swap{animation:questionSwap .42s cubic-bezier(.22,1,.36,1)}
+  @keyframes questionSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .options{display:flex;flex-direction:column;gap:11px}
+  .option{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 16px;text-align:left;color:var(--ink);font-size:14px;line-height:1.6;transition:border-color .2s,background .2s,transform .18s,box-shadow .2s;animation:optionIn .45s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes optionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .option:hover{border-color:#B9CFE3;transform:translateX(3px)}
+  .option:active{transform:scale(.985)}
+  .option .key{flex:0 0 28px;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);transition:all .2s}
+  .option.selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 6px 18px rgba(154,106,60,.09)}
+  .option.selected .key{background:var(--accent);border-color:var(--accent);color:#fff;animation:keyPop .42s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes keyPop{0%{transform:scale(.65)}60%{transform:scale(1.16)}100%{transform:scale(1)}}
+  .nav{display:flex;gap:12px;margin-top:30px}
+  .ghost{flex:0 0 96px;height:50px;border-radius:13px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px}
+  .ghost:disabled{opacity:.35;cursor:not-allowed}
+  .nav .primary{flex:1;height:50px}
+
+  /* 结果 */
+  #result > *{animation:resultIn .62s cubic-bezier(.22,1,.36,1) backwards}
+  #result > *:nth-child(1){animation-delay:.04s}
+  #result > *:nth-child(2){animation-delay:.09s}
+  #result > *:nth-child(3){animation-delay:.14s}
+  #result > *:nth-child(4){animation-delay:.19s}
+  #result > *:nth-child(5){animation-delay:.24s}
+  #result > *:nth-child(6){animation-delay:.29s}
+  #result > *:nth-child(7){animation-delay:.34s}
+  #result > *:nth-child(8){animation-delay:.39s}
+  #result > *:nth-child(9){animation-delay:.44s}
+  #result > *:nth-child(10){animation-delay:.49s}
+  #result > *:nth-child(11){animation-delay:.54s}
+  #result > *:nth-child(12){animation-delay:.59s}
+  #result > *:nth-child(13){animation-delay:.64s}
+  #result > *:nth-child(14){animation-delay:.69s}
+  #result > *:nth-child(15){animation-delay:.74s}
+  @keyframes resultIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .result-label{text-align:center;font-size:11px;letter-spacing:.3em;color:var(--muted);margin-top:12px}
+  .hero{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:30px 22px 26px;text-align:center;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .hero-emoji{font-size:52px;line-height:1;display:block;margin-bottom:12px;animation:emojiPop .7s .12s cubic-bezier(.34,1.56,.64,1) backwards}
+  @keyframes emojiPop{from{opacity:0;transform:scale(.5) rotate(-12deg)}to{opacity:1;transform:none}}
+  .hero-name{font-family:"Noto Serif SC","Songti SC",serif;font-size:30px;font-weight:600;letter-spacing:.06em;margin:0;color:var(--ink)}
+  .hero-era{font-size:11px;color:var(--muted);letter-spacing:.1em;margin-top:8px}
+  .rarity{display:inline-block;margin-top:12px;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:.14em;background:var(--accent-soft);color:var(--accent)}
+  .rarity.gold{background:var(--gold-soft);color:var(--gold)}
+  .hero-tag{font-size:13px;line-height:1.8;color:var(--muted);margin:14px auto 0;max-width:310px}
+  .match-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px}
+  .match-num{font-family:"Noto Serif SC","Songti SC",serif;font-size:34px;font-weight:600;line-height:1;color:var(--accent)}
+  .match-num small{font-size:16px}
+  .match-cap{font-size:11px;color:var(--muted);text-align:left;letter-spacing:.08em;line-height:1.5}
+
+  .block{margin-top:30px}
+  .block h3{font-family:"Noto Serif SC","Songti SC",serif;font-size:17px;font-weight:600;letter-spacing:.05em;margin:0 0 14px;padding-left:12px;border-left:2px solid var(--accent)}
+  .block p{font-size:13.5px;line-height:2;color:#4E5B69;margin:0 0 12px}
+  .block p b{color:var(--ink);font-weight:600}
+  .radar-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 12px 10px;text-align:center}
+  .radar-wrap svg{width:100%;max-width:320px;height:auto;display:block;margin:0 auto}
+  .radar-shape{opacity:0;transform-origin:160px 142px;animation:radarIn .85s .25s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes radarIn{from{opacity:0;transform:scale(.35)}to{opacity:1;transform:scale(1)}}
+  .radar-note{font-size:11px;color:var(--muted);margin-top:2px;padding-bottom:6px}
+  .dim-row{margin-bottom:15px}
+  .dim-top{display:flex;justify-content:space-between;font-size:12px;color:#4E5B69;margin-bottom:7px}
+  .dim-top span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+  .dim-track{height:5px;background:#E7EDF3;border-radius:5px;overflow:hidden}
+  .dim-fill{height:100%;border-radius:5px;background:var(--accent);width:0;transition:width .9s cubic-bezier(.22,1,.36,1)}
+  .dim-fill.low{background:#8FA3B8}
+  .duo{display:flex;flex-direction:column;gap:12px}
+  .duo-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+  .duo-card .dh{font-size:11px;letter-spacing:.16em;color:var(--accent);margin-bottom:8px}
+  .duo-card.alt .dh{color:var(--gold)}
+  .duo-card p{font-size:13px;line-height:1.9;color:#4E5B69;margin:0}
+  .bio{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px 18px}
+  .bio p{font-size:13px;line-height:1.95;color:#4E5B69;margin:0 0 12px}
+  .quote{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;line-height:1.8;color:var(--accent);text-align:center;padding:12px 8px 2px;border-top:1px solid var(--line)}
+  .scene{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:11px;font-size:12.5px;line-height:1.9;color:#4E5B69;position:relative;padding-left:40px}
+  .scene:before{content:attr(data-n);position:absolute;left:14px;top:15px;width:18px;height:18px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .guide{margin:0;padding:0;list-style:none;counter-reset:g}
+  .guide li{position:relative;padding-left:30px;margin-bottom:13px;font-size:13px;line-height:1.85;color:#4E5B69}
+  .guide li:before{counter-increment:g;content:counter(g);position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .summary-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .summary-lead{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;line-height:1.85;color:#2B3A4B;margin:0 0 14px}
+  .summary-lead b{color:var(--accent);font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:11px;padding:6px 10px;border-radius:8px;background:#EDF2F7;border:1px solid var(--line);color:#677586;font-variant-numeric:tabular-nums}
+  .chip.hi{background:var(--accent-soft);border-color:#C8DCEC;color:var(--accent)}
+  .chip.lo{background:#E9EEF3;color:#8D99A6}
+  .insight{border-top:1px solid var(--line);padding-top:15px;margin-top:16px}
+  .insight:first-child{border-top:0;padding-top:0;margin-top:0}
+  .insight h4{font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--ink);margin:0 0 8px;padding-left:10px;border-left:2px solid var(--gold)}
+  .insight p{font-size:13.5px;line-height:2;color:#4E5B69;margin:0 0 10px}
+  .insight p:last-child{margin-bottom:0}
+  .insight b{color:var(--ink);font-weight:600}
+  .dim-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-bottom:12px}
+  .dim-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+  .dim-card-head .dn{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;font-weight:600;color:var(--ink)}
+  .dim-card-head .ds{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .level{padding:3px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:10px;letter-spacing:.06em}
+  .level.mid{background:#F0F3F7;color:#7E8B99}
+  .level.lo{background:#E9EEF3;color:#8D99A6}
+  .dim-card p{font-size:12.5px;line-height:1.9;color:#5B574F;margin:0 0 7px}
+  .dim-card p:last-child{margin-bottom:0}
+  .dim-card p em{font-style:normal;color:var(--accent);font-weight:600}
+  .method{background:#EDF2F7;border-radius:12px;padding:15px 17px}
+  .method p{font-size:12px;line-height:1.95;color:#677586;margin:0 0 9px}
+  .method p:last-child{margin-bottom:0}
+  .method b{color:#2B3A4B;font-weight:600}
+  .path-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-bottom:12px}
+  .path-name{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;font-weight:600;color:var(--ink);margin:0 0 9px}
+  .path-card p{font-size:12.5px;line-height:1.9;color:#4E5B69;margin:0 0 6px}
+  .path-card p b{color:var(--accent);font-weight:600}
+  .path-card p:last-child{margin-bottom:0}
+  .roadmap{position:relative;padding-left:22px}
+  .roadmap:before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line)}
+  .roadmap-item{position:relative;margin-bottom:16px;font-size:13px;line-height:1.9;color:#4E5B69}
+  .roadmap-item:last-child{margin-bottom:0}
+  .roadmap-item:before{content:"";position:absolute;left:-21px;top:8px;width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+  .share-btn{width:100%;height:50px;border-radius:13px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:13px;letter-spacing:.1em;transition:background .2s,transform .18s}
+  .share-btn:active{transform:scale(.985)}
+  .share-btn.done{background:var(--accent-soft)}
+  .disclaimer{margin-top:28px;padding:14px 16px;border:1px dashed var(--line);border-radius:12px;font-size:11px;line-height:1.8;color:#9AA5B0}
+  .restart{margin-top:14px}
+  .analyzing{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(245,242,234,.96);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .38s,visibility .38s}
+  .analyzing.show{opacity:1;visibility:visible}
+  .analyzing .ring{width:74px;height:74px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1.05s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .analyzing .ring-wrap{position:relative;width:74px;height:74px}
+  .analyzing .ring-wrap:after{content:"";position:absolute;inset:12px;border-radius:50%;border:1px solid var(--line);animation:spin 1.8s linear infinite reverse}
+  .analyzing p{margin:24px 0 0;font-size:12px;letter-spacing:.2em;color:var(--muted);animation:pulseText 1.5s ease-in-out infinite}
+  @keyframes pulseText{0%,100%{opacity:.45}50%{opacity:1}}
+  .footer-note{flex:0 0 auto;text-align:center;font-size:10px;color:#AEB8C2;letter-spacing:.1em;padding-top:26px}
+  @media (max-width:360px){
+    .title{font-size:35px}
+    .question{font-size:19px}
+    .hero-name{font-size:25px}
+    .app{padding-left:18px;padding-right:18px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
+<div class="analyzing" id="analyzing" aria-live="polite">
+  <div class="ring-wrap"><div class="ring"></div></div>
+  <p>正在分析你的副业人格</p>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">AI</span><span>SIDE HUSTLE LAB</span></div>
+    <div class="top-hint" id="topHint">副业测评 · 01</div>
+  </header>
+
+  <main>
+    <section class="screen active" id="intro">
+      <div class="eyebrow">A PSYCHOLOGICAL MAP FOR YOUR SIDE HUSTLE</div>
+      <h1 class="title">AI副业<br>适配测试</h1>
+      <div class="title-rule"></div>
+      <p class="lead">AI 工具人人都有，但真正能变现的路径因人而异。30 道题，从职业心理学出发，找到与你性格最匹配的副业原型。</p>
+      <div class="meta">
+        <span><i></i>30 道选择题</span>
+        <span><i></i>约 4 分钟</span>
+        <span><i></i>12 种副业原型</span>
+      </div>
+      <div class="promise">
+        <div class="ph">关于这个测试</div>
+        <p>它不测智商，也不承诺暴富——只看你在具体处境中的本能反应。</p>
+        <p>六个维度取自技术自我效能、创业机会识别、主动性人格、表达力、模糊容忍度与成就动机；结果按人格轮廓匹配副业原型。</p>
+        <p>你得到的不只是一个结果，而是一份可执行的起步路线。</p>
+      </div>
+      <button class="primary" id="startBtn" type="button">开始测评</button>
+      <div class="fine-print">答案只在本机计算，不会上传。结果仅供自我探索参考。</div>
+    </section>
+
+    <section class="screen" id="quiz">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="quiz-head">
+        <div class="step">第 <strong id="stepNow">01</strong> / 30 题</div>
+        <div class="dim-chip">跟随直觉 · 不必深思</div>
+      </div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+      <div class="nav">
+        <button class="ghost" id="prevBtn" type="button">上一题</button>
+        <button class="primary" id="nextBtn" type="button" disabled>下一题</button>
+      </div>
+    </section>
+
+    <section class="screen" id="result">
+      <div class="result-label">YOUR SIDE HUSTLE ARCHETYPE</div>
+      <div class="hero">
+        <span class="hero-emoji" id="heroEmoji">🤖</span>
+        <h2 class="hero-name" id="heroName"></h2>
+        <div class="hero-era" id="heroEra"></div>
+        <div class="rarity" id="heroRarity"></div>
+        <div class="hero-tag" id="heroTag"></div>
+        <div class="match-row">
+          <div class="match-num"><span id="matchNum">0</span><small>%</small></div>
+          <div class="match-cap">副业原型<br>契合度</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>01 · 人格概览</h3>
+        <div class="summary-card">
+          <p class="summary-lead" id="summaryLead"></p>
+          <div class="chips" id="summaryChips"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>02 · 六维人格剖面</h3>
+        <div class="radar-wrap">
+          <div id="radar"></div>
+          <div class="radar-note">数值越高，代表该维度倾向越明显</div>
+        </div>
+        <div style="height:18px"></div>
+        <div id="dimList"></div>
+      </div>
+
+      <div class="block">
+        <h3>03 · 深度心理分析</h3>
+        <div id="analysis"></div>
+      </div>
+
+      <div class="block">
+        <h3>04 · 逐维度解读</h3>
+        <div id="dimCards"></div>
+      </div>
+
+      <div class="block">
+        <h3>05 · 你的优势与盲点</h3>
+        <div class="duo">
+          <div class="duo-card">
+            <div class="dh">你最有力的部分</div>
+            <p id="strengthText"></p>
+          </div>
+          <div class="duo-card alt">
+            <div class="dh">容易忽略的部分</div>
+            <p id="blindText"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>06 · 适合你的副业方向</h3>
+        <div id="pathList"></div>
+      </div>
+
+      <div class="block">
+        <h3>07 · 起步路线图</h3>
+        <div class="roadmap" id="roadmapList"></div>
+      </div>
+
+      <div class="block">
+        <h3>08 · 这类副业者靠什么赚钱</h3>
+        <div class="bio">
+          <p id="bioText"></p>
+          <div class="quote" id="quoteText"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>09 · 这些场景，你是不是很熟悉</h3>
+        <div id="sceneList"></div>
+      </div>
+
+      <div class="block">
+        <h3>10 · 给你的三条建议</h3>
+        <ul class="guide" id="guideList"></ul>
+      </div>
+
+      <div class="block">
+        <h3>11 · 测评方法说明</h3>
+        <div class="method" id="methodNote"></div>
+      </div>
+
+      <div class="block">
+        <button class="share-btn" id="shareBtn" type="button">复制专属分享文案</button>
+        <button class="primary restart" id="restartBtn" type="button">重新测一次</button>
+        <div class="disclaimer">本测试为趣味自我探索工具，维度设计参考技术自我效能感、创业机会识别、主动性人格、模糊容忍度与成就动机等研究，但并非标准化心理测量或投资建议，结果不保证任何收入。原型没有优劣之分，请把它当作认识自己与规划起步的一个入口。</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-note">工具是共同的，路径是你自己的</div>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  var dimNames = ["工具效能","机会嗅觉","行动执行","内容表达","风险耐受","变现实力"];
+
+  var questions = [
+    {d:"工具效能",q:"遇到一个重复繁琐的工作任务，你的第一反应是？",o:[["忍一忍，人工做完",0],["看看有没有现成模板",1],["搜一下有没有 AI 能帮我做",2],["先试 AI，不行再自己搭个自动化流程",3]]},
+    {d:"机会嗅觉",q:"刷到一个新工具或新玩法，你通常会？",o:[["划过去，跟我无关",0],["看个热闹",1],["收藏，改天再看",2],["马上想谁能用、怎么变成收入",3]]},
+    {d:"行动执行",q:"想到一个副业点子，你通常怎么做？",o:[["想想就算了",0],["过几天再说",1],["列个计划，等有空开始",2],["今晚就做出一个最小版本",3]]},
+    {d:"内容表达",q:"要把一个复杂概念讲给外行，你会？",o:[["写不明白，也懒得写",0],["能写，但别人常看不懂",1],["能举例子讲清楚",2],["能写成一篇有人转发的内容",3]]},
+    {d:"风险耐受",q:"副业前三个月没有任何收入，你会？",o:[["立刻放弃",0],["很焦虑，想退出",1],["能撑，但会怀疑自己",2],["当成正常成本，继续验证",3]]},
+    {d:"变现实力",q:"做出一个有用的小工具，你会先想什么？",o:[["自己用就行",0],["免费分享给大家",1],["看看能不能收点小钱",2],["设计定价和交付方式",3]]},
+
+    {d:"工具效能",q:"你使用 AI 工具的频率更接近？",o:[["几乎没用过",0],["偶尔试一试",1],["每周都会用几次",2],["已经融入日常工作流",3]]},
+    {d:"机会嗅觉",q:"判断一个副业机会值不值得做，你最看重？",o:[["别人都在做",0],["听起来很轻松",1],["我能不能学会",2],["谁会为它付钱、我能否持续交付",3]]},
+    {d:"行动执行",q:"计划做副业，但下班后很累，你会？",o:[["今天就算了",0],["刷会手机再说",1],["做一点最简单的动作",2],["按固定时段推进，不靠状态",3]]},
+    {d:"内容表达",q:"你愿意在公开平台持续输出内容吗？",o:[["绝不，太尴尬",0],["只在熟人圈发发",1],["可以匿名写",2],["愿意露出本人，长期经营",3]]},
+    {d:"风险耐受",q:"要用一笔钱试错，可能全亏，你会？",o:[["一分钱都不投",0],["只投极少量",1],["设个上限，亏完就停",2],["按计划分批投入，及时止损",3]]},
+    {d:"变现实力",q:"有人夸你的内容或工具好用，你会？",o:[["谢谢就完了",0],["开心，但不好意思收费",1],["会想能不能做个付费版",2],["顺势推出付费产品并收集反馈",3]]},
+
+    {d:"工具效能",q:"同一个 AI 工具用了三次结果都不满意，你会？",o:[["放弃，这东西不适合我",0],["换一个工具碰碰运气",1],["调整提问方式再试",2],["拆成小步骤，逐段优化提示词",3]]},
+    {d:"机会嗅觉",q:"你发现别人需求的方式更像？",o:[["等别人告诉我",0],["看热门榜单",1],["留意身边人的抱怨",2],["主动找陌生用户聊天，验证痛点",3]]},
+    {d:"行动执行",q:"你的待办清单里，长期未完成的事？",o:[["很多，已经习惯了",0],["有一些，偶尔想起来",1],["不多，会定期清理",2],["基本没有，做完才划掉",3]]},
+    {d:"内容表达",q:"你做的东西，别人通常怎么评价？",o:[["不太看",0],["说还行，但没印象",1],["说挺清楚的",2],["说一看就知道是你的风格",3]]},
+    {d:"风险耐受",q:"同时有几个方向都不确定，你会？",o:[["选最安全的",0],["纠结很久，最后不选",1],["选一个先试",2],["用小成本并行测几个",3]]},
+    {d:"变现实力",q:"关于「先免费还是先收费」，你更倾向？",o:[["永远免费",0],["免费为主，偶尔收",1],["先免费积累，再转付费",2],["尽早收费，用付费验证价值",3]]},
+
+    {d:"工具效能",q:"看到别人用 AI 做出很厉害的东西，你的第一反应是？",o:[["这跟我没关系",0],["挺厉害，但我学不会",1],["想问问他怎么做到的",2],["打算照着拆解复现一遍",3]]},
+    {d:"机会嗅觉",q:"面对一个模糊的新领域，你通常会？",o:[["完全不想碰",0],["观望，等别人验证",1],["先了解大概情况",2],["抢先试错，哪怕只有六成把握",3]]},
+    {d:"行动执行",q:"一个项目做到一半没反馈，你会？",o:[["没人理就算了",0],["停在那里等",1],["问问别人怎么看",2],["自己先发布，再根据反馈改",3]]},
+    {d:"内容表达",q:"配图、排版、标题这些细节，你通常会？",o:[["完全不管",0],["随便弄弄",1],["会花点时间调整",2],["会反复打磨到满意",3]]},
+    {d:"风险耐受",q:"公开作品被负面评价，你会？",o:[["直接删号",0],["难受很久，不敢再看",1],["看看有没有道理",2],["当作数据，继续迭代",3]]},
+    {d:"变现实力",q:"做副业时，你的收入目标更接近？",o:[["没想过",0],["有点零花钱就行",1],["稳定每月一笔",2],["做成可持续的第二收入曲线",3]]},
+
+    {d:"工具效能",q:"关于 AI 与你专业能力的关系，你更认同？",o:[["AI 会取代我这类工作",0],["AI 只是噱头",1],["AI 能帮我省些时间",2],["AI 是杠杆，能放大我的专业",3]]},
+    {d:"机会嗅觉",q:"你更相信哪句话？",o:[["风口都是骗人的",0],["机会属于运气好的人",1],["机会藏在变化里",2],["机会是观察加验证试出来的",3]]},
+    {d:"行动执行",q:"别人评价你「执行力强」，你觉得？",o:[["不太准确",0],["有时吧",1],["基本是",2],["这是我被认可最多的地方",3]]},
+    {d:"内容表达",q:"你更擅长哪种表达方式？",o:[["不太表达",0],["只跟熟悉的人聊",1],["文字或口头都能来",2],["写、说、拍都能，且有人愿意看",3]]},
+    {d:"风险耐受",q:"你更认同下面哪句话？",o:[["不冒险就不会输",0],["稳定比什么都重要",1],["小步试错可以接受",2],["不确定性是收益的来源",3]]},
+    {d:"变现实力",q:"收到第一笔副业收入时，你最可能？",o:[["觉得意外，不太敢信",0],["花掉，没规划",1],["记下来，鼓励自己",2],["复盘为什么成交，然后复制",3]]}
+  ];
+
+  var dimInfo = {
+    "工具效能":{
+      high:"你的技术自我效能感很高：相信自己能驾驭工具，遇到陌生功能也更愿意拆解尝试。",
+      mid:"你对工具保持实用态度，愿意用，但不会把学习新技术当成乐趣。",
+      low:"你对新工具存在距离感，更依赖熟悉的方法，学习成本是你主要的阻力。",
+      drive:"你愿意把重复劳动交给系统，并享受跑通流程那一刻的清爽",
+      cost:"容易沉迷工具本身，忘了用户只为结果付钱",
+      behaviorHigh:"看到新工具上线，你会当晚注册试一遍，并想清楚它能替掉哪一步。",
+      behaviorLow:"新工具出来你先观望，等身边的人用熟了、确认有用才愿意试。",
+      advice:"每次做完一个自动化，补一段三句话说明：解决什么、怎么用、多少钱。"
+    },
+    "机会嗅觉":{
+      high:"你的创业警觉性突出，习惯在变化和抱怨里识别未被满足的需求。",
+      mid:"你能看到机会，但通常需要别人先验证一遍才敢跟进。",
+      low:"你更关注确定性，对模糊信号不敏感，机会常在你犹豫时过去。",
+      drive:"你会主动扫描变化，并把「谁愿意付钱」当成判断的起点",
+      cost:"机会看得太多，容易同时开着好几个坑，没有一个挖到底",
+      behaviorHigh:"刷到一个新玩法，你会马上想谁能用、谁能为此付钱。",
+      behaviorLow:"新东西出来你先看热闹，除非有人明确告诉你它能赚钱。",
+      advice:"给每个新点子设一个验证门槛：找到三个真实用户再投入时间。"
+    },
+    "行动执行":{
+      high:"你的主动性人格与尽责性都较强，不靠状态也能稳定推进。",
+      mid:"你能启动，但持久性依赖外部反馈和日程结构。",
+      low:"想法多落地少，计划常停在「等有空」的阶段。",
+      drive:"你习惯把想法切成今天就能动手的一小步",
+      cost:"长期没有正反馈时容易停摆，需要外部结构帮你兜底",
+      behaviorHigh:"想到点子当晚就做出一个粗糙版本，而不是继续想。",
+      behaviorLow:"点子很多，但你总说等准备好了、等有空了再开始。",
+      advice:"把副业时间固定成日程，不靠灵感启动，只靠位置启动。"
+    },
+    "内容表达":{
+      high:"你的符号化表达能力强，能把复杂东西变成别人愿意看、愿意转的内容。",
+      mid:"你能把事情讲清楚，但还没形成稳定的个人风格。",
+      low:"你更擅长做而不是说，成果常常好用却不好讲。",
+      drive:"你相信被看见才有价值，愿意持续输出并打磨表达",
+      cost:"过度在意呈现，有时会把时间花在包装而非验证上",
+      behaviorHigh:"你能把一个概念写成有人主动转发的内容，并有自己的风格。",
+      behaviorLow:"你做出的东西很好用，但介绍时只说「你试试就知道了」。",
+      advice:"每周固定输出一条内容，先完成再完美，风格是写出来的。"
+    },
+    "风险耐受":{
+      high:"你的模糊容忍度高，能在没有确定回报时继续投入，并设好止损线。",
+      mid:"你接受小步试错，但不确定性明显上升时会变保守。",
+      low:"你对损失高度敏感，宁可错过也不愿承担试错成本。",
+      drive:"你把不确定性当成信息源，用小成本换真实反馈",
+      cost:"过于耐受风险时会低估沉没成本，迟迟不肯停手",
+      behaviorHigh:"三个月没收入你也能继续验证，因为你知道这是成本不是失败。",
+      behaviorLow:"刚投入一点没看到结果，你就会想是不是该算了。",
+      advice:"开始前写下止损线：最多投多少钱、多少时间，到线就停。"
+    },
+    "变现实力":{
+      high:"你的成就动机与价值捕获意识都强，习惯尽早收费并用成交验证价值。",
+      mid:"你知道要变现，但不好意思开口，定价常偏低。",
+      low:"你更容易免费付出，把「被需要」当成回报，忽略商业闭环。",
+      drive:"你会主动设计定价和交付方式，让价值换成可持续收入",
+      cost:"过早追求变现可能损伤信任，尤其在还没证明效果的阶段",
+      behaviorHigh:"做出有用工具后，你第一反应是设计定价和交付方式。",
+      behaviorLow:"别人夸你好用，你只说谢谢，不好意思收钱。",
+      advice:"给第一个产品定一个明确价格，哪怕只有九块九，也别免费。"
+    }
+  };
+
+  var figures = [
+    {
+      name:"AI工具驯兽师",era:"典型赛道 · 提示词与自动化",symbol:"🛠️",tag:"把重复劳动交给系统的人",rarity:"SSR",gold:false,
+      v:[98,78,82,45,62,70],
+      core:"你的轮廓以极高的<strong>技术自我效能感</strong>为核心：你相信自己能驾驭工具，遇到陌生功能也更愿意拆解尝试。机会嗅觉与行动执行都不低，说明你不仅能搭出来，也知道拿去哪里用。内容表达相对靠后，意味着你的成果常常好用但不好讲。",
+      strength:"把模糊需求翻译成可运行流程的能力。同样一个工具，在你手里能变成稳定产出。",
+      blind:"容易沉迷工具本身。你可能会不断升级系统，却忘了用户只为结果付钱，不为你的自动化程度付钱。",
+      bio:"这条路线的变现方式通常有三类：卖提示词与模板包、为企业搭自动化工作流、做工具教学与陪跑。你真正的壁垒不是会哪个工具，而是把行业经验沉淀成可复用的流程。",
+      quote:"「工具的价值不在于多先进，而在于它替谁省下了什么。」",
+      scenes:["同事还在复制粘贴，你已经写了个脚本批量处理。","看到新工具上线，你会当晚就注册试一遍。","你做的东西很好用，但介绍起来只说「你试试就知道了」。"],
+      guide:["每次做完一个自动化，补一段三句话说明：解决什么、怎么用、多少钱。","把工具熟练度换算成客户省下的小时数，这是你的定价依据。","每月只学一个新工具，把其余时间用来交付。"],
+      paths:[{n:"提示词与模板包",d:"门槛低、启动快，适合已有明确场景的人。",s:"整理你最常用的 10 个提示词，写成可复制模板。",m:"定价 9.9–39 元，在内容平台与社群分发。"},{n:"自动化工作流搭建",d:"客单价高，需要理解对方业务流程。",s:"免费帮熟人梳理一个流程，做成前后对比案例。",m:"按项目收费，从 500 元起逐步上涨。"},{n:"工具教学与陪跑",d:"边际成本低，依赖表达能力。",s:"录一段三分钟实操视频，看有没有人问下一步。",m:"小课 49–199 元，或按次陪跑收费。"}],
+      roadmap:["第 1 周 · 定位：列出你最熟练的 3 个工具场景，挑一个能在一小时内见效的。","第 1 个月 · 验证：做出一个可展示的最小成果，发给 10 个潜在用户看反应。","第 3 个月 · 放大：把跑通的流程做成模板或课程，从一次性交付转向可复制产品。"]
+    },
+    {
+      name:"内容炼金术师",era:"典型赛道 · AI 辅助内容创作",symbol:"✍️",tag:"把想法写成有人追着看的内容",rarity:"SSR",gold:false,
+      v:[75,72,70,98,58,76],
+      core:"你的核心优势是<strong>高表达力</strong>，配合较高的工具效能与机会嗅觉。这说明你既能把内容做出来，也知道该投向哪里。风险耐受中等意味着数据波动会影响你的状态；变现实力较高，说明你具备把影响力转成收入的意识。",
+      strength:"把复杂信息转化为有情绪、有节奏、可传播的内容。这是 AI 最难替代的部分。",
+      blind:"容易陷入数据焦虑。阅读量一低就怀疑自己，反而破坏最需要的稳定输出。",
+      bio:"这条路线常见模式：用 AI 做选题与初稿，自己负责判断、改写和人格化表达；收入来自平台分成、商业稿件、付费专栏与社群。你的护城河是审美和视角，不是产量。",
+      quote:"「读者记住的从来不是信息量，而是你替他说出的那句话。」",
+      scenes:["你有一堆草稿，AI 帮你理顺后你再重写一遍才满意。","看到别人爆款，你会拆结构而不是单纯羡慕。","写完一篇你会改好几遍标题，直到它像一句话。"],
+      guide:["固定一个垂直主题，别在不同赛道之间反复横跳。","把爆款拆成结构清单，而不是逐句模仿。","给自己设一个不看成数据的创作时段。"],
+      paths:[{n:"内容账号与平台分成",d:"启动成本最低，但回报周期长。",s:"选一个你能持续写 30 天的主题，先写满 10 篇。",m:"平台流量分成、商业合作与私域转化。"},{n:"商业稿件与代运营",d:"变现快，需要对接客户。",s:"准备三篇样稿，主动联系五个小品牌。",m:"按篇 300–1500 元，或按月包干。"},{n:"付费专栏与写作课",d:"依赖个人影响力积累。",s:"先把免费内容做扎实，再开放付费社群。",m:"专栏 49–199 元，课程 199–599 元。"}],
+      roadmap:["第 1 周 · 定位：选定一个垂直主题，写 3 篇你最想读的内容。","第 1 个月 · 验证：连续输出 20 篇，找出数据最好与最差的各一篇并分析原因。","第 3 个月 · 放大：把表现最好的主题做成系列，同时试探一种变现方式。"]
+    },
+    {
+      name:"数字产品工匠",era:"典型赛道 · 模板资料与数字产品",symbol:"📦",tag:"把经验打包成能反复卖的东西",rarity:"UR",gold:true,
+      v:[86,80,88,62,68,92],
+      core:"这是<strong>高成就动机 + 高行动执行 + 高工具效能</strong>的组合：你既能做出来，也能坚持迭代，还天然关心它能否被复制销售。机会嗅觉较高让你知道该做什么，内容表达中等意味着产品需要靠体验和口碑说话。",
+      strength:"把一次性劳动变成可复制资产的能力。你的每一份积累都在为下一份产品铺路。",
+      blind:"容易陷入收藏癖：做了很多产品却没一个真正打磨到能被复购。",
+      bio:"这一路线的典型产品包括：资料库、模板包、提示词合集、小型工具、行业清单。核心是「一次生产、多次交付」。收入来自单次售卖、会员订阅与更新包。",
+      quote:"「真正的时间自由，来自你睡后仍能交付的东西。」",
+      scenes:["做完一份表格，你会顺手整理成可复用模板。","你更愿意花一晚打磨产品，而不是花一小时发朋友圈。","看到别人低价卖粗制产品，你心里会想「这也能卖」。"],
+      guide:["一次只打磨一个主打产品，做到有人愿意复购再扩展。","给产品写清楚适用人群和不适用人群，减少售后。","每月固定更新一次，让老用户有理由回来。"],
+      paths:[{n:"资料库与模板包",d:"最常见的起步方式，需求稳定。",s:"把你最常被问到的三个问题做成模板。",m:"单价 9.9–49 元，靠复购和口碑。"},{n:"小型工具与插件",d:"技术门槛略高，但竞争更小。",s:"解决一个你自己每天都在用的痛点。",m:"买断制或订阅制，29–199 元。"},{n:"行业清单与数据包",d:"依赖信息整理能力，维护成本低。",s:"选一个你熟悉的行业，做一份别人找不全的清单。",m:"按次售卖或会员制更新。"}],
+      roadmap:["第 1 周 · 定位：列出你手上已经存在、别人却常问你要的东西。","第 1 个月 · 验证：做出第一个产品并卖给 10 个人，收集真实反馈。","第 3 个月 · 放大：建立产品矩阵，用老产品给新产品导流。"]
+    },
+    {
+      name:"副业侦察兵",era:"典型赛道 · 趋势观察与信息差",symbol:"🔭",tag:"比别人早半步看见机会",rarity:"SR",gold:false,
+      v:[70,98,78,55,86,74],
+      core:"你的<strong>创业机会识别能力</strong>是六维中最突出的，模糊容忍度也很高，这让你能在信号还模糊时下注。行动执行不错，说明你不是空想家。内容表达相对靠后，机会常常被你悄悄转化，没有变成可传播的影响力。",
+      strength:"在噪音里识别真实需求的敏感度。你能比多数人早一到两个月看到趋势。",
+      blind:"容易追新。你可能会在机会还没验证完就转向下一个，导致每个都只吃到开头。",
+      bio:"这条路线常见做法：观察平台新政策、新工具与新需求，快速做小范围验证，再把跑通的信息差包装成产品、服务或内容。收益高，但窗口期短。",
+      quote:"「信息差只在被验证的那一刻才值钱。」",
+      scenes:["一个平台刚出新功能，你已经在研究它能怎么变现。","你常把「这个有搞头」挂在嘴边，但要落地时反而犹豫。","你收藏的链接很多，真正复盘的很少。"],
+      guide:["每个机会只给两周验证期，到期要么投入要么放弃。","把观察写成公开内容，让信息差变成个人品牌。","建立复盘表，记录每个判断对在哪、错在哪。"],
+      paths:[{n:"趋势情报与简报",d:"把碎片信息整理成可付费的判断。",s:"每周整理一份行业新动态，发给 10 个朋友试用。",m:"订阅制 19–99 元每月。"},{n:"新平台早期红利",d:"窗口短、回报高，需要快速行动。",s:"选一个新功能，做出一个别人还没做的案例。",m:"平台扶持、接单与账号转让。"},{n:"信息差选品与中介",d:"连接供给与需求，赚撮合费。",s:"找到一个你熟悉的领域，列出三个供需错配点。",m:"按单抽成或服务费。"}],
+      roadmap:["第 1 周 · 定位：选定一个你长期关注的领域，每天记录 3 条新信号。","第 1 个月 · 验证：挑一个信号做小成本验证，看是否有人愿意付费。","第 3 个月 · 放大：把验证成功的方向做成固定栏目或产品，停止追逐其余机会。"]
+    },
+    {
+      name:"人机合拍创作者",era:"典型赛道 · 图像视频与音频创作",symbol:"🎨",tag:"和 AI 一起把想象做出来",rarity:"SSR",gold:false,
+      v:[88,76,66,95,64,62],
+      core:"高<strong>表达力</strong>与高<strong>工具效能</strong>的组合，让你在 AI 创作里如鱼得水。行动执行中等偏低意味着作品常停在灵感阶段；变现实力中等，说明你更享受创作本身而非销售。这正是创作者型人格的典型配比。",
+      strength:"审美判断与工具执行的结合。你能快速试出哪个版本更好，而不是盲抽。",
+      blind:"容易完美主义。作品攒了一堆却不敢公开发布，也就收不到市场反馈。",
+      bio:"变现路线包括：视觉素材售卖、定制图像视频、模板预设、创作教学与IP衍生品。 AI 降低了制作门槛，但审美与叙事能力反而更稀缺。",
+      quote:"「工具负责生成，你负责决定哪一张是对的。」",
+      scenes:["你生成二十张图，只为了挑出一张真正对的。","别人还在学基础操作，你已经在研究风格一致性。","你的作品文件夹很满，但公开发布的没几件。"],
+      guide:["每周公开一件作品，哪怕不完美，先建立反馈回路。","把常用工作流做成预设或模板，这是可复制资产。","给作品写一句创作说明，让它更容易被记住。"],
+      paths:[{n:"视觉素材与模板售卖",d:"被动收入为主，需要稳定风格。",s:"做一个统一风格的系列，上传到素材平台。",m:"单次售卖 5–30 元，或订阅分成。"},{n:"定制图像与视频服务",d:"变现直接，依赖沟通。",s:"用三件样稿去接第一单小需求。",m:"单项目 200–2000 元。"},{n:"创作教学与预设包",d:"边际成本低，需要表达力。",s:"把你的工作流录成教程，附赠预设。",m:"预设 19–69 元，课程 99–299 元。"}],
+      roadmap:["第 1 周 · 定位：连续做出 10 件同一风格的作品，找到你的辨识度。","第 1 个月 · 验证：公开发布 5 件，看哪种反馈最多，并尝试接一单定制。","第 3 个月 · 放大：把最受欢迎的工作流做成预设或教程，开始被动收入。"]
+    },
+    {
+      name:"效率架构师",era:"典型赛道 · 团队提效与流程顾问",symbol:"🧩",tag:"把混乱流程整理成秩序",rarity:"SSR",gold:false,
+      v:[95,66,90,50,55,88],
+      core:"极高的<strong>工具效能</strong>与<strong>行动执行</strong>，加上较高的<strong>变现实力</strong>，构成典型的问题解决型轮廓。机会嗅觉与风险耐受中等，意味着你更适合在明确需求里优化，而不是在混沌中赌方向。内容表达偏低，获客更依赖口碑。",
+      strength:"把混乱业务拆成清晰步骤，并用工具稳定落地。你交付的是确定性。",
+      blind:"你擅长解决别人给你的问题，却不太主动定义问题，容易等活上门。",
+      bio:"变现方式以项目制为主：为小团队梳理流程、搭建 AI 工作流、做内部知识库与培训。客单价高，交付周期长，客户复购是关键。",
+      quote:"「效率不是做得更快，而是少做不该做的事。」",
+      scenes:["加入一个团队三天，你就列出五处可以自动化的环节。","你做的表格别人看一眼就懂，因为字段设计得很清楚。","你很少主动推销，但客户会把你推荐给同行。"],
+      guide:["把每次交付写成案例：原来的问题、你的改法、节省的时间。","主动联系三个你熟悉的团队，免费做一次流程诊断。","把重复交付的部分做成标准包，降低你的时间占用。"],
+      paths:[{n:"企业流程诊断与搭建",d:"客单价最高，靠口碑获客。",s:"免费为一个熟人团队做诊断并留下前后对比。",m:"单个项目 1000–8000 元。"},{n:"内部知识库与文档系统",d:"需求稳定，交付可复制。",s:"用你熟悉的团队做样板，梳理结构。",m:"按项目收费，含维护费。"},{n:"团队 AI 培训",d:"依赖表达能力，可与企业服务捆绑。",s:"准备一份 20 页的实操讲义。",m:"按场 800–3000 元。"}],
+      roadmap:["第 1 周 · 定位：列出你最擅长的三类流程问题，选一类作为主打。","第 1 个月 · 验证：完成一单低价或免费的真实项目，拿到书面反馈。","第 3 个月 · 放大：把交付标准化，并请满意客户推荐两个同行。"]
+    },
+    {
+      name:"知识摆渡人",era:"典型赛道 · 课程咨询与陪跑",symbol:"🧭",tag:"把复杂知识讲到别人会用",rarity:"SR",gold:false,
+      v:[72,68,76,92,62,86],
+      core:"高<strong>表达力</strong>与较高的<strong>变现实力</strong>构成了你的核心：你既能讲清楚，也愿意为结果收费。工具效能中上，说明 AI 对你更像备课助手。行动执行较高但风险耐受中等，适合渐进式扩张而非激进投入。",
+      strength:"诊断学习障碍的能力。你能听出对方「没听懂」背后真正卡住的那一步。",
+      blind:"容易把别人想学的当成自己想教的，课程做出来却没人买。",
+      bio:"变现路径包括：一对一咨询、小班陪跑、录播课程与训练营。 AI 能帮你快速生成讲义和练习，但真正决定成交的是你能否让对方相信「我也能学会」。",
+      quote:"「教会别人，是你理解一件事的最后一步。」",
+      scenes:["朋友问你问题，你会先反问「你卡在哪一步」。","你做笔记的方式和别人不一样，但别人借去看都说清楚。","你开过免费分享，结束后总有人单独来问。"],
+      guide:["先做一对一咨询，用真实问题倒推课程大纲。","每节课只解决一个具体问题，别贪多。","收集学员原话，那是你最好的宣传素材。"],
+      paths:[{n:"一对一咨询与诊断",d:"启动最快，能直接验证需求。",s:"开放三个低价名额，收集真实问题。",m:"每次 99–499 元。"},{n:"小班陪跑与训练营",d:"收入更稳定，需要社群运营。",s:"用免费群跑一期，再转成付费。",m:"每期 299–999 元。"},{n:"录播课程与资料包",d:"边际成本低，依赖前期口碑。",s:"把咨询中重复出现的问题做成课程。",m:"课程 99–399 元。"}],
+      roadmap:["第 1 周 · 定位：写下你最常被问的三个问题，选一个做主题。","第 1 个月 · 验证：做 5 次一对一咨询，记录对方愿意付多少钱。","第 3 个月 · 放大：把高频问题做成小班课，形成固定招生节奏。"]
+    },
+    {
+      name:"电商炼货师",era:"典型赛道 · 选品详情与店铺运营",symbol:"🛒",tag:"把货卖出去的人",rarity:"SR",gold:false,
+      v:[78,86,84,72,70,90],
+      core:"六维中<strong>变现实力、机会嗅觉与行动执行</strong>都处于高位，这是典型的商业驱动型轮廓。工具效能中上让你能高效处理大量素材，风险耐受中等偏高说明你敢试款但会控成本。这是一套非常适合电商的属性组合。",
+      strength:"把数据、文案与视觉整合成转化动作的能力。你知道什么样的描述会让人下单。",
+      blind:"过度盯数据会让你忽略产品质量和长期口碑，短期赚到钱但难沉淀品牌。",
+      bio:"常见变现方式：用 AI 做选品分析、详情页与客服话术，经营无货源店铺或为商家做代运营。收益直接，但平台规则变化快。",
+      quote:"「选品决定上限，细节决定转化。」",
+      scenes:["你逛电商 App 不是买东西，是在研究别人的详情页。","看到一款爆品，你会马上去找它的供应链。","你写文案时会下意识测试哪种说法更打动人。"],
+      guide:["每次上新前写下目标人群和一句话卖点，别边做边想。","给每个试款设止损金额，超过就下架。","把跑通的详情页结构沉淀成模板。"],
+      paths:[{n:"AI 详情页与文案服务",d:"为商家提供服务，回款快。",s:"挑三个商品重写详情，做成对比案例。",m:"单店 300–2000 元。"},{n:"小店试款与无货源",d:"启动成本低，需要持续选品。",s:"用小预算试 3 个品，只看真实转化。",m:"商品毛利与复购。"},{n:"店铺代运营",d:"收入稳定，责任也更大。",s:"先接一个月小型店铺试水。",m:"月费 1000–5000 元加提成。"}],
+      roadmap:["第 1 周 · 定位：选一个你熟悉的品类，分析 10 个爆款的共性。","第 1 个月 · 验证：用最小预算试 3 个品，记录点击率与转化率。","第 3 个月 · 放大：把跑通的品类和详情页结构标准化，稳定上新。"]
+    },
+    {
+      name:"社群链接者",era:"典型赛道 · 社群运营与私域",symbol:"💬",tag:"让人愿意留下来的人",rarity:"R",gold:false,
+      v:[65,74,82,88,66,78],
+      core:"高<strong>表达力</strong>与较高的<strong>行动执行、变现实力</strong>，说明你既能维持关系，也能把它转成收入。技术自我效能偏低，意味着你可能更依赖现成工具而非自己搭建系统。机会嗅觉中等，适合在稳定场景里深耕。",
+      strength:"营造归属感的能力。你能让陌生人慢慢变成愿意互相帮忙的伙伴。",
+      blind:"太在乎气氛，导致该清理的成员、该定的规则一直拖着不处理。",
+      bio:"变现方式：付费社群、私域团购、活动组织与陪伴式服务。 AI 能帮你做内容提醒和资料整理，但社群的温度来自你真实的回应。",
+      quote:"「人留下的理由，从来不是信息，而是关系。」",
+      scenes:["群里冷场时，你总会抛一个恰到好处的话题。","你记得某个人上次提到的小麻烦，并主动问候。","你不太会推销，但大家愿意买你推荐的东西。"],
+      guide:["给社群定三条清晰规则，并执行一次，关系反而更舒服。","把重复回答的问题做成固定资料，减少你的消耗。","每周做一次一对一问候，这是留存最有效的方式。"],
+      paths:[{n:"付费社群与小圈子",d:"依赖长期信任积累。",s:"先用免费小群跑满 30 天，观察活跃度。",m:"年费 99–365 元。"},{n:"社群代运营",d:"为商家维护用户关系。",s:"准备一份社群运营 SOP 作为案例。",m:"月费 1000–4000 元。"},{n:"线上活动与陪伴营",d:"阶段性强，收入集中。",s:"设计一次 7 天主题陪跑。",m:"每期 99–399 元。"}],
+      roadmap:["第 1 周 · 定位：确定你想聚集的是哪一类人，写清楚他们的共同困扰。","第 1 个月 · 验证：建一个小群，连续 30 天稳定输出与回应。","第 3 个月 · 放大：把高频需求做成付费产品，同时保留免费入口。"]
+    },
+    {
+      name:"稳健精算派",era:"典型赛道 · 低风险可复制变现",symbol:"🧮",tag:"先算清楚再出手的人",rarity:"R",gold:false,
+      v:[74,52,80,48,45,95],
+      core:"极高的<strong>变现实力</strong>配合较高的<strong>行动执行</strong>，说明你对「投入必须有回报」有清晰要求。风险耐受偏低、机会嗅觉中等，意味着你更适合成熟、规则明确的副业，而不是早期红利。内容表达偏低，获客靠熟人网络即可。",
+      strength:"把一件事算明白并长期执行的能力。你不追风口，但很少踩大坑。",
+      blind:"对确定性要求太高，会错过所有需要前期投入才能验证的机会。",
+      bio:"适合路线：技能接单、资料整理、小额工具类产品、熟人圈代购与服务。重点是标准化、低投入、可预测。",
+      quote:"「可预测的小收益，胜过不可预测的大故事。」",
+      scenes:["别人说某个项目很火，你先问投入多少、多久回本。","你更愿意做十件小确定，而不是一件大冒险。","价格表你早就列好了，只是很少主动发出去。"],
+      guide:["给自己设一个小额试错预算，不影响生活，但能验证新机会。","把手上的技能做成明确的服务清单和价格表。","每月固定复盘一次，看看哪些收入最稳定。"],
+      paths:[{n:"技能接单与代做",d:"规则清晰，回款确定。",s:"列出你能稳定交付的三项服务并标价。",m:"按件或按小时收费。"},{n:"小额数字产品",d:"一次制作长期售卖。",s:"做一个你最常被问到的资料包。",m:"单价 9.9–29 元。"},{n:"熟人圈服务订阅",d:"靠信任而非流量。",s:"向十位熟人说明你能固定提供什么。",m:"月费 49–199 元。"}],
+      roadmap:["第 1 周 · 定位：列出你已有且能稳定交付的技能，标上价格。","第 1 个月 · 验证：完成三笔真实交易，记录耗时与利润。","第 3 个月 · 放大：把最赚钱的一项标准化，并小幅提高价格。"]
+    },
+    {
+      name:"实验型游牧者",era:"典型赛道 · 多项目快速试错",symbol:"🧪",tag:"用小成本换大信息的人",rarity:"SR",gold:false,
+      v:[82,95,62,64,96,58],
+      core:"极高的<strong>模糊容忍度</strong>与<strong>机会嗅觉</strong>，加上不错的工具效能，让你成为天然的探索者。行动执行中等偏低，意味着点子容易停在验证前；变现实力中等，说明你需要刻意把验证结果转成收入。",
+      strength:"快速试错与快速放弃的能力。你不会在一个错误方向上耗太久。",
+      blind:"放弃太快，有些需要三个月才见效的事，你在第三周就换方向了。",
+      bio:"适合路线：短期项目制、平台新功能测试、内容实验、小批量套利。关键是建立记录系统，否则试过的东西都白试。",
+      quote:"「试错的价值不在错，而在于你记得它为什么错。」",
+      scenes:["你同时在做好几个小项目，每个都进展到一半。","新平台刚上线，你已经注册了三个账号测试。","你放弃项目的速度快得让朋友惊讶。"],
+      guide:["每个实验预设一个明确的判断指标和时间，到期再决定。","建立实验记录表，写下假设、结果和结论。","每季度只保留一个方向做深，其余归档。"],
+      paths:[{n:"平台新功能测试",d:"窗口短，需要快速反应。",s:"选一个新功能，一周内做出案例。",m:"平台扶持、接单与账号价值。"},{n:"短期项目与接单",d:"灵活但收入不稳定。",s:"同时接三类小单，看哪类最省力。",m:"按项目收费。"},{n:"内容实验矩阵",d:"用低成本测试选题方向。",s:"每周试三种不同主题的内容。",m:"流量分成与后续转化。"}],
+      roadmap:["第 1 周 · 定位：同时列出 5 个想试的方向，各写一句验证假设。","第 1 个月 · 验证：每个方向投入不超过 10 小时，记录结果。","第 3 个月 · 放大：只保留数据最好的一个，停止其余并复盘。"]
+    },
+    {
+      name:"长期主义建造者",era:"典型赛道 · 个人品牌与可持续产品",symbol:"🏗️",tag:"慢慢做但不停下来的人",rarity:"UR",gold:true,
+      v:[84,72,95,70,82,94],
+      core:"<strong>行动执行、变现实力与模糊容忍度</strong>同时处于高位，这是少数能长期坚持又保持商业理性的组合。工具效能较高让你能持续提效，表达与机会嗅觉中等偏上，说明你不靠爆发获客，而靠积累。",
+      strength:"长期稳定输出与迭代的能力。你能在没有掌声的阶段继续修正方向。",
+      blind:"进度太慢时容易被质疑，也容易因为标准太高而迟迟不发布。",
+      bio:"适合路线：个人品牌、持续性内容资产、订阅制产品、长期社群。核心是复利逻辑——每一次输出都在为下一次积累信任。",
+      quote:"「慢慢来，比较快。」",
+      scenes:["别人追热点，你还在更新三年前开始的那个栏目。","你做决定慢，但一旦决定就很少反复。","你不羡慕爆款，因为你知道复利不靠爆款。"],
+      guide:["给长期项目设季度里程碑，让进步可见。","每季度公开一次复盘，把积累变成信任资产。","允许自己发布不完美版本，完成比完美更重要。"],
+      paths:[{n:"个人品牌与内容资产",d:"回报慢但复利强。",s:"选一个能写三年的主题，保持固定节奏。",m:"合作、产品转化与订阅。"},{n:"订阅制数字产品",d:"收入可预测，需要持续更新。",s:"把已有内容整理成第一期订阅包。",m:"每月 19–99 元。"},{n:"长期社群与会员",d:"依赖信任沉淀。",s:"先做免费内容，积累 100 个真实读者。",m:"年费会员与专属服务。"}],
+      roadmap:["第 1 周 · 定位：写下你愿意持续做三年的方向，以及第一年的最小目标。","第 1 个月 · 验证：连续输出 20 次，确认自己真的能坚持这个节奏。","第 3 个月 · 放大：把已有内容打包成产品，开始第一次收费。"]
+    }
+  ];
+
+  var answers = new Array(30).fill(null);
+  var current = 0;
+  var advanceTimer = null;
+  var countTimer = null;
+
+  function show(id){
+    ["intro","quiz","result"].forEach(function(s){
+      $(s).classList.toggle("active", s===id);
+    });
+    $("topHint").textContent = id==="quiz" ? ("作答中 · "+String(current+1).padStart(2,"0")) : (id==="result" ? "测评结果 · 30" : "副业测评 · 01");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function render(){
+    var item = questions[current];
+    var q = $("questionText");
+    q.textContent = item.q;
+    q.classList.remove("swap");
+    void q.offsetWidth;
+    q.classList.add("swap");
+    $("stepNow").textContent = String(current+1).padStart(2,"0");
+    $("progressFill").style.width = ((current+1)/questions.length*100)+"%";
+    $("prevBtn").disabled = current===0;
+    $("nextBtn").disabled = answers[current]===null;
+    $("nextBtn").textContent = current===questions.length-1 ? "生成匹配" : "下一题";
+    var box = $("options");
+    box.innerHTML = "";
+    item.o.forEach(function(opt,i){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "option" + (answers[current]===i ? " selected" : "");
+      btn.style.animationDelay = (i*0.055)+"s";
+      var key = document.createElement("span");
+      key.className = "key";
+      key.textContent = ["A","B","C","D"][i];
+      var txt = document.createElement("span");
+      txt.textContent = opt[0];
+      btn.appendChild(key);
+      btn.appendChild(txt);
+      btn.addEventListener("click",function(){ choose(i); });
+      box.appendChild(btn);
+    });
+  }
+
+  function choose(i){
+    clearTimeout(advanceTimer);
+    answers[current] = i;
+    Array.prototype.forEach.call($("options").children,function(el,idx){
+      el.classList.toggle("selected", idx===i);
+    });
+    $("nextBtn").disabled = false;
+    advanceTimer = setTimeout(function(){
+      if(current < questions.length-1){ current++; render(); }
+      else { submitQuiz(); }
+    },320);
+  }
+
+  function submitQuiz(){
+    clearTimeout(advanceTimer);
+    $("analyzing").classList.add("show");
+    setTimeout(function(){ finish(); },820);
+  }
+
+  function buildRadar(vec){
+    var cx=160, cy=142, r=98, n=6;
+    function pt(i,rate){
+      var a = -Math.PI/2 + i*2*Math.PI/n;
+      return [cx+Math.cos(a)*r*rate, cy+Math.sin(a)*r*rate];
+    }
+    var s = '<svg viewBox="0 0 320 292" role="img" aria-label="六维人格剖面图">';
+    [0.25,0.5,0.75,1].forEach(function(rt){
+      var pts=[];
+      for(var i=0;i<n;i++){ var p=pt(i,rt); pts.push(p[0].toFixed(1)+","+p[1].toFixed(1)); }
+      s += '<polygon points="'+pts.join(" ")+'" fill="none" stroke="#DFE6ED" stroke-width="1"/>';
+    });
+    for(var i=0;i<n;i++){
+      var p=pt(i,1);
+      s += '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="#DFE6ED" stroke-width="1"/>';
+    }
+    var data=[];
+    for(var j=0;j<n;j++){ var d=pt(j,vec[j]/100); data.push(d[0].toFixed(1)+","+d[1].toFixed(1)); }
+    s += '<polygon class="radar-shape" points="'+data.join(" ")+'" fill="#2D547F" fill-opacity="0.16" stroke="#2D547F" stroke-width="2" stroke-linejoin="round"/>';
+    for(var k=0;k<n;k++){
+      var c=pt(k,vec[k]/100);
+      s += '<circle cx="'+c[0].toFixed(1)+'" cy="'+c[1].toFixed(1)+'" r="3" fill="#2D547F"/>';
+    }
+    for(var m=0;m<n;m++){
+      var lp=pt(m,1.2);
+      var anchor = lp[0]<cx-8 ? "end" : (lp[0]>cx+8 ? "start" : "middle");
+      var dy = lp[1]<cy-10 ? -2 : (lp[1]>cy+10 ? 10 : 4);
+      s += '<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+dy).toFixed(1)+'" text-anchor="'+anchor+'" font-size="11" fill="#74808E">'+dimNames[m]+'</text>';
+    }
+    s += '</svg>';
+    return s;
+  }
+
+  function countUp(el,target){
+    clearInterval(countTimer);
+    var n=0, step=Math.max(1,Math.round(target/26));
+    countTimer=setInterval(function(){
+      n=Math.min(target,n+step);
+      el.textContent=n;
+      if(n>=target) clearInterval(countTimer);
+    },30);
+  }
+
+  function finish(){
+    clearTimeout(advanceTimer);
+    var sums = {};
+    dimNames.forEach(function(d){ sums[d]=0; });
+    answers.forEach(function(a,i){
+      sums[questions[i].d] += questions[i].o[a][1];
+    });
+    var vec = dimNames.map(function(d){ return Math.round(sums[d]/15*100); });
+    function val(d){ return vec[dimNames.indexOf(d)]; }
+
+    var best = null, bestDist = 1e9;
+    figures.forEach(function(f){
+      var dist = 0;
+      for(var i=0;i<6;i++){ dist += Math.pow(f.v[i]-vec[i],2); }
+      dist = Math.sqrt(dist/6);
+      if(dist < bestDist){ bestDist = dist; best = f; }
+    });
+    var match = Math.max(75,Math.min(98,Math.round(98-bestDist*0.5)));
+
+    var sorted = dimNames.slice().sort(function(a,b){ return val(b)-val(a); });
+    var top = sorted[0], second = sorted[1], low = sorted[5];
+
+    $("heroEmoji").textContent = best.symbol;
+    $("heroName").textContent = best.name;
+    $("heroEra").textContent = best.era;
+    $("heroRarity").textContent = best.rarity + " · 稀有匹配";
+    $("heroRarity").className = "rarity" + (best.gold ? " gold" : "");
+    $("heroTag").textContent = best.tag;
+    $("strengthText").innerHTML = best.strength;
+    $("blindText").innerHTML = best.blind;
+    $("bioText").innerHTML = best.bio;
+    $("quoteText").innerHTML = best.quote;
+    countUp($("matchNum"),match);
+
+    $("radar").innerHTML = buildRadar(vec);
+
+    var list = $("dimList");
+    list.innerHTML = "";
+    sorted.forEach(function(name){
+      var value = val(name);
+      var row = document.createElement("div");
+      row.className = "dim-row";
+      row.innerHTML = '<div class="dim-top"><span>'+name+'</span><span>'+value+' / 100</span></div>'+
+        '<div class="dim-track"><div class="dim-fill'+(value<50?" low":"")+'" data-width="'+value+'"></div></div>';
+      list.appendChild(row);
+    });
+    requestAnimationFrame(function(){
+      Array.prototype.forEach.call(list.querySelectorAll(".dim-fill"),function(el){
+        el.style.width = el.getAttribute("data-width")+"%";
+      });
+    });
+
+    function levelText(d,v){
+      return v>=67 ? dimInfo[d].high : (v>=40 ? dimInfo[d].mid : dimInfo[d].low);
+    }
+    function levelWord(v){ return v>=67 ? "突出" : (v>=40 ? "中等" : "相对靠后"); }
+    function levelClass(v){ return v>=67 ? "" : (v>=40 ? " mid" : " lo"); }
+    function levelChip(v){ return '<span class="level'+levelClass(v)+'">'+levelWord(v)+'</span>'; }
+
+    $("summaryLead").innerHTML = "你的六维轮廓由「<b>"+top+"</b>」主导，「<b>"+low+"</b>」相对靠后；与之最接近的副业原型是「<b>"+best.name+"</b>」，契合度 <b>"+match+"%</b>。这不是谁更优秀，而是这条路径恰好需要你已有的心理特质。";
+    $("summaryChips").innerHTML = sorted.map(function(d){
+      var v = val(d);
+      var cls = v>=67 ? " hi" : (v<40 ? " lo" : "");
+      return '<span class="chip'+cls+'">'+d+' '+v+'</span>';
+    }).join("");
+
+    var sVal = val("情绪稳定性"), cVal = val("尽责性");
+    var av = val("宜人性"), ev = val("外向性");
+    var ov = val("开放性"), mv = val("成就动机");
+    var a = dimInfo[top], b = dimInfo[low];
+
+    var stress;
+    if(sVal>=67){
+      stress = "压力到来时，你较少被情绪裹挟，能较快把注意力从「发生了什么」切换到「接下来怎么办」。这种稳定不是没有感觉，而是感觉之后仍然能行动。";
+    }else if(sVal>=40){
+      stress = "遇到压力你也会波动，但多数时候能自己稳回来。你需要一点缓冲时间——独处、走动，或把事情写下来，之后判断力就会恢复。";
+    }else{
+      stress = "你对压力更敏感，负面情绪停留的时间偏长。同样的挫折，别人当天翻篇，你可能会在心里回放好几天。好消息是，这种敏感也让你更细致、更能察觉风险。";
+    }
+    if(cVal>=67){
+      stress += " 由于尽责性较高，你在压力下的第一反应往往是「把事做完」，这让你可靠，但也容易忽略自己已经透支。";
+    }else if(cVal<40){
+      stress += " 尽责性偏低意味着压力越大，你越容易放弃原有计划，反而需要外部结构帮你兜底。";
+    }
+
+    var rel;
+    if(av>=67 && ev>=67){
+      rel = "你在关系里是主动的那一个：既能照顾别人的感受，也愿意先迈出一步。你很容易成为群体里的连接点，但也要留意，把太多人装进自己的圈子，会让你没有真正的空隙。";
+    }else if(av>=67 && ev<40){
+      rel = "你在关系里更偏深度而非广度：不主动扩张社交，却愿意为少数人投入很多。别人未必第一时间想起你，但真正需要帮助时会来找你。代价是你的边界容易被亲近的人反复试探。";
+    }else if(av<40 && ev>=67){
+      rel = "你在关系里热闹而有立场：喜欢与人来往，但不愿为了合群牺牲判断。你能快速建立连接，却也可能因为一句过于直接的话让别人退后一步。";
+    }else if(av<40 && ev<40){
+      rel = "你在关系里更习惯保持距离：不热衷应酬，也不轻易依赖谁。这让你显得独立而清醒，但也意味着当你真的需要支持时，可能一时不知道该向谁开口。";
+    }else if(av>=67){
+      rel = "你在关系里愿意付出，但会衡量自己的容量：照顾别人对你很重要，可你也不想因此失去自己。你的课题是把「我可以」和「我想要」分开。";
+    }else if(ev>=67){
+      rel = "你在关系里乐于参与，但保留自己的判断：热闹不会让你失去方向，你更看重相处是否舒服，而不是场面是否漂亮。";
+    }else{
+      rel = "你在关系里既不刻意迎合也不刻意疏远：关系对你来说质量比数量重要，你会用时间来筛选谁值得深交。";
+    }
+
+    var dec;
+    if(ov>=67 && mv>=67){
+      dec = "你在决策上属于「先看见可能，再调动资源」的类型：既有想法，也愿意为它承担代价。你最需要警惕的是同时开启太多方向，最后每一个都差一口气。";
+    }else if(ov>=67 && mv<40){
+      dec = "你的想法常常走在行动前面：能看到别人看不到的可能，却不太愿意为它付出持续的成本。好点子不少，真正做成的比例却不稳定——缺的不是判断，而是把一件事推进到结束的纪律。";
+    }else if(ov<40 && mv>=67){
+      dec = "你目标明确，但路径相对保守：更愿意在熟悉的框架里争取更好的结果，而不是换一条全新的路。这让你稳，也可能让你错过范式变化时的窗口期。";
+    }else if(ov<40 && mv<40){
+      dec = "你在决策上优先稳妥：不轻易冒险，也不执着于赢。你更关心「这样做之后日子还好不好过」，这种务实能避开很多坑，但需要有人帮你识别真正值得下注的机会。";
+    }else{
+      dec = "你在决策上介于探索与稳健之间：既能接受新方向，也会评估代价。你的优势是平衡，风险是关键时刻容易再观望一轮。";
+    }
+
+    var analysis = "";
+    analysis += '<div class="insight"><h4>整体轮廓</h4><p>从心理学角度看，你的优势维度是「<b>'+top+'</b>」（'+val(top)+' 分），'+levelText(top,val(top))+'而「<b>'+low+'</b>」在六维中相对靠后（'+val(low)+' 分），'+levelText(low,val(low))+'</p><p>'+best.core+'</p></div>';
+    analysis += '<div class="insight"><h4>人格动力：一个维度如何带动另一个</h4><p>你的主要动力来自「<b>'+top+'</b>」：'+a.drive+'。与此同时，「<b>'+low+'</b>」'+b.cost+'。两者叠加，形成你很典型的行为模式：前者把你推向新的可能，后者决定你在哪里犹豫、在哪里耗能。很多时候瓶颈并不是能力，而是两个维度之间的配比。</p></div>';
+    analysis += '<div class="insight"><h4>不确定与压力下的你</h4><p>'+stress+'</p></div>';
+    analysis += '<div class="insight"><h4>协作与关系中的你</h4><p>'+rel+'</p></div>';
+    analysis += '<div class="insight"><h4>决策与变现风格</h4><p>'+dec+'</p></div>';
+    analysis += '<div class="insight"><h4>为什么是「'+best.name+'」</h4><p>这份匹配不是随意贴标签：系统把你的六维得分与 12 种副业原型的性格向量逐一比对，取总体差距最小的一位。你与「<b>'+best.name+'</b>」的契合点，主要落在「<b>'+top+'</b>」与「<b>'+second+'</b>」两项上——你们面对选择时的本能取向相近，所以更容易理解彼此的处境。</p><p>也要看清差异：副业原型只是典型画像，这里抽取的是性格倾向而非完整的人生与能力。人格维度本身没有高低优劣，'+top+'让你有独特的力量，'+low+'也并非缺陷，它只是你处理世界的一种习惯。真正值得做的，是看清这种习惯在什么场合帮你、又在什么场合困住你。</p></div>';
+    $("analysis").innerHTML = analysis;
+
+    var midBehavior = "在这个维度上你会按场合切换，不会固定在某一种反应上。";
+    $("dimCards").innerHTML = sorted.map(function(d){
+      var v = val(d), info = dimInfo[d];
+      var desc = v>=67 ? info.high : (v>=40 ? info.mid : info.low);
+      var beh = v>=67 ? info.behaviorHigh : (v>=40 ? midBehavior : info.behaviorLow);
+      return '<div class="dim-card"><div class="dim-card-head"><span class="dn">'+d+'</span><span class="ds">'+levelChip(v)+' '+v+' / 100</span></div>'+
+        '<p><em>心理学含义 · </em>'+desc+'</p>'+
+        '<p><em>在生活中的样子 · </em>'+beh+'</p>'+
+        '<p><em>可执行的一步 · </em>'+info.advice+'</p></div>';
+    }).join("");
+
+    $("pathList").innerHTML = best.paths.map(function(x){
+      return '<div class="path-card"><div class="path-name">'+x.n+'</div>'+
+        '<p><b>适合原因 · </b>'+x.d+'</p>'+
+        '<p><b>起步动作 · </b>'+x.s+'</p>'+
+        '<p><b>变现方式 · </b>'+x.m+'</p></div>';
+    }).join("");
+    $("roadmapList").innerHTML = best.roadmap.map(function(x){
+      return '<div class="roadmap-item">'+x+'</div>';
+    }).join("");
+
+    $("methodNote").innerHTML =
+      "<p><b>测量结构</b> · 本测试共 30 道自陈式题目，六个维度各 5 题；每题四个选项按 0–3 分计分，维度原始分范围 0–15，再线性归一化为 0–100。本次你的六维得分为："+dimNames.map(function(d){ return d+" "+val(d); }).join("、")+"。</p>"+
+      "<p><b>匹配方式</b> · 将你的六维得分与 12 种副业原型的性格向量计算欧氏距离，取距离最小者，再换算为契合度。契合度表示轮廓相似度，不代表能力、资源或收入水平的接近，任何副业结果都依赖执行与环境。</p>"+
+      "<p><b>局限说明</b> · 自陈量表易受当下心境、社会赞许性与自我认知偏差影响，单次结果只能反映此刻的倾向；六个维度也不能穷尽一个人。若需严谨评估，请使用标准化量表并由专业人士解读。</p>";
+
+    $("sceneList").innerHTML = best.scenes.map(function(x,i){
+      return '<div class="scene" data-n="'+(i+1)+'">'+x+'</div>';
+    }).join("");
+    $("guideList").innerHTML = best.guide.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+
+    $("shareBtn").textContent = "复制专属分享文案";
+    $("shareBtn").classList.remove("done");
+    $("analyzing").classList.remove("show");
+    show("result");
+  }
+
+  $("startBtn").addEventListener("click",function(){
+    answers = new Array(30).fill(null);
+    current = 0;
+    render();
+    show("quiz");
+  });
+
+  $("prevBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(current>0){ current--; render(); }
+  });
+
+  $("nextBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(answers[current]===null) return;
+    if(current < questions.length-1){ current++; render(); }
+    else { submitQuiz(); }
+  });
+
+  $("restartBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    answers = new Array(30).fill(null);
+    current = 0;
+    show("intro");
+  });
+
+  $("shareBtn").addEventListener("click",function(){
+    var name = $("heroName").textContent;
+    var text = "我在《AI副业测试》里匹配到了「"+name+"」——"+$("heroTag").textContent+"。契合度 "+$("matchNum").textContent+"%，你也来测测，看看哪条副业路径适合你。";
+    function done(){
+      var btn=$("shareBtn");
+      btn.textContent="已复制，去分享吧";
+      btn.classList.add("done");
+      setTimeout(function(){ btn.textContent="复制专属分享文案"; btn.classList.remove("done"); },2600);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done,function(){ fallback(text,done); });
+    } else { fallback(text,done); }
+  });
+
+  function fallback(text,cb){
+    var ta=document.createElement("textarea");
+    ta.value=text;
+    ta.style.position="fixed";
+    ta.style.opacity="0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand("copy"); cb(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
