@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F4EF">
+<meta name="description" content="牛马人格测试 —— 30 道题，测出你是哪一种职场牛马。">
+<title>牛马人格测试</title>
+<style>
+  :root{
+    --bg:#F6F4EF;
+    --surface:#FFFFFF;
+    --ink:#262521;
+    --muted:#7C7A72;
+    --line:#E7E3DA;
+    --accent:#C05238;
+    --accent-soft:#F7EAE4;
+    --gold:#A98645;
+    --gold-soft:#F7F0E0;
+    --shadow:0 12px 34px rgba(60,45,35,.06);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(900px 520px at 12% -10%,#FFFFFF 0%,rgba(255,255,255,0) 62%),var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;position:relative;overflow-x:hidden;
+  }
+  .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.4;animation:drift 20s ease-in-out infinite alternate}
+  .orb.a{width:300px;height:300px;background:#F4DCD1;top:-110px;left:-100px}
+  .orb.b{width:250px;height:250px;background:#EFE4CE;bottom:6%;right:-120px;animation-delay:-7s}
+  .orb.c{width:200px;height:200px;background:#E1E4EC;top:44%;left:-140px;animation-delay:-13s}
+  @keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(28px,36px,0) scale(1.14)}}
+  button{font:inherit;cursor:pointer}
+  .app{position:relative;z-index:1;max-width:520px;min-height:100vh;margin:0 auto;padding:0 22px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+  .topbar{height:66px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.14em;color:var(--ink)}
+  .brand-mark{width:24px;height:24px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:0;animation:breathe 4.2s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(192,82,56,.2)}50%{transform:scale(1.07);box-shadow:0 0 0 7px rgba(192,82,56,0)}}
+  .top-hint{font-size:11px;color:var(--muted);letter-spacing:.1em}
+  main{flex:1 1 auto;padding-top:26px}
+  .screen{display:none}
+  .screen.active{display:block;animation:rise .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  #intro > *{animation:staggerIn .68s cubic-bezier(.22,1,.36,1) backwards}
+  #intro > *:nth-child(1){animation-delay:.04s}
+  #intro > *:nth-child(2){animation-delay:.10s}
+  #intro > *:nth-child(3){animation-delay:.16s}
+  #intro > *:nth-child(4){animation-delay:.22s}
+  #intro > *:nth-child(5){animation-delay:.28s}
+  #intro > *:nth-child(6){animation-delay:.34s}
+  #intro > *:nth-child(7){animation-delay:.40s}
+  #intro > *:nth-child(8){animation-delay:.46s}
+  @keyframes staggerIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  #intro > .title-rule{animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+
+  /* 首页 */
+  .eyebrow{font-size:11px;letter-spacing:.26em;color:var(--accent);margin:34px 0 18px}
+  .title{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-size:42px;line-height:1.24;font-weight:600;letter-spacing:.02em;margin:0}
+  .title-rule{width:42px;height:2px;background:var(--accent);margin:22px 0 20px;transform-origin:left center;animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes growRule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .lead{font-size:14px;line-height:1.9;color:var(--muted);margin:0;max-width:340px}
+  .meta{display:flex;gap:16px;margin:26px 0 40px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .meta span{display:flex;align-items:center;gap:6px}
+  .meta i{width:3px;height:3px;border-radius:50%;background:var(--accent);display:inline-block}
+  .promise{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 26px}
+  .promise .ph{font-size:11px;letter-spacing:.16em;color:var(--accent);margin-bottom:10px}
+  .promise p{margin:0 0 8px;font-size:12.5px;line-height:1.8;color:#5B5850}
+  .promise p:last-child{margin-bottom:0}
+  .primary{width:100%;height:56px;border:0;border-radius:14px;background:var(--ink);color:#fff;font-size:14px;letter-spacing:.18em;transition:transform .18s,opacity .18s}
+  .primary:active{transform:scale(.985)}
+  .primary:disabled{opacity:.36;cursor:not-allowed}
+  .fine-print{font-size:11px;line-height:1.8;color:#A2A099;text-align:center;margin-top:16px}
+
+  /* 答题 */
+  .progress-track{height:3px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:6px}
+  .progress-fill{position:relative;overflow:hidden;height:100%;width:0;background:var(--accent);border-radius:9px;transition:width .42s cubic-bezier(.22,1,.36,1)}
+  .progress-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:sheen 2.4s linear infinite}
+  @keyframes sheen{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .quiz-head{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
+  .step{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+  .step strong{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;color:var(--ink);font-weight:600}
+  .dim-chip{font-size:11px;color:var(--accent);background:var(--accent-soft);padding:6px 11px;border-radius:20px;letter-spacing:.04em}
+  .question{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;line-height:1.62;font-weight:600;margin:6px 0 26px}
+  .question.swap{animation:questionSwap .42s cubic-bezier(.22,1,.36,1)}
+  @keyframes questionSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .options{display:flex;flex-direction:column;gap:11px}
+  .option{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 16px;text-align:left;color:var(--ink);font-size:14px;line-height:1.6;transition:border-color .2s,background .2s,transform .18s,box-shadow .2s;animation:optionIn .45s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes optionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .option:hover{border-color:#DDB9AC;transform:translateX(3px)}
+  .option:active{transform:scale(.985)}
+  .option .key{flex:0 0 28px;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);transition:all .2s}
+  .option.selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 6px 18px rgba(192,82,56,.09)}
+  .option.selected .key{background:var(--accent);border-color:var(--accent);color:#fff;animation:keyPop .42s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes keyPop{0%{transform:scale(.65)}60%{transform:scale(1.16)}100%{transform:scale(1)}}
+  .nav{display:flex;gap:12px;margin-top:30px}
+  .ghost{flex:0 0 96px;height:50px;border-radius:13px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px}
+  .ghost:disabled{opacity:.35;cursor:not-allowed}
+  .nav .primary{flex:1;height:50px}
+
+  /* 结果 */
+  #result > *{animation:resultIn .62s cubic-bezier(.22,1,.36,1) backwards}
+  #result > *:nth-child(1){animation-delay:.04s}
+  #result > *:nth-child(2){animation-delay:.09s}
+  #result > *:nth-child(3){animation-delay:.14s}
+  #result > *:nth-child(4){animation-delay:.19s}
+  #result > *:nth-child(5){animation-delay:.24s}
+  #result > *:nth-child(6){animation-delay:.29s}
+  #result > *:nth-child(7){animation-delay:.34s}
+  #result > *:nth-child(8){animation-delay:.39s}
+  #result > *:nth-child(9){animation-delay:.44s}
+  #result > *:nth-child(10){animation-delay:.49s}
+  @keyframes resultIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .result-label{text-align:center;font-size:11px;letter-spacing:.3em;color:var(--muted);margin-top:12px}
+  .hero{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:30px 22px 26px;text-align:center;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .hero-emoji{font-size:52px;line-height:1;display:block;margin-bottom:12px;animation:emojiPop .7s .12s cubic-bezier(.34,1.56,.64,1) backwards}
+  @keyframes emojiPop{from{opacity:0;transform:scale(.5) rotate(-12deg)}to{opacity:1;transform:none}}
+  .hero-name{font-family:"Noto Serif SC","Songti SC",serif;font-size:29px;font-weight:600;letter-spacing:.04em;margin:0;color:var(--ink)}
+  .rarity{display:inline-block;margin-top:12px;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:.14em;background:var(--accent-soft);color:var(--accent)}
+  .rarity.gold{background:var(--gold-soft);color:var(--gold)}
+  .hero-tag{font-size:13px;line-height:1.8;color:var(--muted);margin:16px auto 0;max-width:300px}
+  .match-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px}
+  .match-num{font-family:"Noto Serif SC","Songti SC",serif;font-size:34px;font-weight:600;line-height:1;color:var(--accent)}
+  .match-num small{font-size:16px}
+  .match-cap{font-size:11px;color:var(--muted);text-align:left;letter-spacing:.08em;line-height:1.5}
+  .one-line{margin-top:16px;background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;line-height:1.75;color:var(--ink);font-weight:600}
+
+  .block{margin-top:30px}
+  .block h3{font-family:"Noto Serif SC","Songti SC",serif;font-size:17px;font-weight:600;letter-spacing:.05em;margin:0 0 14px;padding-left:12px;border-left:2px solid var(--accent)}
+  .block p{font-size:13.5px;line-height:2;color:#55514A;margin:0 0 12px}
+  .block p b{color:var(--ink);font-weight:600}
+  .belong{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:2;color:#4C4942}
+  .belong strong{color:var(--accent);font-weight:600}
+  .radar-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 12px 10px;text-align:center}
+  .radar-wrap svg{width:100%;max-width:320px;height:auto;display:block;margin:0 auto}
+  .radar-note{font-size:11px;color:var(--muted);margin-top:2px;padding-bottom:6px}
+  .dim-row{margin-bottom:15px}
+  .dim-top{display:flex;justify-content:space-between;font-size:12px;color:#55514A;margin-bottom:7px}
+  .dim-top span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+  .dim-track{height:5px;background:#EEEAE1;border-radius:5px;overflow:hidden}
+  .dim-fill{height:100%;border-radius:5px;background:var(--accent);width:0;transition:width .9s cubic-bezier(.22,1,.36,1)}
+  .dim-fill.low{background:#B9A98C}
+  .trait-wrap{display:flex;flex-wrap:wrap;gap:8px}
+  .trait{font-size:12px;padding:7px 13px;border-radius:20px;background:var(--accent-soft);color:var(--accent)}
+  .trait.gold{background:var(--gold-soft);color:var(--gold)}
+  .scene{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:11px;font-size:12.5px;line-height:1.9;color:#57534B;position:relative;padding-left:40px}
+  .scene:before{content:attr(data-n);position:absolute;left:14px;top:15px;width:18px;height:18px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .scene b{color:var(--ink)}
+  .guide{margin:0;padding:0;list-style:none;counter-reset:g}
+  .guide li{position:relative;padding-left:30px;margin-bottom:13px;font-size:13px;line-height:1.85;color:#55514A}
+  .guide li:before{counter-increment:g;content:counter(g);position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .share-btn{width:100%;height:50px;border-radius:13px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:13px;letter-spacing:.1em;transition:background .2s,transform .18s}
+  .share-btn:active{transform:scale(.985)}
+  .share-btn.done{background:var(--accent-soft)}
+  .disclaimer{margin-top:28px;padding:14px 16px;border:1px dashed var(--line);border-radius:12px;font-size:11px;line-height:1.8;color:#9FA09A}
+  .restart{margin-top:14px}
+  .analyzing{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(246,244,239,.95);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .38s,visibility .38s}
+  .analyzing.show{opacity:1;visibility:visible}
+  .analyzing .ring{width:74px;height:74px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1.05s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .analyzing .ring-wrap{position:relative;width:74px;height:74px}
+  .analyzing .ring-wrap:after{content:"";position:absolute;inset:12px;border-radius:50%;border:1px solid var(--line);animation:spin 1.8s linear infinite reverse}
+  .analyzing p{margin:24px 0 0;font-size:12px;letter-spacing:.2em;color:var(--muted);animation:pulseText 1.5s ease-in-out infinite}
+  @keyframes pulseText{0%,100%{opacity:.45}50%{opacity:1}}
+  .footer-note{flex:0 0 auto;text-align:center;font-size:10px;color:#B2B0A9;letter-spacing:.1em;padding-top:26px}
+  @media (max-width:360px){
+    .title{font-size:35px}
+    .question{font-size:19px}
+    .hero-name{font-size:25px}
+    .app{padding-left:18px;padding-right:18px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
+<div class="analyzing" id="analyzing" aria-live="polite">
+  <div class="ring-wrap"><div class="ring"></div></div>
+  <p>正在鉴定你的牛马血统</p>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">牛</span><span>NIUMA TYPE</span></div>
+    <div class="top-hint" id="topHint">人格鉴定 · 01</div>
+  </header>
+
+  <main>
+    <section class="screen active" id="intro">
+      <div class="eyebrow">A SERIOUS TEST ABOUT NOT-SO-SERIOUS YOU</div>
+      <h1 class="title">牛马人格<br>测试</h1>
+      <div class="title-rule"></div>
+      <p class="lead">30 道题，测出你是哪一种职场牛马。别紧张，答案没有对错，只有「你怎么还活着」。</p>
+      <div class="meta">
+        <span><i></i>30 道选择题</span>
+        <span><i></i>约 3 分钟</span>
+        <span><i></i>12 种牛马人格</span>
+      </div>
+      <div class="promise">
+        <div class="ph">测完你会得到</div>
+        <p>· 一个精准到让你想转发的人格名称</p>
+        <p>· 六维牛马指数雷达图 + 匹配度</p>
+        <p>· 你的专属名场面、生存指南和一句可以拿去发朋友圈的话</p>
+      </div>
+      <button class="primary" id="startBtn" type="button">开始鉴定</button>
+      <div class="fine-print">答案仅在你的浏览器中计算，不会被上传或保存</div>
+    </section>
+
+    <section class="screen" id="quiz">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="quiz-head">
+        <div class="step">第 <strong id="stepNow">01</strong> / 30 题</div>
+        <div class="dim-chip" id="dimChip">卷王指数</div>
+      </div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="options" id="options"></div>
+      <div class="nav">
+        <button class="ghost" id="prevBtn" type="button">上一题</button>
+        <button class="primary" id="nextBtn" type="button" disabled>下一题</button>
+      </div>
+    </section>
+
+    <section class="screen" id="result">
+      <div class="result-label">你的牛马人格</div>
+      <div class="hero">
+        <span class="hero-emoji" id="heroEmoji">🐴</span>
+        <h2 class="hero-name" id="heroName">卷王本王</h2>
+        <div class="rarity" id="rarity">SSR</div>
+        <p class="hero-tag" id="heroTag"></p>
+        <div class="match-row">
+          <div class="match-num"><span id="matchNum">0</span><small>%</small></div>
+          <div class="match-cap">人格<br>匹配度</div>
+        </div>
+        <div class="one-line" id="oneLine">一句话结果</div>
+      </div>
+
+      <div class="block">
+        <h3>这就是你，对吧</h3>
+        <div class="belong" id="belong"></div>
+      </div>
+
+      <div class="block">
+        <h3>六维牛马指数</h3>
+        <div class="radar-wrap">
+          <svg id="radar" viewBox="0 0 320 290" role="img" aria-label="六维牛马指数雷达图"></svg>
+          <div class="radar-note">越靠外，这项属性越「牛马」</div>
+        </div>
+        <div id="dimList" style="margin-top:18px"></div>
+      </div>
+
+      <div class="block">
+        <h3>人格解读</h3>
+        <div id="analysis"></div>
+      </div>
+
+      <div class="block">
+        <h3>你的牛马标签</h3>
+        <div class="trait-wrap" id="traits"></div>
+      </div>
+
+      <div class="block">
+        <h3>你的日常名场面</h3>
+        <div id="scenes"></div>
+      </div>
+
+      <div class="block">
+        <h3>专属生存指南</h3>
+        <ul class="guide" id="guide"></ul>
+      </div>
+
+      <div class="block">
+        <button class="share-btn" id="shareBtn" type="button">复制结果 去朋友圈炫耀</button>
+      </div>
+
+      <div class="disclaimer">本测试为娱乐向职场趣味测评，结果基于你的主观作答生成，不构成任何心理诊断或职业建议。请认真工作，也请好好生活。</div>
+      <button class="primary restart" id="restartBtn" type="button">再测一次，换个身份</button>
+    </section>
+  </main>
+
+  <footer class="footer-note">NIUMA TYPE · 测完记得回来看看有没有变</footer>
+</div>
+
+<script>
+  var dims = ["卷王指数","摸鱼天赋","戏精段位","反骨浓度","向上管理","干饭魂"];
+
+  var questions = [
+    {d:"卷王指数",q:"下班时间到了，但领导还没走，你通常会？",o:[["打卡机就是我的生物钟，准时消失",0],["看一眼群里风向，有人走我就走",1],["再待一会儿，把没收尾的事收一收",2],["主动问领导：还有什么我能帮忙的吗",3]]},
+    {d:"卷王指数",q:"周末突然收到工作群消息，你的反应是？",o:[["消息免打扰，周一再说",0],["看到了，自觉装没看见",1],["秒回「收到」，顺手记进待办",2],["直接打开电脑，把能做的先做了",3]]},
+    {d:"卷王指数",q:"同事说「这个需求其实不急」，你？",o:[["太好了，那我先放放",0],["嘴上答应，心里松了口气",1],["排进下周计划",2],["今天顺手做了，早做完早安心",3]]},
+    {d:"卷王指数",q:"看到别人升职加薪，你的第一反应是？",o:[["关我什么事，我准点下班",0],["酸一下，然后继续摸鱼",1],["看看人家做对了什么",2],["默默把目标定得更高一点",3]]},
+    {d:"卷王指数",q:"年末评优，轮到你发言，你会说？",o:[["我那就是正常干活，没啥好说的",0],["感谢一下，然后迅速坐下",1],["简单总结几点成绩，谦虚收尾",2],["从年初讲到年末，还感谢了领导的栽培",3]]},
+
+    {d:"摸鱼天赋",q:"带薪如厕时，你会？",o:[["速战速决，马上回工位",0],["刷两条短视频，控制在不被发现的范围",1],["带手机进去，一局游戏刚刚好",2],["蹲到腿麻，出来还顺了杯免费续的水",3]]},
+    {d:"摸鱼天赋",q:"电脑突然蓝屏重启，你的心情是？",o:[["慌得一批，赶紧找 IT",0],["叹口气，泡杯茶等它自己好",1],["微笑：终于有正当理由休息了",2],["熟练地切到手机，继续追刚才那集剧",3]]},
+    {d:"摸鱼天赋",q:"老板从背后走过的那一瞬间，你？",o:[["正襟危坐，眼神坚定",0],["alt+tab 已经练成肌肉记忆",1],["假装在看文档，其实在看购物车",2],["淡定切回工作界面，还顺手回了个「收到」",3]]},
+    {d:"摸鱼天赋",q:"周报写不出来时，你的做法是？",o:[["现场编，主打一个字数够",0],["翻聊天记录拼凑一下",1],["把上周的复制过来改个日期",2],["用 AI 三分钟生成一份，还排版精美",3]]},
+    {d:"摸鱼天赋",q:"一天里最清醒的时刻是？",o:[["刚上班的前十分钟",0],["上午十点，咖啡刚生效那会儿",1],["临近饭点的那半小时",2],["下班前一小时，效率突然觉醒",3]]},
+
+    {d:"戏精段位",q:"群里领导发了句「这个谁来做」，你？",o:[["沉默是金",0],["悄悄 @ 一个同事",1],["先发个「我来想想」缓冲一下",2],["秒回「我来！」并附一个奋斗表情包",3]]},
+    {d:"戏精段位",q:"被当众表扬时，你会？",o:[["低头假装看电脑，耳朵红了",0],["说句「哪里哪里」，然后迅速坐下",1],["站起来谦逊两句，感谢团队",2],["眼眶微红：这都是领导栽培，然后鞠了一躬",3]]},
+    {d:"戏精段位",q:"收到一个离谱需求，你的第一反应？",o:[["心里骂人，脸上微笑",0],["回一句「好的」，转头发语音吐槽",1],["先复述一遍，让对方自己听出离谱",2],["当场演出一段下巴掉了，配一句「您再说说」",3]]},
+    {d:"戏精段位",q:"开会开到走神时，你脑子里想的是？",o:[["中午吃什么",0],["这会到底还要多久",1],["晚上约了谁",2],["我的表情管理，还在线吗",3]]},
+    {d:"戏精段位",q:"离职那天，你的朋友圈是？",o:[["啥也不发，安静走人",0],["发一张工位照，配文「江湖再见」",1],["感谢列表一长串，主打一个感恩",2],["800 字小作文，含泪又含笑，点赞过百",3]]},
+
+    {d:"反骨浓度",q:"领导说「我这个想法不一定成熟」，你？",o:[["您说得都对",0],["点头，心里保留意见",1],["委婉地提一个小问题",2],["直接说：这几个地方有坑，我列出来了",3]]},
+    {d:"反骨浓度",q:"遇到明显不合理的加班，你会？",o:[["忍，打工人哪有不加班的",0],["忍，但记在小本本上",1],["私下跟同事吐槽一轮",2],["当面问：这个算加班费还是调休",3]]},
+    {d:"反骨浓度",q:"群里发动「自愿报名」，你？",o:[["从不主动",0],["看别人报了再说",1],["不报，但也不解释原因",2],["公开回复：既然是自愿，那我不报",3]]},
+    {d:"反骨浓度",q:"被甩锅的时候，你的第一反应？",o:[["算了，多一事不如少一事",0],["私下澄清一下",1],["群里平静地贴出聊天记录",2],["当场说：这个时间线我可以对一下",3]]},
+    {d:"反骨浓度",q:"听到「狼性文化」四个字，你？",o:[["默默把狼字听成郎",0],["微笑，内心翻个白眼",1],["低头，嘴角微微上扬",2],["小声接一句：狼性先狼自己",3]]},
+
+    {d:"向上管理",q:"领导发了条朋友圈照片，你？",o:[["划过去",0],["点个赞",1],["评论一句「拍得真好」",2],["评论两句，还私聊又夸了一遍",3]]},
+    {d:"向上管理",q:"汇报工作时，你的结构是？",o:[["只说结果，越少越好",0],["结果加一点过程",1],["进度、难点、方案，三段式",2],["先感谢指导，再汇报，最后请领导指示",3]]},
+    {d:"向上管理",q:"领导心情不好的那天，你？",o:[["躲远一点",0],["正常相处，不凑热闹",1],["主动递杯咖啡，聊两句轻松的",2],["精准判断情绪，当天绝不提坏消息",3]]},
+    {d:"向上管理",q:"发工资那天，你第一件事是？",o:[["看一眼数字，关掉",0],["截图发给对象或朋友",1],["盘算一下这个月怎么活",2],["先在群里感谢公司，再去看数字",3]]},
+    {d:"向上管理",q:"有个在高层面前露脸的机会，你？",o:[["能躲就躲",0],["顺其自然",1],["提前准备好 30 秒自我介绍",2],["已经研究好对方的喜好和话题",3]]},
+
+    {d:"干饭魂",q:"上班最大的动力是？",o:[["实现自我价值（假装有）",0],["月底那点工资",1],["中午那顿饭",2],["楼下新开了家店，我摸清它的营业时间了",3]]},
+    {d:"干饭魂",q:"下午三点困到不行，你靠什么续命？",o:[["硬扛",0],["灌一杯咖啡",1],["去茶水间找点吃的",2],["已经开始研究晚上吃什么了",3]]},
+    {d:"干饭魂",q:"团建聚餐通知发出来，你？",o:[["找借口不去",0],["去，但坐角落",1],["去，且提前看好了菜单",2],["第一个到，还主动负责点菜",3]]},
+    {d:"干饭魂",q:"工资到账后第一件事？",o:[["还花呗",0],["存起来",1],["犒劳自己一顿",2],["转给饭搭子：今天我请",3]]},
+    {d:"干饭魂",q:"如果明天不用上班，你最想？",o:[["睡到自然醒",0],["宅家躺一天",1],["约朋友吃顿好的",2],["从早吃到晚，把收藏夹清空",3]]}
+  ];
+
+  var seq=[0,5,10,15,20,25, 1,6,11,16,21,26, 2,7,12,17,22,27, 3,8,13,18,23,28, 4,9,14,19,24,29];
+
+  var dimMeta={
+    "卷王指数":{
+      high:"你把「把事做完」当成一种本能，别人眼里的加班，在你看来更像是把掌控感握在手里。你享受推进和被需要，但也最容易把自我价值绑在产出上。",
+      mid:"你会在该用力的时候用力，也懂得给自己留余地。你不是不拼，只是不愿意把全部生活都押在工位上。",
+      low:"你很清楚工作只是生活的一部分，到点走人对你来说不需要勇气。你并不懒，只是不愿意为不值得的事消耗自己。",
+      advice:"高卷的人：给自己设一个「今天到此为止」的硬线，并真的执行。低卷的人：挑一件你真正在乎的事认真投入一次，快感会和摸鱼完全不同。"
+    },
+    "摸鱼天赋":{
+      high:"你是天生的节奏管理大师，能用最少的消耗把一天过得游刃有余。摸鱼对你不是偷懒，而是一种精力分配策略。",
+      mid:"你懂得劳逸结合，该摸的时候摸，该冲的时候也能冲。你的分寸感是你最舒服的护城河。",
+      low:"你几乎是实诚地对待每一分钟，这让你可靠，也让你比别人更容易累。你可能需要允许自己偶尔「不产出」。",
+      advice:"高摸的人：把摸鱼时间悄悄换成一项会积累的技能，一年后差距会很明显。低摸的人：理直气壮地休息半小时，天不会塌。"
+    },
+    "戏精段位":{
+      high:"你有很强的场面感，知道什么时候该说什么话、摆什么表情。职场对你来说有一半是舞台，而你演得确实不错。",
+      mid:"你能配合气氛，但不抢戏。你知道表达的分寸，也保留了一点真实的自己，这其实很难得。",
+      low:"你更习惯用做事而不是表演来证明自己。你讨厌虚的那一套，也因此常常被更会表达的人抢走聚光灯。",
+      advice:"高戏的人：留几个不必表演的时刻，真诚比技巧更有穿透力。低戏的人：练习用 30 秒讲清你的成果，这不是虚伪，是让努力被看见。"
+    },
+    "反骨浓度":{
+      high:"你骨子里不接受「本来就这样」，对不合理的事天然敏感。你可能会吃点小亏，但你守住了自己最贵的东西——判断力。",
+      mid:"你心里有杆秤，只在真的越界时才开口。你不是刺头，只是不好糊弄。",
+      low:"你习惯先适应环境，冲突对你来说成本太高。你稳、省心，但也常常在事后才后悔当时没说那句话。",
+      advice:"高反的人：把「不对」说成「我有个替代方案」，杀伤力不变、胜率更高。低反的人：从小事开始练习表达不同意见，比如先说一句「我有个不同角度」。"
+    },
+    "向上管理":{
+      high:"你很懂组织里的信息流和情绪流，知道怎么让上面的资源为自己所用。这不是拍马屁，是一种少被误解的能力。",
+      mid:"你能正常地与上级沟通，不刻意经营也不刻意回避。你靠成果说话，偶尔也需要补一点主动。",
+      low:"你更相信「是金子总会发光」，于是常常等光自己来。你讨厌经营关系，但机会有时确实会流向更主动的人。",
+      advice:"高上的人：别让关系经营盖过真实产出，长期看大家认的是结果。低上的人：每周主动同步一次进度，让老板知道你在做什么，这只需要两分钟。"
+    },
+    "干饭魂":{
+      high:"你活着很大程度上是为了吃，工作日被一顿好饭切成两半。这份朴素的热爱，其实是你对生活最诚实的坚持。",
+      mid:"你按时吃饭，也享受美食，但不会为它打乱节奏。食物对你来说是补给，也是小小的奖励。",
+      low:"吃饭对你更像任务，你常常忙到忘了饿。你对自己有点苛刻，身体偶尔会替你提出抗议。",
+      advice:"高饭的人：好好吃饭没错，但别只靠吃续命，睡眠和运动也安排上。低饭的人：认真吃一顿热的，会比你想象中更能恢复状态。"
+    }
+  };
+
+  var personalities=[
+    {
+      name:"卷王本王",emoji:"🐴",rarity:"SSR",cls:"",
+      tag:"别人下班是结束，你下班是换个地方继续卷。",
+      vec:[96,10,42,22,55,42],
+      one:"你是「卷王本王」——KPI 是你的呼吸，加班是你的日常。",
+      belong:"<strong>是的，这就是你。</strong>你把「把事做到最好」写进了肌肉记忆，看到空白的下午会本能地焦虑。别人说你卷，你其实只是受不了事情悬在那儿。你嘴上说累，身体却很诚实地打开了电脑。这份自驱力让你走得比大多数人远，也别忘了——你值得被喜欢，不只因为你交付了什么。",
+      analysis:"你的<b>卷王指数</b>高得离谱，<b>摸鱼天赋</b>却低得让人心疼。你不是不懂休息，是休息时心里还在过明天的日程。这份专注让你成为团队里最稳的底盘，但也要小心：当自我价值只由产出来定义，任何一次停滞都会被你误判成失败。",
+      traits:["自驱永动机","交付强迫症","安静的卷"],
+      scenes:["周报里别人的「本周工作」是三行，你是带目录的十二页。","领导说「今天早点走」，你回「好的」，然后多留了四十分钟。","放假第一天，你打开电脑「就看一眼」，然后看了一整天。"],
+      guide:["给自己设一条「今天到此为止」的硬线，并且真的关电脑。","练习在不产出的时候也允许自己存在，哪怕只有半小时。","把「我很厉害」之外的评价也收集起来，比如「和你待着很舒服」。"]
+    },
+    {
+      name:"摸鱼仙人",emoji:"🐟",rarity:"SSR",cls:"",
+      tag:"六点下班你五点五十九就开始收拾，动作比谁都优雅。",
+      vec:[10,96,38,32,18,72],
+      one:"你是「摸鱼仙人」——上班是为了有地方体面地摸鱼。",
+      belong:"<strong>别装了，说的就是你。</strong>你把「用最少消耗撑完一天」修炼成了一门艺术，alt+tab 快到能出残影。你不是不负责，你只是早就看穿了：工资买的是时间，不是灵魂。你的快乐很简单——一杯免费续的水、一段没人找的下午、一次准点下班的胜利。",
+      analysis:"你的<b>摸鱼天赋</b>满格，<b>卷王指数</b>则敬谢不敏。你对节奏的掌控感其实是一种稀缺能力，能把力气花在刀刃上。但要留意，长期「刚好够用」会让你错过一些本来很想要的东西——不是因为能力不够，而是因为没真正启动过。",
+      traits:["节奏管理大师","带薪发呆专家","准点下班信仰者"],
+      scenes:["老板讲 PPT，你在笔记本上画了整套房子户型图。","你的浏览器开着八个标签页，七个和工作无关。","群里有人说「在吗」，你完美地错过了三小时。"],
+      guide:["把每天省下的半小时，投进一件会积累的事，一年后会吓一跳。","摸鱼时别只看手机，偶尔看看行业动态，机会藏在信息差里。","保持你的松弛感，这是天赋，别为了迎合别人把它丢了。"]
+    },
+    {
+      name:"职场影帝",emoji:"🎭",rarity:"SR",cls:"",
+      tag:"每一次周报汇报，都是一场小型奥斯卡。",
+      vec:[46,48,96,38,62,55],
+      one:"你是「职场影帝」——工位就是舞台，你从不 NG。",
+      belong:"<strong>是你，没错。</strong>你太懂场面了：什么时候该点头、什么时候该露出恰到好处的惊讶、什么时候该把「我不同意」包装成「我再想想」。你不是虚伪，你只是把关系照顾得太好了。很多人觉得和你聊天特别舒服，那是你练出来的本事。",
+      analysis:"你的<b>戏精段位</b>高居榜首，说明你对他人的情绪和场合的节奏极其敏感。这是很强的社交智慧。但演久了容易累，也容易让别人分不清哪句是真的。给自己留几个不用表演的时刻，关系反而更深。",
+      traits:["表情管理大师","气氛组核心","高情商选手"],
+      scenes:["听到离谱需求，你先瞪大眼睛，再缓缓说出「您再讲讲」。","被表扬时你红了眼眶，说「都是大家的功劳」，其实心里开花。","离职那天你的小作文让全组都哭了，包括不熟的实习生。"],
+      guide:["留几个真实到不修饰的瞬间，真诚比技巧更有穿透力。","练一门硬技能，让你的「会来事」有实打实的底牌撑着。","别把每个场合都当舞台，偶尔素颜出场会很舒服。"]
+    },
+    {
+      name:"反骨战神",emoji:"⚔️",rarity:"SR",cls:"",
+      tag:"你不是刺头，你只是把「凭什么」说出了声。",
+      vec:[52,42,46,96,12,58],
+      one:"你是「反骨战神」——忍不了一点，真的忍不了一点。",
+      belong:"<strong>终于被认出来了。</strong>你对「本来就这样」天生过敏，听到「狼性文化」会忍不住翻白眼。你不是不懂规矩，你是不愿意为不合理的规矩买单。你可能吃过一些小亏，但你守住了最贵的东西——自己的判断。这种人不多，而且往往才是真正推动改变的人。",
+      analysis:"你的<b>反骨浓度</b>高得突出，<b>向上管理</b>则低到坦诚。你习惯用 correctness 说话，而不是用关系铺路。这让你赢得尊重，也让你在需要资源的时刻少了一些助力。把「不对」换成「我有个替代方案」，你的胜率会翻倍。",
+      traits:["天生反对派","真相发言人","不吃画饼"],
+      scenes:["全员沉默的会上，你问出了那个所有人想问的问题。","群里说「自愿报名」，你回了句「既然自愿，那我不报」。","被甩锅时你默默贴出聊天记录，时间线清清楚楚。"],
+      guide:["把反对意见打包成「问题 + 方案」，别人更容易接受。","分清哪些仗值得打，把弹药留给真正重要的那几场。","锋芒不用收，但可以加一层温度，说服力会更强。"]
+    },
+    {
+      name:"向上管理大师",emoji:"🪜",rarity:"SR",cls:"",
+      tag:"你不是拍马屁，你是让正确的事被正确的人看见。",
+      vec:[56,22,72,14,96,46],
+      one:"你是「向上管理大师」——汇报是一门艺术，而你，是大师。",
+      belong:"<strong>没错，就是你。</strong>你太懂组织里的信息流和情绪流了：什么时候同步、怎么措辞、先报喜还是先报忧，你心里有一张精确的地图。别人觉得你「会来事」，其实你只是把沟通做到了极致。你很少被误解，也很少错过机会——这不是运气，是能力。",
+      analysis:"你的<b>向上管理</b>接近满分，<b>反骨浓度</b>则低得克制。你擅长让上面的资源流向自己，这是一项非常现实的能力。但要小心别让关系经营盖过真实产出：短期靠表达，长期大家认的还是结果。",
+      traits:["高情商沟通","信息流操盘手","老板的定心丸"],
+      scenes:["领导心情差的那天，你精准地避开了所有坏消息。","你的汇报永远是「progress—problem—plan」三段式。","发工资那天你先在群里感谢公司，然后才去看数字。"],
+      guide:["保持真诚的底色，别让技巧被看穿后反噬信任。","主动同步进度的习惯很好，记得也把功劳分给同伴。","偶尔也说一句不讨好的真话，会让你更被信任。"]
+    },
+    {
+      name:"干饭菩萨",emoji:"🍚",rarity:"R",cls:"gold",
+      tag:"让你加班可以，先问一句中午吃什么。",
+      vec:[32,68,40,30,36,98],
+      one:"你是「干饭菩萨」——支撑你上完整整一天的，是中午那顿饭。",
+      belong:"<strong>我懂你。</strong>你的一天被午饭切成两半，上半场靠期待活着，下半场靠回忆撑着。你对生活最朴素的坚持，就是「再累也要吃口好的」。别人觉得你没出息，其实你比谁都清醒：工作可以换，好吃的不能错过。这份热乎气儿，很珍贵。",
+      analysis:"你的<b>干饭魂</b>熊熊燃烧，是六维里最亮的一项。食物对你不只是补给，更是情绪的锚点，帮你把难熬的日子切成可以承受的小段。但也要留意，别只靠吃来续命——睡眠和运动同样是硬通货。",
+      traits:["人间烟火气","饭搭子之光","靠期待活着"],
+      scenes:["下午三点你困到灵魂出窍，但一想到晚上的火锅立刻精神了。","团建通知一发，你第一个研究菜单，还主动负责点菜。","工资到账，你第一反应是转给饭搭子：今天我请。"],
+      guide:["好好吃饭是对的，但别让吃成为唯一的情绪出口。","把「找好吃的」发展成周末的小探索，会让生活更有质感。","偶尔也关照一下睡眠和运动，状态会更稳。"]
+    },
+    {
+      name:"躺平观世音",emoji:"🛋️",rarity:"N",cls:"gold",
+      tag:"不是不争，是真的懒得争。",
+      vec:[6,90,14,10,10,62],
+      one:"你是「躺平观世音」——不争不抢，无欲则刚。",
+      belong:"<strong>是你吧。</strong>你把「降低期待」活成了一种智慧：不卷、不演、不争、不气。别人急着往上爬，你在自己的节奏里稳稳地待着。你不是没能力，是早就算清楚了什么值得。这份平静，是很多人求了很久都求不到的。",
+      analysis:"你的<b>卷王指数</b>和<b>反骨浓度</b>都很低，<b>摸鱼天赋</b>却很高。你对冲突和消耗的规避近乎本能，这让你很少内耗，但也可能让你在想要的机会面前慢半拍。躺平不是问题，问题是别把「想要的」也一起躺掉。",
+      traits:["低耗能运行","情绪稳定到发光","反内卷先知"],
+      scenes:["别人为晋升焦虑，你准点下班，睡得比谁都香。","群里的争论你看完，默默关掉，去泡了杯茶。","你的口头禅是「都行」「随便」「没关系」。"],
+      guide:["留一件你真正想要的事，为它保留一点「不躺」的力气。","你的平静很宝贵，别让别人的节奏打乱它。","偶尔主动一次，你会发现世界没那么可怕。"]
+    },
+    {
+      name:"老黄牛本牛",emoji:"🐂",rarity:"R",cls:"gold",
+      tag:"沉默，是牛马最高的礼仪。",
+      vec:[88,20,16,6,42,48],
+      one:"你是「老黄牛本牛」——不说话，埋头干，活儿都留下了。",
+      belong:"<strong>说的就是你。</strong>你不爱表现，也很少抱怨，交代给你的事就像进了保险箱。你是那种「平时没存在感、一走才发现整个组都靠你」的人。你的可靠是被时间验证过的，不是喊出来的。只是有时候，你得替自己说一句：我也很累。",
+      analysis:"你的<b>卷王指数</b>很高，<b>反骨浓度</b>和<b>戏精段位</b>都很低。你用行动而不是语言立足，这让你值得被托付，也让你常常被「默认」。沉默不是问题，问题是沉默会让你的付出被当成理所当然。",
+      traits:["靠谱本体","沉默的大多数","团队的地基"],
+      scenes:["别人在会上争功，你低头把问题解决了，没说一句。","你负责的事从来不需要人催，也不需要人检查。","离职交接那天，接手的人说了句：这活儿不好接啊。"],
+      guide:["每季度主动汇报一次成果，让付出被看见，这不是邀功。","学会说「这个我这边排不开」，你不是无限资源。","你的可靠值得更好的回报，必要时可以主动开口谈。"]
+    },
+    {
+      name:"阴阳怪气大师",emoji:"😏",rarity:"SR",cls:"",
+      tag:"我说话带刺，但你挑不出毛病。",
+      vec:[42,58,92,86,34,52],
+      one:"你是「阴阳怪气大师」——话里带刺，句句是梗。",
+      belong:"<strong>哈哈哈，就是你。</strong>你有一种本事：把吐槽说得像玩笑，把尖锐藏进表情包。别人听完先笑，笑完才反应过来「好像在说我」。你不直接冲突，但从不吃亏。你的嘴是你的武器，也是这个群里最有意思的部分。",
+      analysis:"你的<b>戏精段位</b>和<b>反骨浓度</b>双高，说明你既懂表演又有态度。你用幽默包装锋芒，这是一种很聪明的生存策略。但要注意，长期用「阴阳」表达，别人可能会不确定你的真实意图，关键时刻反而误事。",
+      traits:["带刺的温柔","梗王本王","笑着反击"],
+      scenes:["群里说「自愿加班」，你回：那我自愿不报，行吗？","别人甩锅过来，你一句「哇这个我没参与呢」全组都懂了。","你的表情包收藏夹比工作文档还丰富，而且都在关键时刻用上了。"],
+      guide:["重要场合把阴阳换成直说，效率更高，也更被信任。","你的幽默是天赋，记得也用它夸人，杀伤力会变成感染力。","别让「看破不说破」变成习惯，有些话值得认真讲。"]
+    },
+    {
+      name:"人间清醒",emoji:"🧠",rarity:"SSR",cls:"",
+      tag:"全看透了，但还在认真演。",
+      vec:[72,62,58,70,58,64],
+      one:"你是「人间清醒」——看得最明白，却依然认真生活。",
+      belong:"<strong>这个人格，非你莫属。</strong>你什么都懂：知道哪些是画饼，知道哪些努力有意义，知道工作只是生活的一部分。但你没有因此摆烂，也没有因此变得愤世嫉俗。你带着清醒继续投入，这份「知世故而不世故」，是成年人最难得的状态。",
+      analysis:"你六项指数都在中高位，没有明显短板，也没有极端偏执。<b>反骨浓度</b>与<b>卷王指数</b>的同时在线，说明你既有判断力又有行动力——你不是不拼，是拼得很有选择。这种均衡让你在职场里很少翻车。",
+      traits:["清醒且投入","六边形选手","不内耗体质"],
+      scenes:["别人为 PUA 焦虑，你听完笑笑：这个饼我消化不了。","你能一边认真完成项目，一边准点下班去生活。","朋友来吐槽工作，你总能一句话说到点上。"],
+      guide:["保持你的清醒，也别让它变成对热情的抑制。","偶尔允许自己「不那么理性」一次，会活得更轻。","你的均衡是优势，找到一件值得全力投入的事会更耀眼。"]
+    },
+    {
+      name:"脆皮打工魂",emoji:"💢",rarity:"R",cls:"gold",
+      tag:"又累又爱玩，又菜又不走。",
+      vec:[28,74,80,46,22,74],
+      one:"你是「脆皮打工魂」——天天喊着不想干，天天还在干。",
+      belong:"<strong>太真实了，就是你。</strong>你的精神状态在「我要辞职」和「今天也不错」之间反复横跳。你戏多、爱吐槽、干饭积极，但真要行动时又会怂一下。你不是不努力，你只是把太多能量花在了情绪上。别笑，这种人其实撑得最久。",
+      analysis:"你的<b>戏精段位</b>和<b>干饭魂</b>都高，<b>卷王指数</b>却偏低。你把工作当成一场又累又舍不得退出的戏，靠吐槽和美食给自己在续航。这种状态让你显得可爱，但也让你常在「要不要改变」里打转。",
+      traits:["情绪过山车","嘴上辞职达人","脆但坚韧"],
+      scenes:["早上说「今天不干了」，晚上又默默把方案交了。","你的吐槽小作文能写八百字，第二天照样准时打卡。","你说要减肥，下午三点还是冲向了茶水间。"],
+      guide:["把「我要辞职」的能量，先拿一小部分用来学点新东西。","减少情绪内耗，很多事没你想的那么严重。","你的韧性比你以为的强，可以试着做一个一直想做的决定。"]
+    },
+    {
+      name:"六边形战士",emoji:"🏆",rarity:"UR",cls:"gold",
+      tag:"六边形？不好意思，我十八边形。",
+      vec:[90,88,88,88,88,88],
+      one:"你是「六边形战士」——全维度拉满，隐藏人格被你抽中了。",
+      belong:"<strong>恭喜，稀有到发光的就是你。</strong>你能卷也能摸，会演也会怼，懂向上管理，还绝不亏待自己的胃。你把职场当成一场可以玩得很好的游戏，每一项都在水准之上。别人觉得你「什么都会」，其实是你把每件事都认真对待过。这种人，走到哪儿都不会太差。",
+      analysis:"你六项指数全部高位，意味着极强的适应性：能屈能伸，能进能退。你几乎没有明显短板，这是非常罕见的状态。但要警惕「什么都行」带来的选择过载——把全能收拢到一个主攻方向，你的爆发力会更强。",
+      traits:["全能玩家","稀有隐藏款","稳定输出怪"],
+      scenes:["你能卷赢同事，也能摸赢同事，还让两边都觉得你人不错。","任何话题你都能接，任何局面你都不慌。","别人问你到底做什么的，你笑而不语。"],
+      guide:["选一个主攻方向深耕，全能 + 专长才是真正的稀缺。","保持你的松弛和好奇，别让全能变成全累。","你的稀有度很高，记得把它用在真正值得的地方。"]
+    }
+  ];
+
+  var $=function(id){return document.getElementById(id);};
+  var answers=new Array(30).fill(null);
+  var current=0, advanceTimer=null;
+
+  function show(id){
+    ["intro","quiz","result"].forEach(function(x){$(x).classList.toggle("active",x===id);});
+    $("topHint").textContent=id==="intro"?"人格鉴定 · 01":(id==="quiz"?"人格鉴定 · 02":"人格鉴定 · 03");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function render(){
+    var item=questions[seq[current]];
+    $("stepNow").textContent=String(current+1).padStart(2,"0");
+    $("dimChip").textContent=item.d;
+    $("progressFill").style.width=((current+1)/questions.length*100)+"%";
+    var qt=$("questionText");
+    qt.textContent=item.q;
+    qt.classList.remove("swap"); void qt.offsetWidth; qt.classList.add("swap");
+    var box=$("options"); box.innerHTML="";
+    var keys=["A","B","C","D"];
+    item.o.forEach(function(opt,i){
+      var btn=document.createElement("button");
+      btn.type="button";
+      btn.className="option"+(answers[current]===i?" selected":"");
+      btn.style.animationDelay=(i*0.05)+"s";
+      btn.innerHTML='<span class="key">'+keys[i]+'</span><span>'+opt[0]+'</span>';
+      btn.addEventListener("click",function(){
+        answers[current]=i;
+        Array.prototype.forEach.call(box.children,function(c){c.classList.remove("selected");});
+        btn.classList.add("selected");
+        $("nextBtn").disabled=false;
+        clearTimeout(advanceTimer);
+        advanceTimer=setTimeout(function(){
+          if(current<questions.length-1){current++;render();}
+          else{finish();}
+        },360);
+      });
+      box.appendChild(btn);
+    });
+    $("prevBtn").disabled=(current===0);
+    $("nextBtn").textContent=(current===questions.length-1)?"生成结果":"下一题";
+    $("nextBtn").disabled=(answers[current]===null);
+  }
+
+  function countUp(el,target){
+    var start=performance.now(),dur=1000;
+    function step(now){
+      var p=Math.min(1,(now-start)/dur);
+      var e=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*e);
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function radarSVG(vals){
+    var cx=160,cy=142,r=98,n=6,pts=[];
+    function point(i,rv){
+      var a=(-90+i*60)*Math.PI/180;
+      return [cx+Math.cos(a)*r*rv,cy+Math.sin(a)*r*rv];
+    }
+    var svg='';
+    [0.25,0.5,0.75,1].forEach(function(lv){
+      var p=[];
+      for(var i=0;i<n;i++){var q=point(i,lv);p.push(q[0].toFixed(1)+","+q[1].toFixed(1));}
+      svg+='<polygon points="'+p.join(" ")+'" fill="none" stroke="#EAE6DC" stroke-width="1"/>';
+    });
+    for(var i=0;i<n;i++){
+      var q=point(i,1);
+      svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" stroke="#EAE6DC" stroke-width="1"/>';
+    }
+    var up=[];
+    for(var i=0;i<n;i++){var q=point(i,vals[i]/100);up.push(q[0].toFixed(1)+","+q[1].toFixed(1));}
+    svg+='<g style="transform-origin:160px 142px;animation:radarIn .85s .2s cubic-bezier(.22,1,.36,1) backwards">'+
+         '<polygon points="'+up.join(" ")+'" fill="rgba(192,82,56,.16)" stroke="#C05238" stroke-width="2" stroke-linejoin="round"/>';
+    for(var i=0;i<n;i++){
+      var q=point(i,vals[i]/100);
+      svg+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="3.2" fill="#fff" stroke="#C05238" stroke-width="2"/>';
+    }
+    svg+='</g>';
+    var labels=["卷王","摸鱼","戏精","反骨","向上","干饭"];
+    for(var i=0;i<n;i++){
+      var q=point(i,1.22);
+      var anchor=(i===0||i===3)?"middle":(i<3?"start":"end");
+      var dy=(i===0?-2:(i===3?10:4));
+      svg+='<text x="'+q[0].toFixed(1)+'" y="'+(q[1]+dy).toFixed(1)+'" text-anchor="'+anchor+'" font-size="12" fill="#7C7A72" font-family="-apple-system,PingFang SC,sans-serif">'+labels[i]+'</text>';
+    }
+    svg+='<style>@keyframes radarIn{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}</style>';
+    return svg;
+  }
+
+  function finish(){
+    clearTimeout(advanceTimer);
+    var raw={};
+    dims.forEach(function(d){raw[d]=0;});
+    answers.forEach(function(a,i){
+      if(a!==null){var item=questions[seq[i]];raw[item.d]+=item.o[a][1];}
+    });
+    var pct=dims.map(function(d){return Math.round(raw[d]/15*100);});
+    var best=-1,who=personalities[0];
+    personalities.forEach(function(p){
+      var dist=0;
+      for(var i=0;i<6;i++)dist+=Math.abs(pct[i]-p.vec[i]);
+      var s=100-dist/6;
+      if(s>best){best=s;who=p;}
+    });
+    var match=Math.max(80,Math.min(98,Math.round(best*0.5+56)));
+
+    $("heroEmoji").textContent=who.emoji;
+    $("heroName").textContent=who.name;
+    $("rarity").textContent="稀有度 · "+who.rarity;
+    $("rarity").className="rarity "+who.cls;
+    $("heroTag").textContent=who.tag;
+    $("oneLine").textContent=who.one;
+    countUp($("matchNum"),match);
+    $("belong").innerHTML=who.belong;
+
+    var sorted=dims.map(function(d,i){return {d:d,v:pct[i]};}).sort(function(a,b){return b.v-a.v;});
+    $("analysis").innerHTML="<p>"+who.analysis+"</p><p>你最突出的两项是 <b>"+sorted[0].d+"（"+sorted[0].v+"）</b> 和 <b>"+sorted[1].d+"（"+sorted[1].v+"）</b>；相对最弱的是 <b>"+sorted[5].d+"（"+sorted[5].v+"）</b>。下面的建议，主要就是为这一项准备的。</p>";
+
+    $("radar").innerHTML=radarSVG(pct);
+    var list=$("dimList"); list.innerHTML="";
+    sorted.forEach(function(x){
+      var row=document.createElement("div");
+      row.className="dim-row";
+      row.innerHTML='<div class="dim-top"><span>'+x.d+'</span><span>'+x.v+' / 100</span></div>'+
+        '<div class="dim-track"><div class="dim-fill'+(x.v<45?" low":"")+'" data-width="'+x.v+'"></div></div>';
+      list.appendChild(row);
+    });
+
+    var tl=$("traits"); tl.innerHTML="";
+    who.traits.forEach(function(t,i){var s=document.createElement("span");s.className="trait"+(i===1?" gold":"");s.textContent="# "+t;tl.appendChild(s);});
+
+    var sc=$("scenes"); sc.innerHTML="";
+    who.scenes.forEach(function(t,i){var d=document.createElement("div");d.className="scene";d.setAttribute("data-n",String(i+1));d.innerHTML="<b>"+t+"</b>";sc.appendChild(d);});
+
+    var gd=$("guide"); gd.innerHTML="";
+    var mainAdvice=dimMeta[sorted[5].d].advice;
+    who.guide.concat([mainAdvice]).forEach(function(t){var li=document.createElement("li");li.textContent=t;gd.appendChild(li);});
+
+    var btn=$("shareBtn");
+    btn.textContent="复制结果 去朋友圈炫耀";
+    btn.classList.remove("done");
+
+    $("analyzing").classList.add("show");
+    setTimeout(function(){
+      $("analyzing").classList.remove("show");
+      show("result");
+      requestAnimationFrame(function(){
+        Array.prototype.forEach.call(document.querySelectorAll("#dimList .dim-fill"),function(el){el.style.width=el.getAttribute("data-width")+"%";});
+      });
+    },1200);
+  }
+
+  $("startBtn").addEventListener("click",function(){
+    answers=new Array(30).fill(null);
+    current=0;
+    show("quiz");
+    render();
+  });
+  $("nextBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(current<questions.length-1){current++;render();}
+    else{finish();}
+  });
+  $("prevBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(current>0){current--;render();}
+  });
+  $("shareBtn").addEventListener("click",function(){
+    var who=$("heroName").textContent;
+    var emo=$("heroEmoji").textContent;
+    var text=emo+" 我测出来是「"+who+"」，匹配度 "+$("matchNum").textContent+"%！"+$("oneLine").textContent+" 来测测你是哪种牛马。";
+    var done=function(){var b=$("shareBtn");b.textContent="已复制，去粘贴吧";b.classList.add("done");};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,function(){fallbackCopy(text,done);});}
+    else{fallbackCopy(text,done);}
+  });
+  function fallbackCopy(text,done){
+    var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");done();}catch(e){}
+    document.body.removeChild(ta);
+  }
+  $("restartBtn").addEventListener("click",function(){
+    answers=new Array(30).fill(null);
+    current=0;
+    show("intro");
+  });
+</script>
+</body>
+</html>
