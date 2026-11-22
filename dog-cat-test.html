@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF7F2">
+<meta name="description" content="猫狗性格测试 —— 30 道题，用心理学六个维度，还原你在现实中的猫性与狗性。">
+<title>猫狗性格测试</title>
+<style>
+  :root{
+    --bg:#FAF7F2;
+    --surface:#FFFFFF;
+    --ink:#2E2621;
+    --muted:#8A7E73;
+    --line:#EAE0D4;
+    --accent:#A2673F;
+    --accent-soft:#F5E9DC;
+    --gold:#B08A3E;
+    --gold-soft:#F9F1DE;
+    --shadow:0 12px 34px rgba(120,84,52,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(900px 520px at 12% -10%,#FFFFFF 0%,rgba(255,255,255,0) 62%),var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;position:relative;overflow-x:hidden;
+  }
+  .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(72px);opacity:.38;animation:drift 22s ease-in-out infinite alternate}
+  .orb.a{width:300px;height:300px;background:#EAD6C0;top:-110px;left:-100px}
+  .orb.b{width:250px;height:250px;background:#EADCCB;bottom:6%;right:-120px;animation-delay:-7s}
+  .orb.c{width:200px;height:200px;background:#E7D8C6;top:44%;left:-140px;animation-delay:-13s}
+  @keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(28px,34px,0) scale(1.13)}}
+  button{font:inherit;cursor:pointer}
+  .app{position:relative;z-index:1;max-width:520px;min-height:100vh;margin:0 auto;padding:0 22px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+  .topbar{height:66px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--ink)}
+  .brand-mark{width:25px;height:25px;border-radius:7px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:0;animation:breathe 4.4s ease-in-out infinite;font-family:"Noto Serif SC","Songti SC",serif}
+  @keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(162,103,63,.22)}50%{transform:scale(1.07);box-shadow:0 0 0 7px rgba(162,103,63,0)}}
+  .top-hint{font-size:11px;color:var(--muted);letter-spacing:.1em}
+  main{flex:1 1 auto;padding-top:26px}
+  .screen{display:none}
+  .screen.active{display:block;animation:rise .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  #intro > *{animation:staggerIn .68s cubic-bezier(.22,1,.36,1) backwards}
+  #intro > *:nth-child(1){animation-delay:.04s}
+  #intro > *:nth-child(2){animation-delay:.10s}
+  #intro > *:nth-child(3){animation-delay:.16s}
+  #intro > *:nth-child(4){animation-delay:.22s}
+  #intro > *:nth-child(5){animation-delay:.28s}
+  #intro > *:nth-child(6){animation-delay:.34s}
+  #intro > *:nth-child(7){animation-delay:.40s}
+  #intro > *:nth-child(8){animation-delay:.46s}
+  @keyframes staggerIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  #intro > .title-rule{animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+
+  /* 首页 */
+  .eyebrow{font-size:10px;letter-spacing:.24em;color:var(--accent);margin:34px 0 18px}
+  .title{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-size:42px;line-height:1.24;font-weight:600;letter-spacing:.03em;margin:0}
+  .title-rule{width:42px;height:2px;background:var(--accent);margin:22px 0 20px;transform-origin:left center;animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes growRule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .lead{font-size:14px;line-height:1.9;color:var(--muted);margin:0;max-width:350px}
+  .meta{display:flex;gap:16px;margin:26px 0 40px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .meta span{display:flex;align-items:center;gap:6px}
+  .meta i{width:3px;height:3px;border-radius:50%;background:var(--accent);display:inline-block}
+  .promise{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 26px}
+  .promise .ph{font-size:11px;letter-spacing:.16em;color:var(--accent);margin-bottom:10px}
+  .promise p{margin:0 0 8px;font-size:12.5px;line-height:1.8;color:#6F6257}
+  .promise p:last-child{margin-bottom:0}
+  .primary{width:100%;height:56px;border:0;border-radius:14px;background:var(--ink);color:#fff;font-size:14px;letter-spacing:.18em;transition:transform .18s,opacity .18s}
+  .primary:active{transform:scale(.985)}
+  .primary:disabled{opacity:.36;cursor:not-allowed}
+  .fine-print{font-size:11px;line-height:1.8;color:#A99B8D;text-align:center;margin-top:16px}
+
+  /* 答题 */
+  .progress-track{height:3px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:6px}
+  .progress-fill{position:relative;overflow:hidden;height:100%;width:0;background:var(--accent);border-radius:9px;transition:width .42s cubic-bezier(.22,1,.36,1)}
+  .progress-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:sheen 2.4s linear infinite}
+  @keyframes sheen{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .quiz-head{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
+  .step{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+  .step strong{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;color:var(--ink);font-weight:600}
+  .dim-chip{font-size:11px;color:var(--accent);background:var(--accent-soft);padding:6px 11px;border-radius:20px;letter-spacing:.04em}
+  .question{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;line-height:1.62;font-weight:600;margin:6px 0 26px}
+  .question.swap{animation:questionSwap .42s cubic-bezier(.22,1,.36,1)}
+  @keyframes questionSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .options{display:flex;flex-direction:column;gap:11px}
+  .option{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 16px;text-align:left;color:var(--ink);font-size:14px;line-height:1.6;transition:border-color .2s,background .2s,transform .18s,box-shadow .2s;animation:optionIn .45s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes optionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .option:hover{border-color:#DBBE9E;transform:translateX(3px)}
+  .option:active{transform:scale(.985)}
+  .option .key{flex:0 0 28px;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);transition:all .2s}
+  .option.selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 6px 18px rgba(162,103,63,.10)}
+  .option.selected .key{background:var(--accent);border-color:var(--accent);color:#fff;animation:keyPop .42s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes keyPop{0%{transform:scale(.65)}60%{transform:scale(1.16)}100%{transform:scale(1)}}
+  .nav{display:flex;gap:12px;margin-top:30px}
+  .ghost{flex:0 0 96px;height:50px;border-radius:13px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px}
+  .ghost:disabled{opacity:.35;cursor:not-allowed}
+  .nav .primary{flex:1;height:50px}
+
+  /* 结果 */
+  #result > *{animation:resultIn .62s cubic-bezier(.22,1,.36,1) backwards}
+  #result > *:nth-child(1){animation-delay:.04s}
+  #result > *:nth-child(2){animation-delay:.09s}
+  #result > *:nth-child(3){animation-delay:.14s}
+  #result > *:nth-child(4){animation-delay:.19s}
+  #result > *:nth-child(5){animation-delay:.24s}
+  #result > *:nth-child(6){animation-delay:.29s}
+  #result > *:nth-child(7){animation-delay:.34s}
+  #result > *:nth-child(8){animation-delay:.39s}
+  #result > *:nth-child(9){animation-delay:.44s}
+  #result > *:nth-child(10){animation-delay:.49s}
+  #result > *:nth-child(11){animation-delay:.54s}
+  #result > *:nth-child(12){animation-delay:.59s}
+  #result > *:nth-child(13){animation-delay:.64s}
+  #result > *:nth-child(14){animation-delay:.69s}
+  #result > *:nth-child(15){animation-delay:.74s}
+  @keyframes resultIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .result-label{text-align:center;font-size:11px;letter-spacing:.3em;color:var(--muted);margin-top:12px}
+  .hero{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:30px 22px 26px;text-align:center;position:relative;overflow:hidden}
+  .hero:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .hero-emoji{font-size:52px;line-height:1;display:block;margin-bottom:12px;animation:emojiPop .7s .12s cubic-bezier(.34,1.56,.64,1) backwards}
+  @keyframes emojiPop{from{opacity:0;transform:scale(.5) rotate(-12deg)}to{opacity:1;transform:none}}
+  .hero-name{font-family:"Noto Serif SC","Songti SC",serif;font-size:30px;font-weight:600;letter-spacing:.06em;margin:0;color:var(--ink)}
+  .hero-era{font-size:11px;color:var(--muted);letter-spacing:.1em;margin-top:8px}
+  .rarity{display:inline-block;margin-top:12px;padding:5px 14px;border-radius:20px;font-size:11px;letter-spacing:.14em;background:var(--accent-soft);color:var(--accent)}
+  .rarity.gold{background:var(--gold-soft);color:var(--gold)}
+  .hero-tag{font-size:13px;line-height:1.8;color:var(--muted);margin:14px auto 0;max-width:310px}
+  .match-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px}
+  .match-num{font-family:"Noto Serif SC","Songti SC",serif;font-size:34px;font-weight:600;line-height:1;color:var(--accent)}
+  .match-num small{font-size:16px}
+  .match-cap{font-size:11px;color:var(--muted);text-align:left;letter-spacing:.08em;line-height:1.5}
+
+  .block{margin-top:30px}
+  .block h3{font-family:"Noto Serif SC","Songti SC",serif;font-size:17px;font-weight:600;letter-spacing:.05em;margin:0 0 14px;padding-left:12px;border-left:2px solid var(--accent)}
+  .block p{font-size:13.5px;line-height:2;color:#5C5047;margin:0 0 12px}
+  .block p b{color:var(--ink);font-weight:600}
+  .radar-wrap{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 12px 10px;text-align:center}
+  .radar-wrap svg{width:100%;max-width:320px;height:auto;display:block;margin:0 auto}
+  .radar-shape{opacity:0;transform-origin:160px 142px;animation:radarIn .85s .25s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes radarIn{from{opacity:0;transform:scale(.35)}to{opacity:1;transform:scale(1)}}
+  .radar-note{font-size:11px;color:var(--muted);margin-top:2px;padding-bottom:6px}
+  .dim-row{margin-bottom:15px}
+  .dim-top{display:flex;justify-content:space-between;font-size:12px;color:#5C5047;margin-bottom:7px}
+  .dim-top span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+  .dim-track{height:5px;background:#F0E9E0;border-radius:5px;overflow:hidden}
+  .dim-fill{height:100%;border-radius:5px;background:var(--accent);width:0;transition:width .9s cubic-bezier(.22,1,.36,1)}
+  .dim-fill.low{background:#B7A08B}
+  .duo{display:flex;flex-direction:column;gap:12px}
+  .duo-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+  .duo-card .dh{font-size:11px;letter-spacing:.16em;color:var(--accent);margin-bottom:8px}
+  .duo-card.alt .dh{color:var(--gold)}
+  .duo-card p{font-size:13px;line-height:1.9;color:#5C5047;margin:0}
+  .bio{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px 18px}
+  .bio p{font-size:13px;line-height:1.95;color:#5C5047;margin:0 0 12px}
+  .quote{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;line-height:1.8;color:var(--accent);text-align:center;padding:12px 8px 2px;border-top:1px solid var(--line)}
+  .scene{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:11px;font-size:12.5px;line-height:1.9;color:#5C5047;position:relative;padding-left:40px}
+  .scene:before{content:attr(data-n);position:absolute;left:14px;top:15px;width:18px;height:18px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .guide{margin:0;padding:0;list-style:none;counter-reset:g}
+  .guide li{position:relative;padding-left:30px;margin-bottom:13px;font-size:13px;line-height:1.85;color:#5C5047}
+  .guide li:before{counter-increment:g;content:counter(g);position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .summary-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .summary-lead{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;line-height:1.85;color:#2E2621;margin:0 0 14px}
+  .summary-lead b{color:var(--accent);font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:11px;padding:6px 10px;border-radius:8px;background:#F6EFE6;border:1px solid var(--line);color:#677586;font-variant-numeric:tabular-nums}
+  .chip.hi{background:var(--accent-soft);border-color:#E7CDB2;color:var(--accent)}
+  .chip.lo{background:#E9EEF3;color:#8D99A6}
+  .insight{border-top:1px solid var(--line);padding-top:15px;margin-top:16px}
+  .insight:first-child{border-top:0;padding-top:0;margin-top:0}
+  .insight h4{font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--ink);margin:0 0 8px;padding-left:10px;border-left:2px solid var(--gold)}
+  .insight p{font-size:13.5px;line-height:2;color:#5C5047;margin:0 0 10px}
+  .insight p:last-child{margin-bottom:0}
+  .insight b{color:var(--ink);font-weight:600}
+  .dim-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-bottom:12px}
+  .dim-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+  .dim-card-head .dn{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;font-weight:600;color:var(--ink)}
+  .dim-card-head .ds{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .level{padding:3px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:10px;letter-spacing:.06em}
+  .level.mid{background:#F6F1EA;color:#7E8B99}
+  .level.lo{background:#E9EEF3;color:#8D99A6}
+  .dim-card p{font-size:12.5px;line-height:1.9;color:#5C5047;margin:0 0 7px}
+  .dim-card p:last-child{margin-bottom:0}
+  .dim-card p em{font-style:normal;color:var(--accent);font-weight:600}
+  .method{background:#F6EFE6;border-radius:12px;padding:15px 17px}
+  .method p{font-size:12px;line-height:1.95;color:#677586;margin:0 0 9px}
+  .method p:last-child{margin-bottom:0}
+  .method b{color:#2E2621;font-weight:600}
+  .path-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-bottom:12px}
+  .path-name{font-family:"Noto Serif SC","Songti SC",serif;font-size:15px;font-weight:600;color:var(--ink);margin:0 0 9px}
+  .path-card p{font-size:12.5px;line-height:1.9;color:#5C5047;margin:0 0 6px}
+  .path-card p b{color:var(--accent);font-weight:600}
+  .path-card p:last-child{margin-bottom:0}
+  .roadmap{position:relative;padding-left:22px}
+  .roadmap:before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line)}
+  .roadmap-item{position:relative;margin-bottom:16px;font-size:13px;line-height:1.9;color:#5C5047}
+  .roadmap-item:last-child{margin-bottom:0}
+  .roadmap-item:before{content:"";position:absolute;left:-21px;top:8px;width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+  .share-btn{width:100%;height:50px;border-radius:13px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:13px;letter-spacing:.1em;transition:background .2s,transform .18s}
+  .share-btn:active{transform:scale(.985)}
+  .share-btn.done{background:var(--accent-soft)}
+  .disclaimer{margin-top:28px;padding:14px 16px;border:1px dashed var(--line);border-radius:12px;font-size:11px;line-height:1.8;color:#A99B8D}
+  .restart{margin-top:14px}
+  .analyzing{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(250,247,242,.96);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .38s,visibility .38s}
+  .analyzing.show{opacity:1;visibility:visible}
+  .analyzing .ring{width:74px;height:74px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1.05s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .analyzing .ring-wrap{position:relative;width:74px;height:74px}
+  .analyzing .ring-wrap:after{content:"";position:absolute;inset:12px;border-radius:50%;border:1px solid var(--line);animation:spin 1.8s linear infinite reverse}
+  .analyzing p{margin:24px 0 0;font-size:12px;letter-spacing:.2em;color:var(--muted);animation:pulseText 1.5s ease-in-out infinite}
+  @keyframes pulseText{0%,100%{opacity:.45}50%{opacity:1}}
+  .footer-note{flex:0 0 auto;text-align:center;font-size:10px;color:#BCAEA0;letter-spacing:.1em;padding-top:26px}
+  @media (max-width:360px){
+    .title{font-size:35px}
+    .question{font-size:19px}
+    .hero-name{font-size:25px}
+    .app{padding-left:18px;padding-right:18px}
+  }
+
+  .ratio{margin-top:20px;padding:0 6px}
+  .ratio-label{display:flex;justify-content:space-between;font-size:12px;color:#8A7E73;margin-bottom:8px;letter-spacing:.04em}
+  .ratio-label b{font-family:"Noto Serif SC","Songti SC",serif;font-size:17px;color:var(--ink);font-weight:600}
+  .ratio-label span:first-child b{color:var(--accent)}
+  .ratio-track{display:flex;height:9px;border-radius:9px;overflow:hidden;background:var(--line)}
+  .ratio-cat{height:100%;width:50%;background:var(--accent);transition:width 1s cubic-bezier(.22,1,.36,1)}
+  .ratio-dog{height:100%;width:50%;background:#B7A08B;transition:width 1s cubic-bezier(.22,1,.36,1)}
+  .ratio-detail{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .ratio-detail p{font-size:13px;line-height:1.95;color:#5C5047;margin:0 0 14px}
+  .ratio-detail p:last-child{margin-bottom:0}
+  .ratio-detail p b{color:var(--ink);font-weight:600}
+  .ratio-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+  .ratio-col{border-radius:11px;padding:12px 12px 8px;background:#F6EFE6}
+  .ratio-col.dog{background:#F0E9E0}
+  .rc-h{font-size:11px;letter-spacing:.06em;margin-bottom:9px;color:var(--accent);font-weight:600}
+  .ratio-col.dog .rc-h{color:#9A7B5C}
+  .rc-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#5C5047;padding:5px 0;border-top:1px solid rgba(0,0,0,.04)}
+  .rc-row:first-of-type{border-top:0}
+  .rc-row b{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+  .rc-empty{font-size:12px;color:#A99B8D;line-height:1.7;padding:6px 0}
+  @media (max-width:360px){.ratio-cols{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
+<div class="analyzing" id="analyzing" aria-live="polite">
+  <div class="ring-wrap"><div class="ring"></div></div>
+  <p>正在还原你的猫狗性格</p>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">猫</span><span>CAT &amp; DOG LAB</span></div>
+    <div class="top-hint" id="topHint">性格测评 · 01</div>
+  </header>
+
+  <main>
+    <section class="screen active" id="intro">
+      <div class="eyebrow">A PSYCHOLOGICAL PORTRAIT OF CAT &amp; DOG</div>
+      <h1 class="title">猫狗性格<br>匹配测试</h1>
+      <div class="title-rule"></div>
+      <p class="lead">你是猫系还是狗系，还是两者兼有？30 道题，从依恋风格、外向性、情绪表达等六个心理学维度，还原你在现实中的样子，找到与你最像的那只猫或狗。</p>
+      <div class="meta">
+        <span><i></i>30 道选择题</span>
+        <span><i></i>约 4 分钟</span>
+        <span><i></i>12 种猫犬人格</span>
+      </div>
+      <div class="promise">
+        <div class="ph">关于这个测试</div>
+        <p>它不靠直觉猜你像哪种宠物，而是用心理学维度还原你的真实倾向——题目问的都是你在日常里会怎么做。</p>
+        <p>六个维度取自依恋理论、大五人格、自我决定理论与情绪表达性研究；结果给出你的猫性 / 狗性配比与最接近的品种人格。</p>
+        <p>你得到的不只是一个品种名，而是一份能对照现实生活的性格解读。</p>
+      </div>
+      <button class="primary" id="startBtn" type="button">开始测评</button>
+      <div class="fine-print">答案只在本机计算，不会上传。结果仅供自我探索参考。</div>
+    </section>
+
+    <section class="screen" id="quiz">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="quiz-head">
+        <div class="step">第 <strong id="stepNow">01</strong> / 30 题</div>
+        <div class="dim-chip">跟随直觉 · 不必深思</div>
+      </div>
+      <div class="question" id="questionText"></div>
+      <div class="options" id="options"></div>
+      <div class="nav">
+        <button class="ghost" id="prevBtn" type="button">上一题</button>
+        <button class="primary" id="nextBtn" type="button" disabled>下一题</button>
+      </div>
+    </section>
+
+    <section class="screen" id="result">
+      <div class="result-label">YOUR CAT &amp; DOG PERSONALITY</div>
+      <div class="hero">
+        <span class="hero-emoji" id="heroEmoji">🐱</span>
+        <h2 class="hero-name" id="heroName"></h2>
+        <div class="hero-era" id="heroEra"></div>
+        <div class="rarity" id="heroRarity"></div>
+        <div class="hero-tag" id="heroTag"></div>
+        <div class="ratio">
+          <div class="ratio-label"><span>猫性 <b id="catPct">0</b>%</span><span>狗性 <b id="dogPct">0</b>%</span></div>
+          <div class="ratio-track"><div class="ratio-cat" id="ratioCat"></div><div class="ratio-dog" id="ratioDog"></div></div>
+        </div>
+        <div class="match-row">
+          <div class="match-num"><span id="matchNum">0</span><small>%</small></div>
+          <div class="match-cap">品种人格<br>契合度</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>01 · 人格概览</h3>
+        <div class="summary-card">
+          <p class="summary-lead" id="summaryLead"></p>
+          <div class="chips" id="summaryChips"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>02 · 六维性格剖面</h3>
+        <div class="radar-wrap">
+          <div id="radar"></div>
+          <div class="radar-note">分数越高越偏狗性，越低越偏猫性</div>
+        </div>
+        <div style="height:18px"></div>
+        <div id="dimList"></div>
+      </div>
+
+      <div class="block">
+        <h3>03 · 深度心理分析</h3>
+        <div id="analysis"></div>
+      </div>
+
+      <div class="block">
+        <h3>04 · 猫狗配比详解</h3>
+        <div id="ratioDetail"></div>
+      </div>
+
+      <div class="block">
+        <h3>05 · 逐维度解读</h3>
+        <div id="dimCards"></div>
+      </div>
+
+      <div class="block">
+        <h3>06 · 你的优势与盲点</h3>
+        <div class="duo">
+          <div class="duo-card">
+            <div class="dh">你最有力的部分</div>
+            <p id="strengthText"></p>
+          </div>
+          <div class="duo-card alt">
+            <div class="dh">容易忽略的部分</div>
+            <p id="blindText"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>07 · 典型生活场景</h3>
+        <div id="sceneList"></div>
+      </div>
+
+      <div class="block">
+        <h3>08 · 和这样的自己相处</h3>
+        <div class="bio">
+          <p id="coexistText"></p>
+          <div class="quote" id="quoteText"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>09 · 给你的三条建议</h3>
+        <ul class="guide" id="guideList"></ul>
+      </div>
+
+      <div class="block">
+        <h3>10 · 测评方法说明</h3>
+        <div class="method" id="methodNote"></div>
+      </div>
+
+      <div class="block">
+        <button class="share-btn" id="shareBtn" type="button">复制专属分享文案</button>
+        <button class="primary restart" id="restartBtn" type="button">重新测一次</button>
+        <div class="disclaimer">本测试为趣味自我探索工具，维度设计参考依恋理论、大五人格、自我决定理论与情绪表达性研究，但并非标准化心理测量，不具备严格的信效度，结果不构成心理诊断。猫性与狗性只是行为倾向的比喻，没有优劣之分。请把它当作认识自己的一个入口，结合实际情况理性使用。</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer-note">CAT &amp; DOG LAB · 认识自己，从看见日常开始</div>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  var dimNames = ["依恋风格","外向性","情绪表达","协作倾向","规律秩序","宜人性"];
+  // 计分方向统一：分数越高越偏狗性，越低越偏猫性
+
+  var questions = [
+    {d:"依恋风格",q:"周末终于完全自由，你更想怎么度过？",o:[["一个人待着充电，谁也别打扰",0],["约一两个亲近的人安静相处",1],["约朋友出去热闹一下",2],["把时间排满，和各路人马见面",3]]},
+    {d:"外向性",q:"参加一个全是陌生人的聚会，你通常会？",o:[["找角落待着，尽量少说话",0],["只和看起来顺眼的一两人聊",1],["能聊起来，但会挑时机休息",2],["很快打成一片，主动暖场",3]]},
+    {d:"情绪表达",q:"心里不高兴的时候，你通常？",o:[["自己消化，几乎不表现出来",0],["少数人能看出我情绪不对",1],["会说出来，但比较克制",2],["写在脸上，根本藏不住",3]]},
+    {d:"协作倾向",q:"做重要决定时，你更倾向？",o:[["自己想清楚，自己做主",0],["听听意见，但最后自己定",1],["和信任的人商量后决定",2],["希望有人帮我拿主意",3]]},
+    {d:"规律秩序",q:"你的日常作息更像？",o:[["很随意，每天都不一样",0],["大致规律，但经常变",1],["比较规律，偶尔打破",2],["非常固定，几点做什么基本不变",3]]},
+    {d:"宜人性",q:"和人有分歧时，你更可能？",o:[["坚持自己，不太让步",0],["看情况，重要的事不让",1],["多数时候愿意让步",2],["优先照顾对方，避免冲突",3]]},
+
+    {d:"依恋风格",q:"和好朋友很久没联系，通常是？",o:[["各忙各的，联系少了也不觉得怎样",0],["偶尔想起，但很少主动联系",1],["会主动发消息问候",2],["经常约，几天不聊就不自在",3]]},
+    {d:"外向性",q:"你的社交能量更像？",o:[["独处充电，社交耗电",0],["独处为主，少量社交也舒服",1],["两者都能，看心情",2],["和人相处越聊越有精神",3]]},
+    {d:"情绪表达",q:"收到一份很喜欢的礼物，你的反应？",o:[["心里高兴，表面平静",0],["会说谢谢，但不太夸张",1],["明显地表露出喜欢",2],["立刻惊喜地表现，让对方看到",3]]},
+    {d:"协作倾向",q:"团队里分配任务，你更舒服的角色是？",o:[["独立完成分给我的一块",0],["负责自己擅长的部分",1],["和大家协同推进",2],["跟着安排走，配合大家",3]]},
+    {d:"规律秩序",q:"旅行前，你会？",o:[["说走就走，不做计划",0],["大概想想要去哪",1],["做些攻略，但留有余地",2],["详细规划好每天的行程",3]]},
+    {d:"宜人性",q:"朋友请你帮忙但你不太方便时，你？",o:[["直接拒绝",0],["说明情况，婉拒",1],["犹豫一下，尽量帮",2],["不好意思拒绝，硬着头皮帮",3]]},
+
+    {d:"依恋风格",q:"别人临时取消和你的约定，第一反应是？",o:[["松了口气，正好自己待着",0],["没什么感觉",1],["有点失落，但能理解",2],["挺难受，会想是不是我的问题",3]]},
+    {d:"外向性",q:"在群体讨论中，你更像？",o:[["安静听，想好了才说",0],["偶尔发表看法",1],["经常参与，但不当主角",2],["主导话题，带动气氛",3]]},
+    {d:"情绪表达",q:"和亲近的人有矛盾，你更倾向？",o:[["先冷静，情绪平复后再说",0],["想一会儿，再找合适时机谈",1],["会直接说出不满",2],["当场就把情绪表达出来",3]]},
+    {d:"协作倾向",q:"别人给你建议时，你通常？",o:[["先按自己的想法来",0],["听听，参考一下",1],["认真考虑，常常采纳",2],["很愿意照着做",3]]},
+    {d:"规律秩序",q:"答应别人的事，你通常？",o:[["看当时的状态和心情",0],["尽量做，但偶尔会忘",1],["记着，基本都能做到",2],["一定办到，提前安排好",3]]},
+    {d:"宜人性",q:"你更希望别人怎么评价你？",o:[["有主见，有个性",0],["靠谱，有自己的原则",1],["好相处，让人舒服",2],["善良、贴心、好说话",3]]},
+
+    {d:"依恋风格",q:"出差或旅行在外，你最容易？",o:[["享受独处，很少想家",0],["偶尔想起熟悉的环境",1],["会和身边人保持联系",2],["很快就想回到熟悉的人和环境中",3]]},
+    {d:"外向性",q:"到一个新环境，你更可能？",o:[["先观察，不主动融入",0],["慢慢熟悉后再打开",1],["主动打招呼，但保持分寸",2],["迅速和所有人熟起来",3]]},
+    {d:"情绪表达",q:"看一部感人的电影，你？",o:[["内心触动，但基本不流露",0],["眼角有点湿，但忍住",1],["会和身边人说我被感动了",2],["毫不掩饰地哭出来",3]]},
+    {d:"协作倾向",q:"发现大家的方案有问题，你会？",o:[["坚持自己的做法",0],["保留意见，按自己的想法来",1],["提出意见，但最终服从团队",2],["大家怎么定我就怎么做",3]]},
+    {d:"规律秩序",q:"你的桌面或房间更像？",o:[["东西随手放，比较乱",0],["自己知道东西在哪就行",1],["大致整洁",2],["归类整齐，井井有条",3]]},
+    {d:"宜人性",q:"群体里有人被冷落，你？",o:[["不太会特别去做点什么",0],["心里同情，但不一定行动",1],["会和他说几句话",2],["主动照顾，拉他进话题",3]]},
+
+    {d:"依恋风格",q:"一段关系里，你更看重？",o:[["各自有空间，不用时时在一起",0],["舒服的独处与相处平衡",1],["经常在一起，分享日常",2],["亲密无间，几乎形影不离",3]]},
+    {d:"外向性",q:"手机里的联系人，你更倾向？",o:[["只留真正重要的少数人",0],["联系人不多但都熟",1],["各类型都有，常联系一些",2],["好友众多，喜欢认识新朋友",3]]},
+    {d:"情绪表达",q:"别人夸奖你时，你通常？",o:[["谦虚带过，不太接话",0],["说谢谢，心里高兴但不外露",1],["大方接受，表达感谢",2],["明显开心，会和人分享",3]]},
+    {d:"协作倾向",q:"对于规则和安排，你更倾向？",o:[["按自己的节奏和方式来",0],["大方向自己把握",1],["遵守，但偶尔灵活",2],["严格按安排来，让人放心",3]]},
+    {d:"规律秩序",q:"面对繁琐但需细致完成的任务，你？",o:[["凭感觉做，能交付就行",0],["做到差不多就行",1],["会认真完成，检查一遍",2],["细致完成，反复确认无遗漏",3]]},
+    {d:"宜人性",q:"别人情绪低落找你倾诉，你通常？",o:[["陪着听，但不太会安慰",0],["听着，给点实际建议",1],["耐心安慰，让他好受些",2],["全力安慰，尽力让他开心起来",3]]}
+  ];
+
+  var dimInfo = {
+    "依恋风格":{
+      dog:"你的依恋需求偏高：你从亲密关系中获得安全感，喜欢保持联系，独处太久会不适应。",
+      mid:"你对亲密的需求适中：既享受陪伴，也需要自己的空间，两者平衡时状态最好。",
+      cat:"你的依恋需求偏低：你高度自足，独处不孤单，不需要频繁确认关系也能安心。",
+      driveDog:"你把关系当成能量的来源，越亲近越有安全感",
+      driveCat:"你的自我足够稳定，不依赖别人的在场来确认自己",
+      costDog:"过度依恋会让你害怕独处，也更容易因为别人的疏远而不安",
+      costCat:"过度独立会让你在真正需要支持时，不知道该向谁开口",
+      behDog:"几天没和亲近的人联系，你会主动找话聊，觉得这样才踏实。",
+      behCat:"一个人待很久也不觉得闷，别人不来找你，你也很少主动去找别人。",
+      advice:"依恋风格没有好坏：偏猫的人可主动维护几段重要关系，偏狗的人可练习享受独处。"
+    },
+    "外向性":{
+      dog:"你的外向性较高：你从人际互动中获得能量，表达欲强，乐于认识新朋友。",
+      mid:"你的外向性适中：能社交也能独处，会根据场合切换状态。",
+      cat:"你的外向性偏低：你更倾向安静观察，独处能恢复精力，密集社交对你是一种消耗。",
+      driveDog:"你在人群里越聊越有精神，热闹对你不是负担而是补给",
+      driveCat:"你的注意力更内向，独处时反而更能想清楚事情",
+      costDog:"社交太多容易挤占独处时间，让你没有真正恢复的机会",
+      costCat:"长期回避社交会让机会和关系从身边悄悄溜走",
+      behDog:"聚会里你很快和陌生人聊开，甚至主动暖场。",
+      behCat:"聚会里你更愿意待在一旁，先看清楚再说，宁可少说几句。",
+      advice:"不必强迫自己改变性格：偏猫的人可选择性社交，偏狗的人要给自己留安静时间。"
+    },
+    "情绪表达":{
+      dog:"你的情绪表达性高：喜怒哀乐都写在脸上，坦诚直接，别人很容易读懂你。",
+      mid:"你的情绪表达适中：该说的时候会说，但会挑对象和场合。",
+      cat:"你的情绪表达性低：习惯把感受收在心里，用行动代替言语，不轻易外露。",
+      driveDog:"你相信真实流露才够真诚，隐藏情绪对你来说很累",
+      driveCat:"你更看重克制与分寸，情绪稳定是你给人的印象",
+      costDog:"太直白有时会伤人，或让别人觉得你情绪起伏大",
+      costCat:"压抑久了容易被误读成冷淡，亲近的人也可能猜不透你",
+      behDog:"心情好坏一眼就能看出来，藏都藏不住。",
+      behCat:"心里波澜壮阔，脸上却看不出什么，别人常以为你没事。",
+      advice:"表达没有对错：偏猫的人可以练习说出具体感受，偏狗的人可学会给情绪留缓冲。"
+    },
+    "协作倾向":{
+      dog:"你的协作倾向高：你愿意配合团队、听取意见，把大家的安排放在自己前面。",
+      mid:"你的协作倾向适中：既保留独立判断，也能配合团队节奏。",
+      cat:"你的协作倾向低：自主性强，更愿意自己决定、自己负责，不喜欢被安排。",
+      driveDog:"你把配合当成善意，让事情顺利推进比你个人主张更重要",
+      driveCat:"你相信自己的判断，独立做事时效率最高也最自在",
+      costDog:"一味配合容易让你失去立场，甚至承担本不该你承担的事",
+      costCat:"太坚持自主会让你难以求助，也不容易享受团队协作的好处",
+      behDog:"大家怎么定你就怎么做，即使自己有点保留也不会坚持。",
+      behCat:"你更愿意按自己的想法来，别人安排太多反而让你烦躁。",
+      advice:"偏猫的人可练习适度授权与合作，偏狗的人要敢于在关键处表达不同意见。"
+    },
+    "规律秩序":{
+      dog:"你的规律秩序感强：你喜欢计划、守时、可靠，按部就班让你安心。",
+      mid:"你的规律秩序适中：大致有节奏，也能接受临时变化。",
+      cat:"你的规律秩序感低：随性、灵活、活在当下，被固定计划绑住会难受。",
+      driveDog:"秩序感让你可预期、可托付，别人愿意把重要的事交给你",
+      driveCat:"灵活让你适应力强，变化和意外对你来说都不是问题",
+      costDog:"过于守序会让你难以应对突发，也会对别人不够宽容",
+      costCat:"太随性容易让重要的事拖延，也给别人带来不确定性",
+      behDog:"出门旅行你会提前规划好每天的行程，临时改动会打乱你的节奏。",
+      behCat:"你说走就走，计划越简单越舒服，被细节安排反而扫兴。",
+      advice:"偏猫的人可给关键事设最低限度的结构，偏狗的人要给计划留出弹性。"
+    },
+    "宜人性":{
+      dog:"你的宜人性高：你倾向于合作、体谅、照顾别人，害怕冲突，乐于助人。",
+      mid:"你的宜人性适中：愿意照顾别人，也会为自己保留边界。",
+      cat:"你的宜人性偏低：你有主见、不轻易迎合，必要时敢于说不。",
+      driveDog:"你把别人的感受放在心上，和谐的关系让你有满足感",
+      driveCat:"你重视真实与独立，不为了讨好而牺牲自己的判断",
+      costDog:"太好说话会让你难以拒绝，长期积累委屈和疲惫",
+      costCat:"过于坚持立场会让关系紧张，也更容易被人误解为不近人情",
+      behDog:"别人有困难你会第一时间帮，哪怕自己不方便也难以拒绝。",
+      behCat:"你会先判断这件事该不该管，不会为了场面而勉强自己。",
+      advice:"偏猫的人可多表达善意，偏狗的人要学会有边界地付出。"
+    }
+  };
+
+  var figures = [
+    {
+      name:"英国短毛猫",era:"猫系 · 沉稳自守型",symbol:"🐱",tag:"安静独立、情绪稳定的独处者",rarity:"R",gold:false,
+      v:[25,30,25,20,55,40],
+      core:"你的依恋需求、外向性与情绪表达都处于低位，是典型的<strong>高独立、低外显</strong>轮廓。依恋理论里你更接近安全型的独立端：不需要频繁确认关系也能安心。规律秩序中等偏高，说明你有自己的节奏，只是这套节奏主要由你自己定义。",
+      strength:"情绪稳定、不轻易被打扰。别人靠热闹充电，你靠独处恢复，这让你在压力下反而更冷静。",
+      blind:"表达太少容易被误读成冷淡。你的在乎只留给少数人，其他人可能一直不知道你其实很重感情。",
+      coexist:"和你这样的性格相处，重要的不是热情，而是尊重边界。你讨厌被强行安排，也不喜欢没有预告的亲近——给足空间，你反而会主动靠近。给自己留一段不被打扰的固定时间，是维持状态的关键。",
+      quote:"「不是冷淡，只是我的热情只开给少数人。」",
+      scenes:["聚会里你常常是最早想回家的那个。","别人问你近况，你回一句「还行」就没了下文。","一只猫能安安静静待在你旁边一下午，你们互不打扰却很舒服。"],
+      guide:["练习把「我没事」换成一句具体的感受，让别人有机会靠近你。","保留固定的独处时间，但每周主动联系一个你在乎的人。","不必强迫自己变外向，深度关系本来就比广度更适合你。"]
+    },
+    {
+      name:"布偶猫",era:"猫系 · 温柔慢热型",symbol:"🐈",tag:"温和亲人，却保有自己的节奏",rarity:"SR",gold:false,
+      v:[45,40,42,38,45,62],
+      core:"你的宜人性是六维中最高的，说明你天生愿意照顾别人的感受；但外向与表达处于中低区间，你表达善意的方式偏安静、偏行动。依恋需求中等，你既享受亲密也需要空间——这是典型的<strong>温柔而有边界</strong>的猫系画像。",
+      strength:"温和而可靠。你不抢风头，却能让身边人感到安心，这种稳定的善意很容易积累出长久的信任。",
+      blind:"太顾及别人的感受，容易把自己的需要往后放。你习惯先问别人「你还好吗」，却很少让别人问到你。",
+      coexist:"和你相处的人会觉得舒服，但也可能因为你看上去太好说话而忽略你的需要。练习在关键的事情上先说出自己的偏好，关系反而更平衡。",
+      quote:"「我对你温柔，但我也有自己的边界。」",
+      scenes:["朋友难过时，你不多说，只是默默陪着、递上需要的东西。","你很少拒绝别人，但心里其实有一杆秤。","熟人面前你很放松，陌生人面前你需要一点时间热身。"],
+      guide:["每天留一件只为自己的小事，不因照顾别人而取消。","练习直接说出需求，哪怕只是「我今天想自己待着」。","把你的善意说出口，别人未必猜得到。"]
+    },
+    {
+      name:"狸花猫",era:"猫系 · 独立探索型",symbol:"🐅",tag:"机敏、自主，按自己的路线走",rarity:"R",gold:false,
+      v:[22,42,35,15,50,30],
+      core:"你的协作倾向是六维中最低的，自主性极强——你更愿意自己判断、自己行动，不喜欢被安排。外向与规律秩序保持平衡：不排斥社交，但更相信自己的观察。这是<strong>高自主、低依附</strong>的典型轮廓。",
+      strength:"能独立解决问题，不依赖别人的评价来确认方向，行动力强且不易被群体裹挟。",
+      blind:"不容易求助。你把「自己搞定」当成默认设置，明明有人能帮忙，也要拖到自己扛不住才开口。",
+      coexist:"和你相处要给足自由度，指令式的安排会激起你的反感。你更吃「把目标和资源给你，方法自己定」这一套。适度分享你的进展，会让别人更愿意在你需要时伸手。",
+      quote:"「我自己能搞定，这是我的底气。」",
+      scenes:["接到任务你先自己琢磨，很少第一时间去问人。","别人给你建议，你会听完然后按自己的想法做。","你喜欢自己摸索路线，按部就班的旅行反而没意思。"],
+      guide:["遇到扛不住的事，练习向信任的人开口求助。","把「我可以自己来」换成「我想自己试试，有问题再找你」。","在团队里适度同步进度，独立不等于封闭。"]
+    },
+    {
+      name:"加菲猫",era:"猫系 · 松弛随性型",symbol:"😺",tag:"不紧不慢、活得松弛的人",rarity:"R",gold:false,
+      v:[38,28,45,35,25,55],
+      core:"你的规律秩序感是六维中最低的，随性、活在当下是你的底色；宜人性和情绪表达中等，说明你亲和但不黏人。你不喜欢被计划绑住，更相信「到了再说」。这是一套<strong>低结构、高适应</strong>的猫系配置。",
+      strength:"松弛感。你很少内耗于还没发生的未来，也很少因为计划被打乱而焦虑，抗压方式很轻盈。",
+      blind:"该认真的时候容易松。重要的事如果没人盯，你可能拖到最后一刻才动手。",
+      coexist:"和你相处很轻松，但如果你总是「到时候再说」，和讲计划的人合作会摩擦。给重要的事设一个最低限度的提醒或截止点，既不牺牲松弛感，也能让人放心。",
+      quote:"「急什么，到了再说。」",
+      scenes:["旅行前你只订了酒店，行程全靠当天心情。","deadline 前一晚，你才开始进入状态。","别人催你时，你总能不慌不忙地回一句「来得及」。"],
+      guide:["挑三件真正重要的事，设好不可更改的截止点。","把「到时候再说」换成「我记着，某天前给你」。","保留松弛感，但别让它变成拖延的借口。"]
+    },
+    {
+      name:"暹罗猫",era:"猫系 · 外向黏人型",symbol:"🦜",tag:"猫的外表，狗的热心",rarity:"SR",gold:false,
+      v:[62,70,68,48,40,58],
+      core:"你的外向性与情绪表达在猫系里格外突出，依恋需求也偏高——你比大多数猫更愿意亲近人、更愿意表达。规律秩序偏低，说明你随性。你是<strong>猫与狗之间的 crossover</strong>：既有猫的敏感，也有狗的热情。",
+      strength:"既能独处也能融入，表达方式直接，别人容易读懂你，也愿意和你亲近。",
+      blind:"情绪起伏比较明显，心情好坏都写在脸上，有时会让亲近的人跟着紧张。",
+      coexist:"和你相处很少冷场，你会让关系很快热起来。但当你的热情没有得到回应时，你容易受伤。学会把一部分注意力收回到自己身上，你的热情才会更持久。",
+      quote:"「我很黏人，但那是因为我真的喜欢你。」",
+      scenes:["你高兴的时候整个人都在发光，难过时也藏不住。","刚认识的人，你很快就能聊得像老朋友。","别人一句话语气不对，你会反复琢磨半天。"],
+      guide:["给情绪一个缓冲，冲动回应前先停三秒。","别把全部热情押在一个人身上。","享受你的感染力，它是很稀缺的天赋。"]
+    },
+    {
+      name:"黑猫",era:"猫系 · 神秘慢热型",symbol:"🐈‍⬛",tag:"观察先行，不轻易亲近",rarity:"SSR",gold:true,
+      v:[28,22,20,25,48,32],
+      core:"你的外向性、情绪表达与协作倾向都在低位，是六维里最偏猫的轮廓之一。你习惯先观察再行动，对陌生人保持距离，但一旦认可一个人会非常忠诚。规律秩序中等，说明你有自己稳定的节奏。",
+      strength:"洞察力强。你话少但看得细，常能注意到别人忽略的细节，判断也更冷静。",
+      blind:"慢热到容易被错过。别人可能因为你最初的距离感就打消了靠近的念头。",
+      coexist:"和你相处需要耐心，但一旦通过你的「审核」，你会是很长久的伙伴。适当给一点主动的信号，会让那些想靠近你的人少走弯路。",
+      quote:"「我不是高冷，我只是慢热。」",
+      scenes:["新环境里你先观察很久，才慢慢开口。","你记得别人随口提过的小细节，却从不说。","一旦认定一个人，你会默默把他划进自己的小圈子。"],
+      guide:["对想靠近的人，给一个明确的友善信号。","把注意到的小细节说出来，那是很好的连接。","你的慢热不是缺点，不必为此道歉。"]
+    },
+    {
+      name:"金毛",era:"犬系 · 阳光友善型",symbol:"🦮",tag:"温暖、外向、值得信赖",rarity:"SSR",gold:false,
+      v:[88,85,82,78,72,92],
+      core:"六维全面偏高，尤其宜人性与依恋需求极强——你是典型的<strong>安全依恋 + 高宜人</strong>组合。你从关系和给予中获得能量，愿意主动照顾别人，也享受被需要。这是最典型的狗系轮廓。",
+      strength:"天然的亲和力与信任感。别人愿意把事交给你，因为你可靠又真诚。",
+      blind:"太在意别人的感受，难以拒绝。你可能揽下超出负荷的事，最后自己疲惫不堪。",
+      coexist:"和你相处很温暖，但你需要练习「先照顾自己」。把付出的边界说清楚，别人反而会更尊重你，关系也更长久。",
+      quote:"「被需要，是我最安心的事。」",
+      scenes:["朋友有难，你总是第一个到场的那个。","你很少对人说不，哪怕自己已经很累。","你走到哪里都能交到朋友，真诚是你的招牌。"],
+      guide:["每周留一段完全属于自己的时间。","练习说「这次我可能帮不上」，天不会塌。","把照顾别人的能力，也分一点给自己。"]
+    },
+    {
+      name:"柯基",era:"犬系 · 热情活力型",symbol:"🐕",tag:"走到哪儿都带着热闹",rarity:"SR",gold:false,
+      v:[80,88,85,70,65,85],
+      core:"外向性与情绪表达双高，你热情、外放、感染力强。依恋与宜人也高，说明你享受陪伴、乐于付出。规律秩序中等，你活得尽兴但不至于失控。这是<strong>高能量、高表达</strong>的狗系画像。",
+      strength:"把气氛带起来的能力。有你在的场合很少冷场，你的热情感染力强。",
+      blind:"精力分配容易失衡——兴致上来什么都答应，最后时间不够用、答应太多做不到。",
+      coexist:"和你在一起不会无聊，但你需要注意别让热情变成压力。对别人也给一点安静的空间，关系会更有层次。",
+      quote:"「开心就要说出来呀。」",
+      scenes:["你一到场，气氛立刻热起来。","高兴的事你会第一时间分享给所有人。","你常常同时约了好几拨人，最后时间撞车。"],
+      guide:["答应事情前先想一下时间够不够。","给热情留一点节制，别人也需要喘口气。","把活力用在少数真正重要的事上。"]
+    },
+    {
+      name:"边境牧羊犬",era:"犬系 · 聪明尽责型",symbol:"🐩",tag:"高回应、高标准、可靠担当",rarity:"SSR",gold:false,
+      v:[72,70,60,88,95,75],
+      core:"规律秩序与协作倾向是六维中最高的两项，说明你尽责、守序、愿意配合团队。外向与表达中等，你更偏重用行动说话。这是<strong>高尽责、高回应</strong>的工作型狗系画像。",
+      strength:"把事情做好的自律与责任感。交代给你的事，基本不用返工，你让人放心。",
+      blind:"标准太高，容易对别人也对自己过于挑剔，显得不好相处，也容易过度承担。",
+      coexist:"和你共事很省心，但你在意「事情做对」胜过「大家舒服」。偶尔放低一点标准、多肯定别人，团队会更愿意配合你。",
+      quote:"「交给我，你就不用操心了。」",
+      scenes:["你做的表格和清单，别人看一眼就懂。","别人还在讨论，你已经把执行方案想好了。","看到流程里的漏洞，你会忍不住去补。"],
+      guide:["分清「必须完美」和「够用就好」的事。","多说出对别人的认可，少一点默默纠错。","别把所有责任都揽到自己身上。"]
+    },
+    {
+      name:"柴犬",era:"犬系 · 独立忠诚型",symbol:"🦊",tag:"狗里的猫，有主见的忠实伙伴",rarity:"R",gold:false,
+      v:[55,50,45,35,70,58],
+      core:"你的规律秩序较高、协作倾向偏低，形成<strong>忠诚但有主见</strong>的特别组合。你不像典型狗那样全然顺从，更接近「我认你，但我也有自己的想法」。这是犬系里最独立的一型。",
+      strength:"一旦认定就不轻易改变，稳定而长情，你的承诺含金量很高。",
+      blind:"固执。你决定好的事别人很难说服，有时会错过更好的方案，也容易显得不合群。",
+      coexist:"你不是不忠心，只是不喜欢被指挥。和你说清楚「为什么」比「照做」更有效。适度听取不同意见，会让你的判断更稳。",
+      quote:"「我认你，但这事我有自己的看法。」",
+      scenes:["你认准的事，十头牛都拉不回来。","对大多数人你淡淡的，对少数人却特别好。","别人跟风的东西，你偏要自己判断值不值。"],
+      guide:["做决定前，主动听一个反对意见。","把「我不要」换成「我更想要这个」。","你的独立很珍贵，但别让它变成固执。"]
+    },
+    {
+      name:"拉布拉多",era:"犬系 · 稳重友善型",symbol:"🦮",tag:"情绪稳定、值得托付",rarity:"SR",gold:false,
+      v:[82,80,72,75,85,88],
+      core:"六维均衡且全面偏高，宜人性与规律秩序尤其突出——你既友善又可靠。情绪表达中等，说明你热情但不浮夸。这是<strong>稳定型高狗性</strong>画像，也是最容易获得长久信任的一型。",
+      strength:"可预期、可托付。认识越久，别人越信任你，你是团队里的定心丸。",
+      blind:"太追求稳定，面对需要冒险的机会时容易保守，错过一些窗口期。",
+      coexist:"和你相处踏实安心，但有时你会为了维持稳定而回避必要的冲突。该开口时说清楚，关系反而更健康。",
+      quote:"「稳一点，反而走得更远。」",
+      scenes:["别人有麻烦，第一时间想到找你商量。","你答应的事从不食言，时间观念很强。","大家意见不一的时候，往往等你一句话定调。"],
+      guide:["给自己设一个小额试错预算，练习接受不确定。","该表达不同意见时别为了和气而沉默。","你的可靠是优势，别让它变成包袱。"]
+    },
+    {
+      name:"泰迪贵宾",era:"犬系 · 机灵社交型",symbol:"🐩",tag:"聪明、会表达、学得快",rarity:"SR",gold:false,
+      v:[70,85,88,68,72,80],
+      core:"情绪表达与外向性是六维中最高项，你擅长表达、反应快、学东西迅速。依恋与宜人也高，说明你享受互动、讨人喜欢。规律秩序中等，你灵活而不刻板。这是<strong>高表达、高学习</strong>的狗系画像。",
+      strength:"快速学习与表达能力，让你在新环境里很快被注意到，也容易获得机会。",
+      blind:"太会说话有时显得不够真诚，别人可能怀疑你「见人说人话」，信任积累较慢。",
+      coexist:"你擅长让气氛变好，但要让关系走深，需要偶尔放下技巧、展现真实。适度暴露脆弱，反而更让人亲近。",
+      quote:"「会说话是天赋，真诚是选择。」",
+      scenes:["新技能你上手特别快，还能讲给别人听。","你能根据不同对象调整说话方式。","场合越复杂，你越如鱼得水。"],
+      guide:["重要关系里少一点套路，多说真实的想法。","把学得快的能力，沉淀成一项能拿得出手的专长。","你的表达力很强，用它去帮别人而非只取悦。"]
+    }
+  ];
+
+  var answers = new Array(30).fill(null);
+  var current = 0;
+  var advanceTimer = null;
+  var countTimer = null;
+
+  function show(id){
+    ["intro","quiz","result"].forEach(function(s){
+      $(s).classList.toggle("active", s===id);
+    });
+    $("topHint").textContent = id==="quiz" ? ("作答中 · "+String(current+1).padStart(2,"0")) : (id==="result" ? "测评结果 · 30" : "性格测评 · 01");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function render(){
+    var item = questions[current];
+    var q = $("questionText");
+    q.textContent = item.q;
+    q.classList.remove("swap");
+    void q.offsetWidth;
+    q.classList.add("swap");
+    $("stepNow").textContent = String(current+1).padStart(2,"0");
+    $("progressFill").style.width = ((current+1)/questions.length*100)+"%";
+    $("prevBtn").disabled = current===0;
+    $("nextBtn").disabled = answers[current]===null;
+    $("nextBtn").textContent = current===questions.length-1 ? "生成匹配" : "下一题";
+    var box = $("options");
+    box.innerHTML = "";
+    item.o.forEach(function(opt,i){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "option" + (answers[current]===i ? " selected" : "");
+      btn.style.animationDelay = (i*0.055)+"s";
+      var key = document.createElement("span");
+      key.className = "key";
+      key.textContent = ["A","B","C","D"][i];
+      var txt = document.createElement("span");
+      txt.textContent = opt[0];
+      btn.appendChild(key);
+      btn.appendChild(txt);
+      btn.addEventListener("click",function(){ choose(i); });
+      box.appendChild(btn);
+    });
+  }
+
+  function choose(i){
+    clearTimeout(advanceTimer);
+    answers[current] = i;
+    Array.prototype.forEach.call($("options").children,function(el,idx){
+      el.classList.toggle("selected", idx===i);
+    });
+    $("nextBtn").disabled = false;
+    advanceTimer = setTimeout(function(){
+      if(current < questions.length-1){ current++; render(); }
+      else { submitQuiz(); }
+    },320);
+  }
+
+  function submitQuiz(){
+    clearTimeout(advanceTimer);
+    $("analyzing").classList.add("show");
+    setTimeout(function(){ finish(); },820);
+  }
+
+  function buildRadar(vec){
+    var cx=160, cy=142, r=98, n=6;
+    function pt(i,rate){
+      var a = -Math.PI/2 + i*2*Math.PI/n;
+      return [cx+Math.cos(a)*r*rate, cy+Math.sin(a)*r*rate];
+    }
+    var s = '<svg viewBox="0 0 320 292" role="img" aria-label="六维性格剖面图">';
+    [0.25,0.5,0.75,1].forEach(function(rt){
+      var pts=[];
+      for(var i=0;i<n;i++){ var p=pt(i,rt); pts.push(p[0].toFixed(1)+","+p[1].toFixed(1)); }
+      s += '<polygon points="'+pts.join(" ")+'" fill="none" stroke="#EAE3DA" stroke-width="1"/>';
+    });
+    for(var i=0;i<n;i++){
+      var p=pt(i,1);
+      s += '<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="#EAE3DA" stroke-width="1"/>';
+    }
+    var data=[];
+    for(var j=0;j<n;j++){ var d=pt(j,vec[j]/100); data.push(d[0].toFixed(1)+","+d[1].toFixed(1)); }
+    s += '<polygon class="radar-shape" points="'+data.join(" ")+'" fill="#A2673F" fill-opacity="0.16" stroke="#A2673F" stroke-width="2" stroke-linejoin="round"/>';
+    for(var k=0;k<n;k++){
+      var c=pt(k,vec[k]/100);
+      s += '<circle cx="'+c[0].toFixed(1)+'" cy="'+c[1].toFixed(1)+'" r="3" fill="#A2673F"/>';
+    }
+    for(var m=0;m<n;m++){
+      var lp=pt(m,1.2);
+      var anchor = lp[0]<cx-8 ? "end" : (lp[0]>cx+8 ? "start" : "middle");
+      var dy = lp[1]<cy-10 ? -2 : (lp[1]>cy+10 ? 10 : 4);
+      s += '<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+dy).toFixed(1)+'" text-anchor="'+anchor+'" font-size="11" fill="#8A8078">'+dimNames[m]+'</text>';
+    }
+    s += '</svg>';
+    return s;
+  }
+
+  function countUp(el,target){
+    clearInterval(countTimer);
+    var n=0, step=Math.max(1,Math.round(target/26));
+    countTimer=setInterval(function(){
+      n=Math.min(target,n+step);
+      el.textContent=n;
+      if(n>=target) clearInterval(countTimer);
+    },30);
+  }
+
+  function finish(){
+    clearTimeout(advanceTimer);
+    var sums = {};
+    dimNames.forEach(function(d){ sums[d]=0; });
+    answers.forEach(function(a,i){
+      sums[questions[i].d] += questions[i].o[a][1];
+    });
+    var vec = dimNames.map(function(d){ return Math.round(sums[d]/15*100); });
+    function val(d){ return vec[dimNames.indexOf(d)]; }
+
+    var best = null, bestDist = 1e9;
+    figures.forEach(function(f){
+      var dist = 0;
+      for(var i=0;i<6;i++){ dist += Math.pow(f.v[i]-vec[i],2); }
+      dist = Math.sqrt(dist/6);
+      if(dist < bestDist){ bestDist = dist; best = f; }
+    });
+    var match = Math.max(76,Math.min(98,Math.round(98-bestDist*0.42)));
+
+    var dogPct = Math.round(vec.reduce(function(a,b){ return a+b; },0)/6);
+    var catPct = 100-dogPct;
+    var ratioWord = dogPct>=72 ? "典型的狗系性格" : (dogPct>=58 ? "明显偏狗系" : (dogPct>=43 ? "猫狗各半的均衡型" : (dogPct>=30 ? "明显偏猫系" : "典型的猫系性格")));
+
+    var sorted = dimNames.slice().sort(function(a,b){ return val(b)-val(a); });
+    var top = sorted[0], second = sorted[1], low = sorted[5];
+
+    $("heroEmoji").textContent = best.symbol;
+    $("heroName").textContent = best.name;
+    $("heroEra").textContent = best.era;
+    $("heroRarity").textContent = best.rarity + " · 稀有匹配";
+    $("heroRarity").className = "rarity" + (best.gold ? " gold" : "");
+    $("heroTag").textContent = best.tag;
+    $("strengthText").innerHTML = best.strength;
+    $("blindText").innerHTML = best.blind;
+    $("coexistText").innerHTML = best.coexist;
+    $("quoteText").innerHTML = best.quote;
+    countUp($("matchNum"),match);
+
+    $("catPct").textContent = catPct;
+    $("dogPct").textContent = dogPct;
+    $("ratioCat").style.width = catPct+"%";
+    $("ratioDog").style.width = dogPct+"%";
+
+    $("radar").innerHTML = buildRadar(vec);
+
+    var list = $("dimList");
+    list.innerHTML = "";
+    sorted.forEach(function(name){
+      var value = val(name);
+      var row = document.createElement("div");
+      row.className = "dim-row";
+      row.innerHTML = '<div class="dim-top"><span>'+name+' <small style="color:#A99C90">'+(value>=50?"偏狗":"偏猫")+'</small></span><span>'+value+' / 100</span></div>'+
+        '<div class="dim-track"><div class="dim-fill" data-width="'+value+'"></div></div>';
+      list.appendChild(row);
+    });
+    requestAnimationFrame(function(){
+      Array.prototype.forEach.call(list.querySelectorAll(".dim-fill"),function(el){
+        el.style.width = el.getAttribute("data-width")+"%";
+      });
+    });
+
+    function levelText(d,v){
+      return v>=67 ? dimInfo[d].dog : (v>=40 ? dimInfo[d].mid : dimInfo[d].cat);
+    }
+    function levelWord(v){ return v>=67 ? "偏狗" : (v>=40 ? "均衡" : "偏猫"); }
+    function levelClass(v){ return v>=67 ? "" : (v>=40 ? " mid" : " lo"); }
+    function levelChip(v){ return '<span class="level'+levelClass(v)+'">'+levelWord(v)+'</span>'; }
+
+    $("summaryLead").innerHTML = "你的猫性约 <b>"+catPct+"%</b>、狗性约 <b>"+dogPct+"%</b>，属于<b>"+ratioWord+"</b>。六维中「<b>"+top+"</b>」最偏狗性，「<b>"+low+"</b>」最偏猫性；与之最接近的品种人格是「<b>"+best.name+"</b>」，契合度 <b>"+match+"%</b>。这个配比不是标签，而是你日常反应的倾向总和。";
+    $("summaryChips").innerHTML = sorted.map(function(d){
+      var v = val(d);
+      var cls = v>=67 ? " hi" : (v<40 ? " lo" : "");
+      return '<span class="chip'+cls+'">'+d+' '+v+'</span>';
+    }).join("");
+
+    var att=val("依恋风格"), ext=val("外向性"), exp=val("情绪表达");
+    var coo=val("协作倾向"), rou=val("规律秩序"), agr=val("宜人性");
+
+    var attach;
+    if(att>=67){
+      attach = "在依恋风格上你明显偏狗系：亲密关系是你的能量来源，你喜欢保持联系，独处太久会不适应。这样的你在关系里温暖而投入，但要留意，如果安全感过度依赖别人的回应，对方的每一次疏远都会被放大。";
+    }else if(att>=40){
+      attach = "在依恋风格上你处于中间：既享受陪伴，也需要独处，两者平衡时你状态最好。你不会黏人，也不会冷到让人够不着，这种弹性让你在关系里比较从容。";
+    }else{
+      attach = "在依恋风格上你明显偏猫系：你高度自足，独处不孤单，不需要频繁确认关系也能安心。这样的你独立而稳定，但代价是当你真的需要支持时，常常不知道该向谁开口。";
+    }
+
+    var social;
+    if(ext>=67 && exp>=67){
+      social = "你在社交上是外放型：从互动中获取能量，表达也直接，别人很容易读懂你。你走到哪里都能很快熟起来，但要记得给独处留一点位置。";
+    }else if(ext>=67 && exp<40){
+      social = "你在社交上是「热心参与、冷处理表达」型：愿意参与人群，但很少袒露真实情绪。别人觉得你好相处，却可能一直不了解真正的你。";
+    }else if(ext<40 && exp>=67){
+      social = "你在社交上是「安静但真诚」型：不主动扩张社交圈，但对亲近的人非常坦率。你的表达是真的，只是只留给少数人。";
+    }else if(ext<40 && exp<40){
+      social = "你在社交上是内敛型：偏好独处与观察，情绪也收得很深。这让你显得沉稳可靠，但也意味着机会和关系容易从身边悄悄溜走。";
+    }else{
+      social = "你在社交上介于独处与融入之间：能社交也能安静，会根据场合切换状态，这种平衡让你在不同的圈子里都能自在。";
+    }
+
+    var pressure;
+    if(exp>=67 && rou>=67){
+      pressure = "压力下你会一边把情绪说出来，一边更用力地把事情按计划推进。你不会闷着，也不会乱套，但要注意别把焦躁传给身边的人。";
+    }else if(exp>=67 && rou<40){
+      pressure = "压力下你的情绪先出来，行动反而变随性。你需要先处理感受，才谈得上处理事情，给自己一点缓冲会更稳。";
+    }else if(exp<40 && rou>=67){
+      pressure = "压力下你更沉默，也更依赖既定的秩序：把事情按部就班做完，是你稳住自己的方式。只是别忘了情绪也需要出口。";
+    }else if(exp<40 && rou<40){
+      pressure = "压力下你既不外露也不太计划，容易先搁着、缓一缓再处理。你的恢复方式偏内部消化，给足时间通常能自己缓回来。";
+    }else{
+      pressure = "压力下你会在表达与克制之间找平衡：该说的时候会说，也会维持基本的节奏。你的复原力来自这种不极端。";
+    }
+
+    var coop;
+    if(coo>=67 && agr>=67){
+      coop = "在协作上你是典型的配合型：愿意听安排、照顾别人的感受，团队有你很省心。但代价是你很难说不，容易把别人的需求排在自己前面。";
+    }else if(coo>=67 && agr<40){
+      coop = "在协作上你愿意配合，但保留自己的判断：你会执行，却不会无条件认同。这种「合作但不盲从」其实很可贵。";
+    }else if(coo<40 && agr>=67){
+      coop = "在协作上你待人友善，却不喜欢被安排：你可以帮忙，但方法要自己定。给空间比给指令更能激发你的投入。";
+    }else if(coo<40 && agr<40){
+      coop = "在协作上你高度自主：自己做决定、自己负责，不喜欢被指挥，也不轻易迎合。你适合独立负责一块，而不是层层汇报。";
+    }else{
+      coop = "在协作上你兼顾独立与配合：既能自己拿主意，也能在需要时跟上团队。关键是分清哪些事该坚持，哪些事可以让步。";
+    }
+
+    var analysis = "";
+    analysis += '<div class="insight"><h4>整体轮廓：你的猫狗配比</h4><p>六个维度中，每一项分数越高越偏狗性、越低越偏猫性。你最偏狗性的是「<b>'+top+'</b>」（'+val(top)+' 分），'+levelText(top,val(top))+'最偏猫性的是「<b>'+low+'</b>」（'+val(low)+' 分），'+levelText(low,val(low))+'六维平均后，你的狗性约 <b>'+dogPct+'%</b>、猫性约 <b>'+catPct+'%</b>，也就是<b>'+ratioWord+'</b>。</p><p>'+best.core+'</p></div>';
+    analysis += '<div class="insight"><h4>依恋模式</h4><p>'+attach+'</p></div>';
+    analysis += '<div class="insight"><h4>社交与情绪表达</h4><p>'+social+'</p></div>';
+    analysis += '<div class="insight"><h4>协作方式</h4><p>'+coop+'</p></div>';
+    analysis += '<div class="insight"><h4>压力下的你</h4><p>'+pressure+'</p></div>';
+    analysis += '<div class="insight"><h4>为什么是「'+best.name+'」</h4><p>匹配不是随意贴标签：系统把你的六维得分与 12 种猫犬品种人格的性格向量逐一比对，取总体差距最小的一位。你与「<b>'+best.name+'</b>」的相似之处，主要落在「<b>'+top+'</b>」与「<b>'+second+'</b>」两项——这些维度上的本能反应相近，所以这份描述会格外贴你的日常。</p><p>也要看清差异：品种人格是典型的性格画像，这里抽取的是行为倾向，不代表外貌、能力或生活境遇。猫性与狗性没有优劣，偏猫让你自足、敏锐，偏狗让你温暖、可靠。真正值得做的，是看清这些倾向在什么场合帮你、又在什么场合困住你。</p></div>';
+    $("analysis").innerHTML = analysis;
+
+    var catDims = dimNames.filter(function(d){ return val(d)<50; }).sort(function(a,b){ return val(a)-val(b); });
+    var dogDims = dimNames.filter(function(d){ return val(d)>=50; }).sort(function(a,b){ return val(b)-val(a); });
+    var r = "";
+    r += '<div class="ratio-detail">';
+    r += '<p>你的配比来自六个维度的平均：<b>猫性 '+catPct+'% · 狗性 '+dogPct+'%</b>。它描述的是你面对日常情境时的平均倾向，而不是某个标签。</p>';
+    r += '<div class="ratio-cols">';
+    r += '<div class="ratio-col cat"><div class="rc-h">把你拉向猫性的维度</div>'+
+      (catDims.length ? catDims.map(function(d){ return '<div class="rc-row"><span>'+d+'</span><b>'+val(d)+'</b></div>'; }).join("") : '<div class="rc-empty">六个维度都未明显偏猫</div>')+'</div>';
+    r += '<div class="ratio-col dog"><div class="rc-h">把你拉向狗性的维度</div>'+
+      (dogDims.length ? dogDims.map(function(d){ return '<div class="rc-row"><span>'+d+'</span><b>'+val(d)+'</b></div>'; }).join("") : '<div class="rc-empty">六个维度都未明显偏狗</div>')+'</div>';
+    r += '</div>';
+    r += '<p>这些倾向组合起来，就是你现实中的样子：<b>'+ratioWord+'</b>。'+best.tag+'。如果身边的人常说你「像猫」或「像狗」，这份配比通常能解释他们为什么这么说。</p>';
+    r += '</div>';
+    $("ratioDetail").innerHTML = r;
+
+    var midBehavior = "在这个维度上你会按场合切换，不会固定在某一种反应上。";
+    $("dimCards").innerHTML = sorted.map(function(d){
+      var v = val(d), info = dimInfo[d];
+      var desc = v>=67 ? info.dog : (v>=40 ? info.mid : info.cat);
+      var drive = v>=50 ? info.driveDog : info.driveCat;
+      var cost = v>=50 ? info.costDog : info.costCat;
+      var beh = v>=67 ? info.behDog : (v>=40 ? midBehavior : info.behCat);
+      return '<div class="dim-card"><div class="dim-card-head"><span class="dn">'+d+'</span><span class="ds">'+levelChip(v)+' '+v+' / 100</span></div>'+
+        '<p><em>心理学含义 · </em>'+desc+'</p>'+
+        '<p><em>驱动机制 · </em>'+drive+'；'+cost+'。</p>'+
+        '<p><em>在生活中的样子 · </em>'+beh+'</p>'+
+        '<p><em>可执行的一步 · </em>'+info.advice+'</p></div>';
+    }).join("");
+
+    $("methodNote").innerHTML =
+      "<p><b>测量结构</b> · 本测试共 30 道自陈式题目，六个维度各 5 题；每题四个选项按 0–3 分计分，维度原始分范围 0–15，再线性归一化为 0–100。所有维度统一为「分数越高越偏狗性、越低越偏猫性」。本次你的六维得分为："+dimNames.map(function(d){ return d+" "+val(d); }).join("、")+"。</p>"+
+      "<p><b>猫狗配比</b> · 将六个维度得分取平均得到狗性比例，猫性比例为 100 减去狗性比例。配比反映的是行为倾向的平均水平，不代表你「是猫还是狗」——多数人都处在两者之间。</p>"+
+      "<p><b>品种匹配</b> · 将你的六维得分与 12 种猫犬品种人格的性格向量计算欧氏距离，取距离最小者，再换算为契合度。契合度表示轮廓相似度，不代表外貌、能力或生活境遇的接近。</p>"+
+      "<p><b>局限说明</b> · 维度设计参考依恋理论、大五人格、自我决定理论与情绪表达性研究，但本测试并非标准化心理测量，不具备严格的信效度。自陈量表易受当下心境、社会赞许性与自我认知偏差影响，单次结果只能反映此刻的倾向。结果用于自我观察与娱乐参考，不构成心理诊断。</p>";
+
+    $("sceneList").innerHTML = best.scenes.map(function(x,i){
+      return '<div class="scene" data-n="'+(i+1)+'">'+x+'</div>';
+    }).join("");
+    $("guideList").innerHTML = best.guide.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+
+    $("shareBtn").textContent = "复制专属分享文案";
+    $("shareBtn").classList.remove("done");
+    $("analyzing").classList.remove("show");
+    show("result");
+  }
+
+  $("startBtn").addEventListener("click",function(){
+    answers = new Array(30).fill(null);
+    current = 0;
+    render();
+    show("quiz");
+  });
+
+  $("prevBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(current>0){ current--; render(); }
+  });
+
+  $("nextBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(answers[current]===null) return;
+    if(current < questions.length-1){ current++; render(); }
+    else { submitQuiz(); }
+  });
+
+  $("restartBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    answers = new Array(30).fill(null);
+    current = 0;
+    show("intro");
+  });
+
+  $("shareBtn").addEventListener("click",function(){
+    var name = $("heroName").textContent;
+    var text = "我在《猫狗性格测试》里匹配到了「"+name+"」——猫性 "+$("catPct").textContent+"% / 狗性 "+$("dogPct").textContent+"%，"+$("heroTag").textContent+"。契合度 "+$("matchNum").textContent+"%，你也来测测你是猫系还是狗系。";
+    function done(){
+      var btn=$("shareBtn");
+      btn.textContent="已复制，去分享吧";
+      btn.classList.add("done");
+      setTimeout(function(){ btn.textContent="复制专属分享文案"; btn.classList.remove("done"); },2600);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done,function(){ fallback(text,done); });
+    } else { fallback(text,done); }
+  });
+
+  function fallback(text,cb){
+    var ta=document.createElement("textarea");
+    ta.value=text;
+    ta.style.position="fixed";
+    ta.style.opacity="0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand("copy"); cb(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  render();
+})();
+
+</script>
+</body>
+</html>
