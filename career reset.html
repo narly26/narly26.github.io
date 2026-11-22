@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5F6F3">
+<meta name="description" content="失业后职业规划 —— 50 道题，看清此刻的处境，理清接下来的方向。">
+<title>失业后职业规划</title>
+<style>
+  :root{
+    --bg:#F5F6F3;
+    --surface:#FFFFFF;
+    --ink:#1E2A2C;
+    --muted:#797F7D;
+    --line:#E4E7E2;
+    --accent:#2C5A61;
+    --accent-soft:#E9F1F1;
+    --gold:#AC8552;
+    --gold-soft:#F8F2E8;
+    --shadow:0 12px 34px rgba(30,42,44,.05);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(900px 520px at 12% -10%,#FFFFFF 0%,rgba(255,255,255,0) 62%),var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;position:relative;overflow-x:hidden;
+  }
+  .ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.42;animation:drift 20s ease-in-out infinite alternate}
+  .orb.a{width:300px;height:300px;background:#D8E6E5;top:-110px;left:-100px}
+  .orb.b{width:250px;height:250px;background:#F1E7D5;bottom:6%;right:-120px;animation-delay:-7s}
+  .orb.c{width:200px;height:200px;background:#E0E6EC;top:44%;left:-140px;animation-delay:-13s}
+  @keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(28px,36px,0) scale(1.14)}}
+  button,input,select{font:inherit}
+  button{cursor:pointer}
+  .app{position:relative;z-index:1;max-width:520px;min-height:100vh;margin:0 auto;padding:0 22px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+  .topbar{height:66px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.14em;color:var(--ink)}
+  .brand-mark{width:24px;height:24px;border-radius:7px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;letter-spacing:0;animation:breathe 4.2s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(44,90,97,.18)}50%{transform:scale(1.07);box-shadow:0 0 0 7px rgba(44,90,97,0)}}
+  .top-hint{font-size:11px;color:var(--muted);letter-spacing:.1em}
+  main{flex:1 1 auto;padding-top:26px}
+  .screen{display:none}
+  .screen.active{display:block;animation:rise .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  #intro > *{animation:staggerIn .68s cubic-bezier(.22,1,.36,1) backwards}
+  #intro > *:nth-child(1){animation-delay:.04s}
+  #intro > *:nth-child(2){animation-delay:.10s}
+  #intro > *:nth-child(3){animation-delay:.16s}
+  #intro > *:nth-child(4){animation-delay:.22s}
+  #intro > *:nth-child(5){animation-delay:.28s}
+  #intro > *:nth-child(6){animation-delay:.34s}
+  #intro > *:nth-child(7){animation-delay:.40s}
+  #intro > *:nth-child(8){animation-delay:.46s}
+  #intro > *:nth-child(9){animation-delay:.52s}
+  #intro > *:nth-child(10){animation-delay:.58s}
+  #intro > *:nth-child(11){animation-delay:.64s}
+  @keyframes staggerIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  #intro > .title-rule{animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+
+  /* 首页 */
+  .eyebrow{font-size:11px;letter-spacing:.28em;color:var(--gold);margin:34px 0 18px}
+  .title{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-size:39px;line-height:1.27;font-weight:600;letter-spacing:.03em;margin:0}
+  .title-rule{width:42px;height:2px;background:var(--accent);margin:22px 0 20px;transform-origin:left center;animation:growRule .85s .5s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes growRule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  .lead{font-size:14px;line-height:1.9;color:var(--muted);margin:0;max-width:340px}
+  .meta{display:flex;gap:16px;margin:26px 0 34px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .meta span{display:flex;align-items:center;gap:6px}
+  .meta i{width:3px;height:3px;border-radius:50%;background:var(--gold);display:inline-block}
+  .field-label{display:block;font-size:12px;color:var(--muted);letter-spacing:.08em;margin:18px 0 10px}
+  .select-field,.age-field{
+    display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);
+    border-radius:14px;padding:0 18px;height:56px;transition:border-color .2s,box-shadow .2s;
+  }
+  .select-field:focus-within,.age-field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .select-field select{
+    flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:15px;color:var(--ink);
+    -webkit-appearance:none;appearance:none;
+  }
+  .select-field:after{content:"";width:8px;height:8px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg);margin-left:8px}
+  .age-field input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:19px;color:var(--ink);font-family:"Noto Serif SC","Songti SC",serif}
+  .age-field input::placeholder{color:#C4C8C4}
+  .age-field em{font-style:normal;font-size:13px;color:var(--muted)}
+  .form-error{min-height:20px;font-size:12px;color:#B4604F;padding-top:7px;opacity:0;transition:opacity .2s}
+  .form-error.show{opacity:1}
+  #intro > .form-error{animation:none}
+  .primary{width:100%;height:56px;border:0;border-radius:14px;background:var(--ink);color:#fff;font-size:14px;letter-spacing:.18em;transition:transform .18s,opacity .18s}
+  .primary:active{transform:scale(.985)}
+  .primary:disabled{opacity:.36;cursor:not-allowed}
+  .fine-print{font-size:11px;line-height:1.8;color:#A2A7A3;text-align:center;margin-top:16px}
+
+  /* 答题 */
+  .progress-track{height:3px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:6px}
+  .progress-fill{position:relative;overflow:hidden;height:100%;width:0;background:var(--accent);border-radius:9px;transition:width .42s cubic-bezier(.22,1,.36,1)}
+  .progress-fill:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:sheen 2.4s linear infinite}
+  @keyframes sheen{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .quiz-head{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
+  .step{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+  .step strong{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;color:var(--ink);font-weight:600}
+  .dim-chip{font-size:11px;color:var(--accent);background:var(--accent-soft);padding:6px 11px;border-radius:20px;letter-spacing:.04em}
+  .question{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;line-height:1.62;font-weight:600;margin:6px 0 26px}
+  .question.swap{animation:questionSwap .42s cubic-bezier(.22,1,.36,1)}
+  @keyframes questionSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .options{display:flex;flex-direction:column;gap:11px}
+  .option{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 16px;text-align:left;color:var(--ink);font-size:14px;line-height:1.6;transition:border-color .2s,background .2s,transform .18s,box-shadow .2s;animation:optionIn .45s cubic-bezier(.22,1,.36,1) backwards}
+  @keyframes optionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .option:hover{border-color:#C2D0CE;transform:translateX(3px)}
+  .option:active{transform:scale(.985)}
+  .option .key{flex:0 0 28px;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);transition:all .2s}
+  .option.selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 6px 18px rgba(44,90,97,.08)}
+  .option.selected .key{background:var(--accent);border-color:var(--accent);color:#fff;animation:keyPop .42s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes keyPop{0%{transform:scale(.65)}60%{transform:scale(1.16)}100%{transform:scale(1)}}
+  .nav{display:flex;gap:12px;margin-top:30px}
+  .ghost{flex:0 0 96px;height:50px;border-radius:13px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:13px}
+  .ghost:disabled{opacity:.35;cursor:not-allowed}
+  .nav .primary{flex:1;height:50px}
+
+  /* 结果 */
+  #result > *{animation:resultIn .62s cubic-bezier(.22,1,.36,1) backwards}
+  #result > *:nth-child(1){animation-delay:.04s}
+  #result > *:nth-child(2){animation-delay:.09s}
+  #result > *:nth-child(3){animation-delay:.14s}
+  #result > *:nth-child(4){animation-delay:.19s}
+  #result > *:nth-child(5){animation-delay:.24s}
+  #result > *:nth-child(6){animation-delay:.29s}
+  #result > *:nth-child(7){animation-delay:.34s}
+  #result > *:nth-child(8){animation-delay:.39s}
+  #result > *:nth-child(9){animation-delay:.44s}
+  @keyframes resultIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .result-label{text-align:center;font-size:11px;letter-spacing:.3em;color:var(--muted);margin-top:12px}
+  .verdict-hero{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:30px 24px 26px;text-align:center;position:relative;overflow:hidden}
+  .verdict-hero:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .quote-mark{font-family:Georgia,serif;font-size:46px;line-height:.5;color:var(--accent-soft);height:24px}
+  .one-line{font-family:"Noto Serif SC","Songti SC",serif;font-size:21px;line-height:1.7;font-weight:600;color:var(--ink);margin:16px 2px 20px;animation:numberGlow 3.6s ease-in-out infinite}
+  @keyframes numberGlow{0%,100%{text-shadow:0 0 0 rgba(44,90,97,0)}50%{text-shadow:0 0 18px rgba(44,90,97,.10)}}
+  .profile-tag{display:inline-block;margin-top:2px;padding:7px 16px;border-radius:20px;font-size:12px;letter-spacing:.12em;background:var(--accent-soft);color:var(--accent)}
+  .profile-tag.gold{background:var(--gold-soft);color:var(--gold)}
+  .hero-desc{font-size:13px;line-height:1.9;color:var(--muted);margin:16px auto 0;max-width:320px}
+  .index-card{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px;display:flex;align-items:center;gap:18px}
+  .index-num{font-family:"Noto Serif SC","Songti SC",serif;font-size:46px;line-height:1;font-weight:600;color:var(--accent)}
+  .index-num small{font-size:15px;color:var(--muted);font-weight:400;margin-left:2px}
+  .index-info{flex:1;min-width:0;border-left:1px solid var(--line);padding-left:18px}
+  .index-info .lbl{font-size:11px;letter-spacing:.12em;color:var(--muted)}
+  .index-info .pair{display:flex;gap:16px;margin-top:8px;font-size:12px;line-height:1.6}
+  .index-info .pair span{display:block;color:var(--muted);font-size:10px}
+  .index-info .pair b{color:var(--ink);font-weight:600}
+  .block{margin-top:30px}
+  .block h3{font-family:"Noto Serif SC","Songti SC",serif;font-size:17px;font-weight:600;letter-spacing:.06em;margin:0 0 14px;padding-left:12px;border-left:2px solid var(--accent)}
+  .block p{font-size:13.5px;line-height:2;color:#55514A;margin:0 0 12px}
+  .block p b{color:var(--ink);font-weight:600}
+  .dim-row{margin-bottom:15px}
+  .dim-top{display:flex;justify-content:space-between;font-size:12px;color:#55514A;margin-bottom:7px}
+  .dim-top span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+  .dim-track{height:5px;background:#ECE9E2;border-radius:5px;overflow:hidden}
+  .dim-fill{height:100%;border-radius:5px;background:var(--accent);width:0;transition:width .9s cubic-bezier(.22,1,.36,1)}
+  .dim-fill.low{background:#B99A6E}
+  .subhead{font-size:11px;letter-spacing:.18em;color:var(--gold);margin:22px 0 10px}
+  .subhead:first-child{margin-top:0}
+  .diff-story{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px;padding:14px 16px;font-size:12.5px;line-height:1.95;color:#57534B}
+  .diff-story.gold{border-left-color:var(--gold)}
+  .insight{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 16px 4px;margin-bottom:12px}
+  .insight-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .insight-dot{flex:0 0 8px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .insight-dot.gold{background:#B99A6E}
+  .insight-head h4{margin:0;font-size:13.5px;font-weight:600;flex:1}
+  .insight-head em{font-style:normal;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .insight p{font-size:12.5px;line-height:1.95;color:#57534B;margin:0 0 9px}
+  .insight p span{color:var(--ink);font-weight:600}
+  .insight-bar{height:4px;background:#ECE9E2;border-radius:4px;overflow:hidden;margin-bottom:12px}
+  .insight-bar i{display:block;height:100%;background:var(--accent);border-radius:4px;width:0;transition:width .9s cubic-bezier(.22,1,.36,1)}
+  .insight-bar i.gold{background:#B99A6E}
+  .roadmap{position:relative;padding-left:26px;margin-top:6px}
+  .roadmap:before{content:"";position:absolute;left:7px;top:8px;bottom:14px;width:1px;background:var(--line)}
+  .phase{position:relative;margin-bottom:20px}
+  .phase:before{content:"";position:absolute;left:-23px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+  .phase h4{margin:0 0 3px;font-size:14px;font-weight:600;color:var(--ink)}
+  .phase .when{font-size:11px;color:var(--gold);letter-spacing:.08em;margin-bottom:8px}
+  .phase ul{margin:0;padding:0;list-style:none}
+  .phase li{position:relative;padding-left:14px;font-size:12.5px;line-height:1.85;color:#57534B;margin-bottom:5px}
+  .phase li:before{content:"";position:absolute;left:0;top:10px;width:4px;height:4px;border-radius:50%;background:#AFB7B3}
+  .tips{margin:0;padding:0;list-style:none;counter-reset:tip}
+  .tips li{position:relative;padding-left:30px;margin-bottom:13px;font-size:13px;line-height:1.85;color:#55514A}
+  .tips li:before{counter-increment:tip;content:counter(tip);position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+  .disclaimer{margin-top:28px;padding:14px 16px;border:1px dashed var(--line);border-radius:12px;font-size:11px;line-height:1.8;color:#9FA49F}
+  .analyzing{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(245,246,243,.95);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .38s,visibility .38s}
+  .analyzing.show{opacity:1;visibility:visible}
+  .analyzing .ring{width:74px;height:74px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1.05s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .analyzing .ring-wrap{position:relative;width:74px;height:74px}
+  .analyzing .ring-wrap:after{content:"";position:absolute;inset:12px;border-radius:50%;border:1px solid var(--line);animation:spin 1.8s linear infinite reverse}
+  .analyzing p{margin:24px 0 0;font-size:12px;letter-spacing:.22em;color:var(--muted);animation:pulseText 1.5s ease-in-out infinite}
+  @keyframes pulseText{0%,100%{opacity:.45}50%{opacity:1}}
+  .restart{margin-top:22px}
+  .footer-note{flex:0 0 auto;text-align:center;font-size:10px;color:#B0B5B0;letter-spacing:.1em;padding-top:26px}
+  @media (max-width:360px){
+    .title{font-size:33px}
+    .question{font-size:19px}
+    .one-line{font-size:19px}
+    .index-num{font-size:40px}
+    .app{padding-left:18px;padding-right:18px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span></div>
+<div class="analyzing" id="analyzing" aria-live="polite">
+  <div class="ring-wrap"><div class="ring"></div></div>
+  <p>正在梳理你的答案</p>
+</div>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">职</span><span>CAREER RESET</span></div>
+    <div class="top-hint" id="topHint">职业复盘 · 01</div>
+  </header>
+
+  <main>
+    <section class="screen active" id="intro">
+      <div class="eyebrow">A CLEARER WAY FORWARD</div>
+      <h1 class="title">失业后<br>职业规划</h1>
+      <div class="title-rule"></div>
+      <p class="lead">停顿不是终点，而是重新选择的机会。用 50 道题，看清此刻的处境，理清接下来的方向。</p>
+      <div class="meta">
+        <span><i></i>50 道选择题</span>
+        <span><i></i>约 6 分钟</span>
+        <span><i></i>6 个职业维度</span>
+      </div>
+      <label class="field-label" for="statusInput">你目前的状况</label>
+      <div class="select-field">
+        <select id="statusInput" aria-label="目前状况">
+          <option value="just">刚离开职场（1 个月内）</option>
+          <option value="mid">空窗 1–3 个月</option>
+          <option value="long">空窗 3 个月以上</option>
+          <option value="other">其他 / 想转行探索</option>
+        </select>
+      </div>
+      <label class="field-label" for="yearsInput">相关工作年限</label>
+      <div class="age-field">
+        <input id="yearsInput" type="number" inputmode="numeric" min="0" max="40" placeholder="请输入工作年限" aria-label="工作年限">
+        <em>年</em>
+      </div>
+      <div class="form-error" id="formError">请输入 0 至 40 之间的工作年限</div>
+      <button class="primary" id="startBtn" type="button">开始测试</button>
+      <div class="fine-print">答案仅在你的浏览器中计算，不会被上传或保存</div>
+    </section>
+
+    <section class="screen" id="quiz">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="quiz-head">
+        <div class="step">第 <strong id="stepNow">01</strong> / 50 题</div>
+        <div class="dim-chip" id="dimChip">职业方向与定位</div>
+      </div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="options" id="options"></div>
+      <div class="nav">
+        <button class="ghost" id="prevBtn" type="button">上一题</button>
+        <button class="primary" id="nextBtn" type="button" disabled>下一题</button>
+      </div>
+    </section>
+
+    <section class="screen" id="result">
+      <div class="result-label">你的职业处境结论</div>
+      <div class="verdict-hero">
+        <div class="quote-mark">“</div>
+        <div class="one-line" id="oneLine">一句话结论</div>
+        <div class="profile-tag" id="profileTag">稳步过渡型</div>
+        <p class="hero-desc" id="heroDesc"></p>
+      </div>
+
+      <div class="index-card">
+        <div class="index-num"><span id="totalIndex">0</span><small>/100</small></div>
+        <div class="index-info">
+          <div class="lbl">职业状态指数</div>
+          <div class="pair">
+            <div><span>相对优势</span><b id="topDim">—</b></div>
+            <div><span>优先补强</span><b id="lowDim">—</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>你现在的位置</h3>
+        <div id="situation"></div>
+      </div>
+
+      <div class="block">
+        <h3>六个职业维度</h3>
+        <div id="dimList"></div>
+      </div>
+
+      <div class="block">
+        <h3>逐维度深度解读</h3>
+        <div id="deepAnalysis"></div>
+      </div>
+
+      <div class="block">
+        <h3>未来规划路线图</h3>
+        <div class="roadmap" id="roadmap"></div>
+      </div>
+
+      <div class="block">
+        <h3>给你的行动清单</h3>
+        <ul class="tips" id="tips"></ul>
+      </div>
+
+      <div class="disclaimer">本报告基于你的主观作答生成，用于自我梳理与方向参考，不构成职业发展或心理方面的专业诊断。若你正经历持续的情绪困扰，建议寻求专业心理咨询帮助。</div>
+      <button class="primary restart" id="restartBtn" type="button">重新测试</button>
+    </section>
+  </main>
+
+  <footer class="footer-note">CAREER RESET · 一次温和的自我盘点</footer>
+</div>
+
+<script>
+  var dimOrder = ["职业方向与定位","求职行动力","技能与竞争力","心理韧性与情绪","人脉与资源","规划与成长"];
+
+  var questions = [
+    {d:"职业方向与定位",q:"谈到下一份工作，你目前的状态更接近？",o:[["清楚知道自己想要的岗位和行业",3],["有大致方向，但具体岗位说不清",2],["有几个模糊想法，还没确定",1],["完全没想过，走一步看一步",0]]},
+    {d:"职业方向与定位",q:"你能否用一两句话说明自己适合什么类型的工作？",o:[["能，而且有具体例子支撑",3],["大致能说清，但不够具体",2],["只能说出零散的关键词",1],["基本说不出来",0]]},
+    {d:"职业方向与定位",q:"选择新机会时，你目前的判断标准是？",o:[["有清晰的优先级排序并据此判断",3],["有几个标准，但偶尔摇摆",2],["主要看薪资，其他没细想",1],["别人说什么好就考虑什么",0]]},
+    {d:"职业方向与定位",q:"你对「理想工作」的想象是？",o:[["具体到日常工作内容和状态",3],["有画面但比较笼统",2],["只有「钱多事少」这类模糊期待",1],["完全没有想过",0]]},
+    {d:"职业方向与定位",q:"你是否清楚自己不适合哪类工作？",o:[["很清楚，也有过实际验证",3],["大致知道",2],["隐约有些感觉",1],["没想过这个问题",0]]},
+    {d:"职业方向与定位",q:"面对「稳定」与「成长」的取舍，你？",o:[["清楚自己当前阶段的优先级",3],["倾向成长，但偶尔动摇",2],["说不清，看机会再说",1],["完全随缘",0]]},
+    {d:"职业方向与定位",q:"你如何定义这次职业空窗期？",o:[["主动调整，为下一阶段做准备",3],["被动接受，但积极面对",2],["无奈等待，走一步看一步",1],["一直在逃避，不愿多想",0]]},
+    {d:"职业方向与定位",q:"当目标暂时无法实现时，你通常会？",o:[["拆解成阶段性目标，逐步靠近",3],["调整路径但不放弃方向",2],["先放一放，等机会出现",1],["直接换方向或彻底放弃",0]]},
+    {d:"职业方向与定位",q:"你对未来三年的职业位置有清晰预期吗？",o:[["有，且大致知道如何到达",3],["有方向，路径还需细化",2],["有一点想法但不坚定",1],["完全没概念",0]]},
+
+    {d:"求职行动力",q:"目前你投递简历的频率是？",o:[["每天都有针对性投递",3],["每周稳定投递几次",2],["偶尔投一投",1],["几乎没有投过",0]]},
+    {d:"求职行动力",q:"你是否会根据不同岗位调整简历？",o:[["每次都针对性优化",3],["重要岗位会调整",2],["基本都用同一份",1],["从没想过要改",0]]},
+    {d:"求职行动力",q:"每天花在求职上的有效时间大约是？",o:[["4 小时以上，像上班一样",3],["2 至 4 小时",2],["1 小时左右",1],["几乎没有固定投入",0]]},
+    {d:"求职行动力",q:"面试前你通常会做多少准备？",o:[["研究公司并做模拟练习",3],["了解公司背景和业务",2],["简单看一眼岗位描述",1],["基本不准备，临场发挥",0]]},
+    {d:"求职行动力",q:"被拒绝之后，你多久能重新出发？",o:[["当天复盘完就继续",3],["一两天能调整好",2],["需要一周左右",1],["很久都缓不过来",0]]},
+    {d:"求职行动力",q:"你会主动联系招聘方或行业内的人吗？",o:[["经常主动，把它当成常态",3],["偶尔会",2],["想过但很少行动",1],["从不，觉得不好意思",0]]},
+    {d:"求职行动力",q:"你目前的求职渠道情况是？",o:[["多平台加内推加人脉并行",3],["有两三个渠道",2],["主要靠一个平台",1],["没有固定渠道",0]]},
+    {d:"求职行动力",q:"你是否为求职设过明确的小目标？",o:[["有，并且坚持执行",3],["有，但执行不稳定",2],["想设但一直没落实",1],["从来没有设过",0]]},
+    {d:"求职行动力",q:"当求职进展不顺时，你通常？",o:[["复盘方法，调整策略再试",3],["换个渠道或方式",2],["停下来等一等",1],["完全停滞，不想面对",0]]},
+
+    {d:"技能与竞争力",q:"说到你的核心能力，你能列举出几项？",o:[["3 项以上，且能说明如何运用",3],["2 至 3 项，比较清楚",2],["1 至 2 项，比较笼统",1],["基本说不出来",0]]},
+    {d:"技能与竞争力",q:"你能否把过往经历转化为简历上的亮点？",o:[["能，且有数据成果支撑",3],["能写出一些，但不够突出",2],["很吃力，不知道怎么写",1],["完全不会",0]]},
+    {d:"技能与竞争力",q:"与同岗位的人相比，你的优势是？",o:[["清楚且具体，有案例支撑",3],["大致知道",2],["说不清，缺乏信心",1],["觉得自己没什么优势",0]]},
+    {d:"技能与竞争力",q:"面对岗位要求的技能缺口，你通常？",o:[["主动学习补齐，并有计划",3],["会学，但不够系统",2],["想学但一直没开始",1],["觉得没办法，顺其自然",0]]},
+    {d:"技能与竞争力",q:"你是否了解自己的可迁移技能（沟通、分析、组织等）？",o:[["很清楚，并且能举例",3],["有大致了解",2],["听说过但没梳理过",1],["不了解",0]]},
+    {d:"技能与竞争力",q:"学习一项新东西时，你的状态是？",o:[["能快速上手并坚持下来",3],["学得会，但需要时间",2],["学得慢，容易放弃",1],["很难投入进去",0]]},
+    {d:"技能与竞争力",q:"你能清晰地向别人说明「你能带来什么价值」吗？",o:[["能，而且有说服力",3],["大致能说清楚",2],["说得比较含糊",1],["不知道怎么讲",0]]},
+    {d:"技能与竞争力",q:"你最近一次获得新能力是在？",o:[["3 个月内，且是主动学的",3],["半年内",2],["一年前左右",1],["想不起来了",0]]},
+
+    {d:"心理韧性与情绪",q:"失业以来，你整体的情绪状态更接近？",o:[["有波动但整体平稳、有信心",3],["偶尔焦虑，能自我调节",2],["经常焦虑或低落",1],["长期低落，难以排解",0]]},
+    {d:"心理韧性与情绪",q:"你如何看待这段空窗期？",o:[["一个重新审视和充电的机会",3],["有挑战，但也有意义",2],["大多是压力和煎熬",1],["完全是负面的经历",0]]},
+    {d:"心理韧性与情绪",q:"当「我不行」这类念头出现时，你？",o:[["能觉察并理性地反驳它",3],["会意识到，但需要时间消化",2],["容易被带走，反复去想",1],["深信不疑，无法自拔",0]]},
+    {d:"心理韧性与情绪",q:"你目前的作息和生活节奏是？",o:[["规律，像正常上班一样安排",3],["基本规律，偶尔松散",2],["比较混乱，昼夜颠倒",1],["完全失控",0]]},
+    {d:"心理韧性与情绪",q:"你有多相信「自己最终能找到合适的工作」？",o:[["很相信，只是时间问题",3],["比较相信",2],["有点怀疑",1],["几乎不相信",0]]},
+    {d:"心理韧性与情绪",q:"遇到挫折时，你更倾向于？",o:[["找人聊聊，然后想办法",3],["自己消化，慢慢恢复",2],["憋在心里，越想越糟",1],["逃避，不愿面对",0]]},
+    {d:"心理韧性与情绪",q:"你还能从日常小事中获得愉悦感吗？",o:[["经常能",3],["有时能",2],["很少",1],["几乎不能",0]]},
+    {d:"心理韧性与情绪",q:"与失业前相比，你对自己的评价？",o:[["变得更清晰、更客观了",3],["略有波动但基本稳定",2],["明显下降",1],["大幅下降，很否定自己",0]]},
+
+    {d:"人脉与资源",q:"遇到职业困惑时，你通常会向谁求助？",o:[["有前辈或朋友可请教，会主动联系",3],["有人可问，但很少主动",2],["不知道该找谁",1],["不想麻烦别人",0]]},
+    {d:"人脉与资源",q:"你是否还在维护行业内的联系？",o:[["经常互动，关系活跃",3],["偶尔联系",2],["基本断联",1],["没有可联系的行业人脉",0]]},
+    {d:"人脉与资源",q:"你会告诉别人「我正在找工作」吗？",o:[["会，而且说明找什么方向",3],["会告诉亲近的人",2],["几乎只字不提",1],["觉得不好意思，刻意回避",0]]},
+    {d:"人脉与资源",q:"有人给你介绍机会时，你的反应通常是？",o:[["积极跟进，认真对待",3],["会了解，但不够主动",2],["常常错过或拖延",1],["觉得与自己无关",0]]},
+    {d:"人脉与资源",q:"你是否用过线上职业社群来拓展机会？",o:[["经常参与，有实际收获",3],["偶尔看看",2],["注册过但没怎么用",1],["从未尝试",0]]},
+    {d:"人脉与资源",q:"你与前同事、老同学的关系如何？",o:[["保持联系，能互相支持",3],["有联系但不深",2],["基本不联系",1],["关系疏远或不好",0]]},
+    {d:"人脉与资源",q:"你能从身边人那里获得真实的反馈吗？",o:[["能，而且会认真听取",3],["有时能",2],["很少",1],["没有这样的关系",0]]},
+    {d:"人脉与资源",q:"是否有人能为你做内推或背书？",o:[["有，而且知道该找谁",3],["可能有，但还没联系",2],["不确定",1],["没有",0]]},
+
+    {d:"规划与成长",q:"你对未来三年有个大致的职业规划吗？",o:[["有清晰的规划",3],["有大致方向",2],["想过但不具体",1],["完全没想过",0]]},
+    {d:"规划与成长",q:"这段空窗期，你有没有在学习或提升？",o:[["有系统计划并在执行",3],["有学，但比较零散",2],["想学但没坚持下来",1],["完全没有",0]]},
+    {d:"规划与成长",q:"你是否关注行业趋势和新机会？",o:[["经常关注，有自己的判断",3],["偶尔关注",2],["很少关注",1],["完全不关心",0]]},
+    {d:"规划与成长",q:"做决定时，你更多依靠什么？",o:[["信息和理性分析",3],["理性与直觉结合",2],["主要凭感觉",1],["犹豫不决，依赖他人",0]]},
+    {d:"规划与成长",q:"你是否给自己设过明确的「重新上岗」时间表？",o:[["有，并分解为阶段",3],["心里有个大概期限",2],["没有明确时间",1],["不敢想这件事",0]]},
+    {d:"规划与成长",q:"面对「转行还是坚持」的问题，你？",o:[["理性评估后主动做选择",3],["会权衡，但需要时间",2],["很纠结，反复摇摆",1],["回避，不做决定",0]]},
+    {d:"规划与成长",q:"你如何看待「规划」这件事？",o:[["相信规划能让努力更有效",3],["有用，但计划赶不上变化",2],["有点用，但不相信能执行",1],["没用，都是空想",0]]},
+    {d:"规划与成长",q:"如果现在有个理想机会但准备不足，你会？",o:[["先争取，边做边补",3],["评估之后再决定",2],["因为没准备好而犹豫",1],["直接放弃",0]]}
+  ];
+
+  var dimMeta = {
+    "职业方向与定位":{
+      high:"你对自己要去哪里有清晰的答案，能说出具体的方向、标准与理由。这份清晰是你最大的底气，能帮你过滤掉大量不合适的机会。",
+      mid:"你有大致方向，但还没细化到具体岗位和判断标准。这会让你在看机会时容易犹豫，也较难向别人准确表达你想找什么。",
+      low:"你目前对自己的定位比较模糊，容易在外界信息里摇摆。方向不清会让行动分散，投递和面试都缺少一根主线。",
+      advice:"写下三句「我要 / 我不要 / 我能接受」，把模糊的想法变成可判断的标准，再拿它去筛选每一个机会。"
+    },
+    "求职行动力":{
+      high:"你把自己像上班一样组织起来，稳定投递、主动出击、遇挫即复盘。行动力是你当前最强的推进器。",
+      mid:"你有在行动，但节奏和稳定性不足，容易受情绪和进展影响。把行动固定成日程，会比靠意志力更可靠。",
+      low:"你目前的行动比较零散甚至停滞。求职最怕的不是失败，而是停摆——一旦停下来，焦虑会反过来削弱行动。",
+      advice:"把求职拆成每天可完成的最小动作，例如「投 3 份 + 联系 1 人」，先连续做 7 天，让节奏先于结果回来。"
+    },
+    "技能与竞争力":{
+      high:"你能清楚盘点自己的能力，并用具体成果说话。你知道自己值多少钱，也知道该如何展示。",
+      mid:"你有能力，但表达和包装不足，简历与自我介绍还没把价值讲透。很多时候不是你不行，而是没被看见。",
+      low:"你对自己的竞争力缺少梳理，简历和表达都比较笼统。这会让面试官难以判断你的价值，也容易让你自己低估自己。",
+      advice:"用「做过什么 + 怎么做 + 结果如何」重写三段经历，各配一个数字，你的竞争力会立刻变得具体。"
+    },
+    "心理韧性与情绪":{
+      high:"你在波动中仍能保持稳定，能觉察并调节情绪，也保有生活节奏。这种复原力是度过空窗期的关键资产。",
+      mid:"你有情绪起伏，但基本能自我调节。要注意的是别让低落积累——规律作息和固定节奏是最好的缓冲。",
+      low:"负面情绪停留较久，自我评价下降，生活节奏也有些失序。这会持续消耗你的行动力和判断力。",
+      advice:"先恢复作息与运动这两件小事，情绪稳了再谈求职。把「我今天做成了什么」写下来，用事实对抗自我否定。"
+    },
+    "人脉与资源":{
+      high:"你有人可以请教、有圈子可以互动，也愿意主动开口。很多机会不在招聘平台上，而在这些连接里。",
+      mid:"你有人脉，但联系不深、也较少主动。资源放着不用就等于没有，轻轻的一次问候就可能带来转机。",
+      low:"你目前比较孤立，既没有可请教的人，也不太愿意开口。单打独斗会让信息闭塞，机会也随之变少。",
+      advice:"列一张 10 人名单，本周只做一件事：告诉其中 3 个人你在找什么方向。开口比结果更重要。"
+    },
+    "规划与成长":{
+      high:"你有目标、有时间表，也在持续学习。你不只是在找工作，而是在经营一条长期的增长曲线。",
+      mid:"你有想法和方向，但计划比较松散、执行不稳定。把规划落到时间点和可检查的节点上，会有效很多。",
+      low:"你缺少明确的时间表和成长安排，容易陷入等待。没有规划的等待会让人越来越被动。",
+      advice:"定一个 8 周计划：每周一个可验证的小目标，写在可见的地方。规划的意义在于让每天的行动有落点。"
+    }
+  };
+
+  var profiles = {
+    ready:{tag:"从容重启型",gold:false,
+      situation:"你整体状态积极，能力、行动与心态都在较好的区间。这对你来说更像一次主动的换乘，而不是被迫的停顿。你现在最需要的不是更多努力，而是把优势聚焦到最值得的机会上，避免因选择过多而分散。",
+      one:"你已具备从容重启的底气，把优势收拢到一个方向，机会自然会更快靠近。"},
+    steady:{tag:"稳步过渡型",gold:false,
+      situation:"你的整体状态处在健康区间，多数维度表现稳定，个别环节还有提升空间。你正走在一条正确的路上，只是节奏和精度可以再打磨。只要把短板补上，你的竞争力会明显上一个台阶。",
+      one:"你正稳步走过过渡期，补上最关键的一环，就能把现有的积累真正兑现。"},
+    building:{tag:"蓄力调整型",gold:true,
+      situation:"你正处在蓄力阶段，有些维度已经有基础，另一些还比较吃力。空窗期带来的消耗开始显现，但你的底子仍在。此时最重要的不是全面出击，而是先恢复节奏、集中突破一两个关键点，避免顾此失彼。",
+      one:"你正处在蓄力调整期，先稳住节奏、集中一点突破，比全面出击更有效。"},
+    rebuild:{tag:"重整旗鼓型",gold:true,
+      situation:"你现在承受的压力不小，多个维度同时偏低，行动和情绪都可能进入了低谷。请先把这理解为一段艰难时期的状态，而不是对你能力的判决。此刻最优先的不是马上找到工作，而是恢复生活秩序、重建信心，再一步步重新出发。",
+      one:"眼下的低潮不代表你的能力，从恢复作息与一个小目标开始，慢慢把主动权拿回来。"}
+  };
+
+  function profileFor(v){ if(v>=75)return profiles.ready; if(v>=55)return profiles.steady; if(v>=35)return profiles.building; return profiles.rebuild; }
+  function levelFor(p){ return p>=70?"high":(p>=45?"mid":"low"); }
+  var levelName={high:"表现突出",mid:"尚有空间",low:"需要关注"};
+
+  var statusLead={
+    just:"你刚离开职场，正站在过渡的起点，最初的震荡和情绪起伏都属正常，不必急着下结论。",
+    mid:"你已经走过最初的震荡期，正处在重新找节奏的阶段，这时候的行动方式会决定接下来的走向。",
+    long:"你已经历了较长的调整期，接下来最需要的不是继续等待，而是打破惯性、重新建立结构与连接。",
+    other:"你正考虑换个方向或探索新的可能，这是一次主动的选择，关键在于把想法验证成具体的路径。"
+  };
+  function yearsLead(y){
+    if(y<1) return "你的职业生涯刚起步，可塑性是当下最大的资产，方向比资历更值得投入。";
+    if(y<3) return "你有一到三年的积累，正处在方向定型的关键期，此时的选择会深刻影响后续路径。";
+    if(y<6) return "你具备三到五年的实战经验，正是发力的好阶段，把经验讲清楚就能转化为竞争力。";
+    if(y<11) return "你积累了五到十年的专业资本，深度是你的护城河，如何让经验被新机会看见是重点。";
+    return "你拥有十年以上的深厚经验，如何让积累重新生根、产生新的价值，是这一阶段的核心命题。";
+  }
+
+  var $=function(id){return document.getElementById(id);};
+  var answers=new Array(50).fill(null);
+  var current=0, advanceTimer=null, userStatus="mid", userYears=0;
+
+  function show(id){
+    ["intro","quiz","result"].forEach(function(x){$(x).classList.toggle("active",x===id);});
+    $("topHint").textContent = id==="intro"?"职业复盘 · 01":(id==="quiz"?"职业复盘 · 02":"职业复盘 · 03");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function render(){
+    var item=questions[current];
+    $("stepNow").textContent=String(current+1).padStart(2,"0");
+    $("dimChip").textContent=item.d;
+    $("progressFill").style.width=((current+1)/questions.length*100)+"%";
+    var qt=$("questionText");
+    qt.textContent=item.q;
+    qt.classList.remove("swap"); void qt.offsetWidth; qt.classList.add("swap");
+    var box=$("options"); box.innerHTML="";
+    var keys=["A","B","C","D"];
+    item.o.forEach(function(opt,i){
+      var btn=document.createElement("button");
+      btn.type="button";
+      btn.className="option"+(answers[current]===i?" selected":"");
+      btn.style.animationDelay=(i*0.05)+"s";
+      btn.innerHTML='<span class="key">'+keys[i]+'</span><span>'+opt[0]+'</span>';
+      btn.addEventListener("click",function(){
+        answers[current]=i;
+        Array.prototype.forEach.call(box.children,function(c){c.classList.remove("selected");});
+        btn.classList.add("selected");
+        $("nextBtn").disabled=false;
+        clearTimeout(advanceTimer);
+        advanceTimer=setTimeout(function(){
+          if(current<questions.length-1){current++;render();}
+          else{finish();}
+        },360);
+      });
+      box.appendChild(btn);
+    });
+    $("prevBtn").disabled=(current===0);
+    $("nextBtn").textContent=(current===questions.length-1)?"生成报告":"下一题";
+    $("nextBtn").disabled=(answers[current]===null);
+  }
+
+  function countUp(el,target){
+    var start=performance.now(),dur=900;
+    function step(now){
+      var p=Math.min(1,(now-start)/dur);
+      var e=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*e);
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function finish(){
+    clearTimeout(advanceTimer);
+    var scores={};
+    dimOrder.forEach(function(n){scores[n]=0;});
+    answers.forEach(function(a,i){ if(a!==null) scores[questions[i].d]+=questions[i].o[a][1]; });
+    var pct={};
+    dimOrder.forEach(function(n){
+      var count=questions.filter(function(q){return q.d===n;}).length;
+      pct[n]=Math.round(scores[n]/(count*3)*100);
+    });
+    var total=Math.round(dimOrder.reduce(function(s,n){return s+pct[n];},0)/dimOrder.length);
+    var sorted=dimOrder.slice().sort(function(a,b){return pct[b]-pct[a];});
+    var top=sorted[0], low=sorted[sorted.length-1];
+    var profile=profileFor(total);
+
+    $("oneLine").textContent=profile.one;
+    $("profileTag").textContent=profile.tag;
+    $("profileTag").className="profile-tag"+(profile.gold?" gold":"");
+    $("heroDesc").textContent="你的职业状态指数为 "+total+" 分，「"+top+"」是你的相对优势，「"+low+"」是最值得优先补强的一环。";
+    countUp($("totalIndex"),total);
+    $("topDim").textContent=top;
+    $("lowDim").textContent=low;
+
+    var sit="";
+    sit+="<p>"+statusLead[userStatus]+"</p>";
+    sit+="<p>"+yearsLead(userYears)+"</p>";
+    sit+='<div class="diff-story'+(profile.gold?" gold":"")+'">'+profile.situation+'</div>';
+    $("situation").innerHTML=sit;
+
+    var list=$("dimList"); list.innerHTML="";
+    sorted.forEach(function(name){
+      var value=pct[name];
+      var row=document.createElement("div");
+      row.className="dim-row";
+      row.innerHTML='<div class="dim-top"><span>'+name+'</span><span>'+value+' / 100</span></div>'+
+        '<div class="dim-track"><div class="dim-fill'+(value<45?" low":"")+'" data-width="'+value+'"></div></div>';
+      list.appendChild(row);
+    });
+
+    var deep=$("deepAnalysis"); deep.innerHTML="";
+    sorted.forEach(function(name){
+      var value=pct[name], lv=levelFor(value), meta=dimMeta[name];
+      var card=document.createElement("div");
+      card.className="insight";
+      card.innerHTML='<div class="insight-head"><span class="insight-dot'+(lv==="low"?" gold":"")+'"></span>'+
+        '<h4>'+name+'</h4><em>'+value+' · '+levelName[lv]+'</em></div>'+
+        '<div class="insight-bar"><i class="'+(lv==="low"?"gold":"")+'" data-width="'+value+'"></i></div>'+
+        '<p><span>你的现状：</span>'+meta[lv]+'</p>'+
+        '<p><span>可以试试：</span>'+meta.advice+'</p>';
+      deep.appendChild(card);
+    });
+
+    var rmap=$("roadmap"); rmap.innerHTML="";
+    var phases=[
+      {h:"先稳住，再出发",w:"第 1 阶段 · 未来 2 周",items:[
+        "恢复规律作息，固定每天两段求职时间，先把节奏找回来。",
+        dimMeta[low].advice,
+        "把简历更新到最新，针对最想要的 2 个岗位各优化一版。"
+      ]},
+      {h:"集中发力，扩大接触",w:"第 2 阶段 · 1 至 3 个月",items:[
+        "按每周固定投递与复盘，记录投递数、面试数与时反馈，用数据调整策略。",
+        "主动联系 5 位行业内的朋友或前同事，争取内推与真实信息。",
+        "针对岗位缺口选 1 项高价值技能系统学习，产出可展示的成果。"
+      ]},
+      {h:"沉淀方向，形成复利",w:"第 3 阶段 · 3 至 6 个月",items:[
+        "回看这段时间的面试反馈，收敛到最匹配的一到两个方向。",
+        "把已积累的经验整理成案例库，让竞争力可以被清楚讲述。",
+        "建立长期学习与行业连接的习惯，让下一次变化来临时更从容。"
+      ]}
+    ];
+    phases.forEach(function(p){
+      var div=document.createElement("div");
+      div.className="phase";
+      var lis=p.items.map(function(x){return "<li>"+x+"</li>";}).join("");
+      div.innerHTML='<div class="when">'+p.w+'</div><h4>'+p.h+'</h4><ul>'+lis+'</ul>';
+      rmap.appendChild(div);
+    });
+
+    $("tips").innerHTML=
+      "<li>"+dimMeta[low].advice+"</li>"+
+      "<li>把「找工作」当成一份全职工作来安排时间，稳定节奏比一时冲刺更重要。</li>"+
+      "<li>每得到一个面试反馈，记录一次并调整简历或表达方式，让每次尝试都有沉淀。</li>"+
+      "<li>告诉至少 3 个人你正在找什么方向，机会往往从 conversations 里来。</li>"+
+      "<li>每周留一件与求职无关、但让你愉快的事，保护好情绪这项长期资本。</li>";
+
+    $("analyzing").classList.add("show");
+    setTimeout(function(){
+      $("analyzing").classList.remove("show");
+      show("result");
+      requestAnimationFrame(function(){
+        Array.prototype.forEach.call(document.querySelectorAll("#dimList .dim-fill"),function(el){el.style.width=el.getAttribute("data-width")+"%";});
+        Array.prototype.forEach.call(document.querySelectorAll("#deepAnalysis .insight-bar i"),function(el){el.style.width=el.getAttribute("data-width")+"%";});
+      });
+    },1150);
+  }
+
+  $("startBtn").addEventListener("click",function(){
+    var y=parseInt($("yearsInput").value,10);
+    if(isNaN(y)||y<0||y>40){$("formError").classList.add("show");return;}
+    $("formError").classList.remove("show");
+    userYears=y;
+    userStatus=$("statusInput").value;
+    answers=new Array(50).fill(null);
+    current=0;
+    show("quiz");
+    render();
+  });
+  $("yearsInput").addEventListener("input",function(){$("formError").classList.remove("show");});
+  $("nextBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(current<questions.length-1){current++;render();}
+    else{finish();}
+  });
+  $("prevBtn").addEventListener("click",function(){
+    clearTimeout(advanceTimer);
+    if(current>0){current--;render();}
+  });
+  $("restartBtn").addEventListener("click",function(){
+    answers=new Array(50).fill(null);
+    current=0;
+    $("yearsInput").value="";
+    show("intro");
+  });
+</script>
+</body>
+</html>
