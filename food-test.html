@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>食品匹配测试 · 你是哪一道食物人格</title>
+<meta name="description" content="36 道题，测出你的 12 项能力刻度，并匹配一道专属于你的食物人格。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8D%A1%3C/text%3E%3C/svg%3E">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --ink:#3a2d28;
+    --ink2:#6d5a52;
+    --ink3:#a08d85;
+    --line:#f2e4dc;
+    --card:#fffdfb;
+    --rose:#e8657f;
+    --pink:#ff6f9c;
+    --grad:linear-gradient(135deg,#ffa66b 0%,#ff7f8f 55%,#ff6f9c 100%);
+  }
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink);
+    background:#fdf7f3;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(720px 520px at 8% -6%,rgba(255,190,150,.55),transparent 62%),
+      radial-gradient(620px 460px at 98% 4%,rgba(255,175,205,.45),transparent 60%),
+      radial-gradient(760px 560px at 50% 108%,rgba(206,199,255,.42),transparent 62%);
+    filter:blur(2px);
+  }
+  .app{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:44px 18px 70px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:26px;
+    box-shadow:0 18px 50px -18px rgba(176,132,110,.35),0 2px 8px rgba(176,132,110,.06);
+    padding:30px 26px;
+  }
+  .screen{display:none;}
+  .screen.active{display:block;animation:rise .5s cubic-bezier(.22,.9,.3,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+
+  .btn{
+    appearance:none;border:0;cursor:pointer;font-family:inherit;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:16px 26px;border-radius:999px;
+    background:var(--grad);color:#fff;font-size:16px;font-weight:600;
+    box-shadow:0 14px 30px -10px rgba(255,111,156,.65);
+    transition:transform .18s ease,box-shadow .18s ease,opacity .18s;
+    width:100%;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 20px 36px -12px rgba(255,111,156,.7);}
+  .btn:active{transform:translateY(0) scale(.99);}
+  .btn.ghost{background:#fff;color:var(--ink2);box-shadow:none;border:1.5px solid var(--line);}
+  .btn.ghost:hover{border-color:#ffc3ad;color:var(--rose);box-shadow:0 8px 20px -12px rgba(200,150,130,.8);}
+
+  .hero{padding:40px 28px 34px;text-align:center;position:relative;overflow:hidden;}
+  .hero::after{
+    content:"";position:absolute;width:280px;height:280px;right:-120px;top:-140px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,178,150,.5),transparent 68%);
+  }
+  .hero-emoji{font-size:42px;letter-spacing:8px;margin-bottom:18px;filter:drop-shadow(0 8px 14px rgba(200,140,120,.35));}
+  h1.title{
+    font-size:40px;line-height:1.24;font-weight:800;letter-spacing:-.5px;
+    background:linear-gradient(120deg,#f4713f,#ef5f85 45%,#b76ad4);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    margin-bottom:14px;
+  }
+  .subtitle{font-size:15.5px;color:var(--ink2);max-width:430px;margin:0 auto 24px;}
+  .meta-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+  .meta-chip{font-size:13px;color:var(--ink2);background:#fff8f4;border:1px solid var(--line);padding:7px 14px;border-radius:999px;}
+  .meta-chip b{color:var(--rose);font-weight:700;}
+  .intro-note{font-size:12.5px;color:var(--ink3);margin-top:16px;line-height:1.8;}
+
+  .quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:12.5px;color:var(--ink3);letter-spacing:.06em;}
+  .progress{height:8px;border-radius:99px;background:#f6e8e1;overflow:hidden;margin-bottom:30px;}
+  .progress span{display:block;height:100%;width:0;border-radius:99px;background:var(--grad);transition:width .45s cubic-bezier(.3,.9,.3,1);}
+  .q-wrap{min-height:330px;}
+  .q-text{font-size:22px;line-height:1.55;font-weight:700;letter-spacing:-.2px;margin-bottom:26px;color:#332729;}
+  .opts{display:flex;flex-direction:column;gap:11px;}
+  .opt{
+    display:flex;align-items:center;gap:14px;
+    padding:15px 18px;border-radius:18px;cursor:pointer;
+    border:1.5px solid var(--line);background:#fff;font-size:15.5px;color:var(--ink);
+    transition:all .18s ease;user-select:none;
+  }
+  .opt .idx{
+    width:26px;height:26px;flex:0 0 26px;border-radius:50%;
+    display:grid;place-items:center;font-size:12px;font-weight:700;
+    background:#fdf0ea;color:#c79179;transition:all .18s;
+  }
+  .opt:hover{border-color:#ffc9b3;background:#fff9f5;transform:translateY(-1px);}
+  .opt:hover .idx{background:#ffe4d6;color:#e07a55;}
+  .opt.on{border-color:#ff8f62;background:linear-gradient(120deg,#fff6f0,#fff2f6);box-shadow:0 10px 24px -16px rgba(240,120,90,.9);}
+  .opt.on .idx{background:var(--grad);color:#fff;}
+  .opt .bar{margin-left:auto;font-size:11px;color:#cdb3a8;white-space:nowrap;}
+
+  .quiz-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:24px;}
+  .back-btn{background:none;border:0;color:var(--ink3);font-size:13.5px;cursor:pointer;font-family:inherit;padding:8px 4px;transition:color .2s;}
+  .back-btn:hover{color:var(--rose);}
+  .back-btn:disabled{opacity:.28;cursor:default;}
+  .foot-right{display:flex;align-items:center;gap:20px;}
+  .hint{font-size:11.5px;color:#c2aba0;}
+  .next-btn{
+    border:0;cursor:pointer;font-family:inherit;font-size:14.5px;font-weight:600;
+    padding:12px 24px;border-radius:999px;white-space:nowrap;
+    background:#f7e7df;color:#c39a87;
+    transition:all .2s ease;
+  }
+  .next-btn.ready{background:var(--grad);color:#fff;box-shadow:0 12px 24px -14px rgba(255,111,156,.9);}
+  .next-btn.ready:hover{transform:translateY(-1px);box-shadow:0 16px 28px -12px rgba(255,111,156,.9);}
+  .next-btn.shake{animation:shake .42s;}
+  .next-btn.pulse{animation:pulseBtn 1.6s ease-in-out infinite;}
+  @keyframes pulseBtn{
+    0%,100%{box-shadow:0 12px 24px -14px rgba(255,111,156,.9);}
+    50%{box-shadow:0 14px 34px -8px rgba(255,111,156,.95);}
+  }
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+
+  .loading{text-align:center;padding:70px 20px 60px;}
+  .loader-plate{
+    width:132px;height:132px;margin:0 auto 30px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#fff,#fff6f0 60%,#ffeade);
+    box-shadow:0 24px 50px -22px rgba(200,140,110,.8),inset 0 0 0 10px #fff;
+    display:grid;place-items:center;font-size:52px;
+    animation:bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-12px) rotate(4deg);}}
+  .loading h3{font-size:18px;font-weight:700;margin-bottom:10px;}
+  .loading p{font-size:13.5px;color:var(--ink3);height:22px;}
+
+  .r-hero{text-align:center;padding:34px 24px 30px;position:relative;}
+  .match{position:absolute;top:20px;right:20px;font-size:11px;color:#b98f7c;background:#fff7f2;border:1px solid #ffe3d5;border-radius:999px;padding:5px 12px;}
+  .match b{font-size:14px;color:var(--rose);font-weight:800;}
+  .r-emoji{
+    width:132px;height:132px;line-height:132px;font-size:66px;text-align:center;
+    margin:0 auto 14px;display:block;border-radius:50%;
+    background:radial-gradient(circle at 34% 26%,#fff 0%,#fff6ee 58%,#ffe8d9 100%);
+    box-shadow:0 22px 40px -22px rgba(196,138,112,.75),inset 0 0 0 1px rgba(255,255,255,.9),inset 0 -8px 18px rgba(255,214,190,.45);
+    animation:pop .7s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.6) rotate(-10deg);}to{opacity:1;transform:none;}}
+  .r-name{font-size:34px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px;}
+  .r-tag{font-size:15px;color:var(--ink2);margin-bottom:20px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px;}
+  .chip{font-size:12.5px;color:#a17a66;background:#fff6ef;border:1px solid #ffe8dc;padding:5px 12px;border-radius:999px;}
+  .archive{font-size:11px;letter-spacing:.14em;color:#cdb9ae;}
+
+  .r-card{margin-top:16px;}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .sec-head h2{font-size:16.5px;font-weight:800;letter-spacing:-.2px;}
+  .sec-sub{font-size:12.5px;color:var(--ink3);margin-bottom:18px;}
+  .r-body{font-size:14.6px;color:var(--ink2);line-height:1.95;}
+  .ref{display:inline-block;margin-top:16px;font-size:11.5px;color:#c09a86;background:#fff7f1;padding:5px 12px;border-radius:8px;}
+
+  .radar-wrap{display:grid;grid-template-columns:1fr;gap:6px;justify-items:center;}
+  svg.radar{width:100%;max-width:410px;height:auto;overflow:visible;}
+  .legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:11px;color:#bfa79a;margin-top:2px;}
+  .legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+
+  .domains{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px;border-top:1px dashed var(--line);padding-top:22px;}
+  .domain{background:#fffaf6;border:1px solid #fbeadf;border-radius:16px;padding:14px 16px;}
+  .domain .dn{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:4px;}
+  .domain .dn b{font-size:13.5px;color:#5a463d;}
+  .domain .dn i{font-style:normal;font-size:15px;font-weight:800;color:var(--rose);font-variant-numeric:tabular-nums;}
+  .domain p{font-size:11.5px;color:var(--ink3);line-height:1.7;}
+
+  .bars{margin-top:24px;border-top:1px dashed var(--line);padding-top:20px;display:flex;flex-direction:column;gap:13px;}
+  .bar-row{display:grid;grid-template-columns:70px 1fr 40px;align-items:center;gap:12px;font-size:13px;}
+  .bar-row .lb{color:var(--ink2);}
+  .track{height:9px;border-radius:99px;background:#f7eee8;overflow:hidden;display:block;}
+  .fill{height:100%;width:0;border-radius:99px;transition:width 1s cubic-bezier(.25,.9,.3,1);display:block;}
+  .bar-row .vl{text-align:right;font-weight:700;color:#8a6f63;font-variant-numeric:tabular-nums;}
+
+  .formula{background:linear-gradient(135deg,#fffaf6,#fff5fa);border-radius:18px;padding:20px;font-size:14.4px;color:var(--ink2);line-height:1.95;}
+  .formula b{color:var(--rose);}
+  .formula .fx{font-size:17px;font-weight:800;color:#3a2d28;display:block;margin-bottom:8px;letter-spacing:.02em;}
+
+  ul.manual{list-style:none;display:flex;flex-direction:column;gap:14px;}
+  ul.manual li{display:flex;gap:12px;font-size:14.4px;color:var(--ink2);line-height:1.8;}
+  ul.manual li .dot{flex:0 0 22px;width:22px;height:22px;border-radius:8px;margin-top:3px;background:#fff2ea;color:#e08c63;display:grid;place-items:center;font-size:11px;font-weight:800;}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .mini{background:#fffaf5;border:1px solid #fbeadf;border-radius:18px;padding:18px;}
+  .mini h3{font-size:13px;font-weight:800;color:#b3765c;margin-bottom:8px;letter-spacing:.04em;}
+  .mini p{font-size:13.4px;color:var(--ink2);line-height:1.85;}
+  .two .mini:nth-child(2){background:#f8f6ff;border-color:#ece6ff;}
+  .two .mini:nth-child(2) h3{color:#8a7fc4;}
+
+  .quote{text-align:center;font-size:16px;color:#5a463d;line-height:1.9;padding:24px 18px;border-radius:20px;background:linear-gradient(135deg,#fff4ee,#fff2f7);border:1px dashed #ffd9c9;}
+  .note{font-size:12.5px;color:var(--ink3);line-height:1.9;padding:16px 4px 0;}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;}
+  .toast{
+    position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);
+    background:#3a2d28;color:#fff;font-size:13px;padding:11px 20px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:all .3s;z-index:99;white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+
+  @media (max-width:520px){
+    .app{padding:26px 14px 50px;}
+    .card{padding:24px 20px;border-radius:22px;}
+    h1.title{font-size:32px;}
+    .hero{padding:32px 20px 26px;}
+    .hero-emoji{font-size:34px;letter-spacing:6px;}
+    .q-text{font-size:19.5px;}
+    .q-wrap{min-height:300px;}
+    .opt{font-size:15px;padding:14px 15px;gap:11px;}
+    .opt .bar{display:none;}
+    .r-name{font-size:27px;}
+    .r-emoji{width:112px;height:112px;line-height:112px;font-size:56px;}
+    .two{grid-template-columns:1fr;}
+    .actions{grid-template-columns:1fr;}
+    .match{position:static;display:inline-block;margin-bottom:14px;}
+    .bar-row{grid-template-columns:62px 1fr 34px;gap:9px;}
+    .hint{display:none;}
+    .next-btn{padding:12px 20px;font-size:14px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 首页 ============ -->
+  <section class="screen active" id="screen-intro">
+    <div class="card hero">
+      <div class="hero-emoji">🍡 🍕 🍬 🍳</div>
+      <h1 class="title">食品匹配测试</h1>
+      <p class="subtitle">每个人身上，都有一道食物的质地。<br>36 道题，看看你是弹的、脆的，还是流心的。</p>
+
+      <div class="meta-row">
+        <span class="meta-chip"><b>36</b> 道题</span>
+        <span class="meta-chip">约 <b>6</b> 分钟</span>
+        <span class="meta-chip"><b>12</b> 项能力 · <b>4</b> 个能力域</span>
+      </div>
+
+      <button class="btn" id="startBtn">开始测试 · 测出我的食物人格</button>
+      <p class="intro-note">没有对错，请按第一反应作答。<br>结果仅供自我探索，不作为临床心理诊断。</p>
+    </div>
+  </section>
+
+  <!-- ============ 答题 ============ -->
+  <section class="screen" id="screen-quiz">
+    <div class="quiz-top">
+      <span id="qCount">第 1 / 36 题</span>
+      <span id="qPct">0%</span>
+    </div>
+    <div class="progress"><span id="progressBar"></span></div>
+    <div class="card">
+      <div class="q-wrap" id="qWrap">
+        <div class="q-text" id="qText"></div>
+        <div class="opts" id="opts"></div>
+      </div>
+      <div class="quiz-foot">
+        <button class="back-btn" id="backBtn" disabled>← 上一题</button>
+        <div class="foot-right">
+          <span class="hint">1-5 选择 · 选中后自动下一题</span>
+          <button class="next-btn" id="nextBtn">下一题 →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 加载 ============ -->
+  <section class="screen" id="screen-loading">
+    <div class="card loading">
+      <div class="loader-plate" id="loaderEmoji">🍳</div>
+      <h3>正在为你匹配食物…</h3>
+      <p id="loadingText">称量 12 项能力刻度</p>
+    </div>
+  </section>
+
+  <!-- ============ 结果 ============ -->
+  <section class="screen" id="screen-result">
+    <div class="card r-hero">
+      <div class="match">匹配度 <b id="matchPct">93%</b></div>
+      <div><span class="r-emoji" id="rEmoji">🍡</span></div>
+      <h1 class="r-name" id="rName">糯叽叽麻薯</h1>
+      <p class="r-tag" id="rTag"></p>
+      <div class="chips" id="rChips"></div>
+      <div class="archive" id="rArchive">档案编号 2026-00</div>
+    </div>
+
+    <div class="card r-card">
+      <div class="sec-head"><h2>你的风味雷达</h2></div>
+      <p class="sec-sub">十二项能力刻度，越靠外代表这一项越接近你的本能反应。</p>
+      <div class="radar-wrap">
+        <div id="radarBox" style="width:100%;display:flex;justify-content:center;"></div>
+        <div class="legend">
+          <span><i style="background:#ffb08a"></i>75+ 主武器</span>
+          <span><i style="background:#ffd9a8"></i>55-74 稳定发挥</span>
+          <span><i style="background:#efe2da"></i>55 以下 可充电区</span>
+        </div>
+      </div>
+
+      <div class="domains" id="domainsBox"></div>
+      <div class="bars" id="barsBox"></div>
+    </div>
+
+    <div class="card r-card">
+      <div class="sec-head"><h2>为什么是这个食物</h2></div>
+      <p class="sec-sub" id="whySub">质地、结构与你的行为模式之间的对应关系。</p>
+      <p class="r-body" id="whyBody"></p>
+      <div class="ref" id="refTag"></div>
+    </div>
+
+    <div class="card r-card">
+      <div class="sec-head"><h2>你的隐藏配方</h2></div>
+      <p class="sec-sub">主食材之外，还有两层味道在悄悄影响你。</p>
+      <div class="formula" id="formulaBox"></div>
+    </div>
+
+    <div class="card r-card">
+      <div class="sec-head"><h2>相处说明书</h2></div>
+      <p class="sec-sub">如果把自己交给别人使用，这页应该贴在包装上。</p>
+      <ul class="manual" id="manualList"></ul>
+    </div>
+
+    <div class="card r-card">
+      <div class="two">
+        <div class="mini"><h3>最佳饭搭子</h3><p id="partnerText"></p></div>
+        <div class="mini"><h3>容易卡住的地方</h3><p id="pitfallText"></p></div>
+      </div>
+    </div>
+
+    <div class="card r-card">
+      <div class="quote"><span id="quoteText"></span></div>
+      <div class="note" id="lowNote"></div>
+      <div class="actions">
+        <button class="btn ghost" id="copyBtn">复制结果文案</button>
+        <button class="btn" id="retryBtn">再测一次</button>
+      </div>
+      <p class="note" style="border-top:1px dashed var(--line);margin-top:18px;">
+        本测试基于公开心理学构念改编，用于自我观察与团队破冰，不构成临床诊断或人事评估依据。人是流动的，食物也是。
+      </p>
+    </div>
+  </section>
+
+</div>
+<div class="toast" id="toast">已复制</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= 能力维度（12 项） ================= */
+  var ORDER = ["ST","CM","CO","HU","EM","EX","CR","CU","ER","AS","LS","DM"];
+
+  var DIMS = {
+    ST:{
+      name:"抗压力", en:"Resilience", emoji:"🍡", food:"糯叽叽麻薯", short:"麻薯", color:"#e8657f",
+      texture:"糯叽叽的，按下去会自己弹回来",
+      tag:"你不硬扛，你是弹回去。",
+      ref:"参考构念 · 心理韧性（Resilience）／情绪基线恢复速度",
+      why:"抗压的核心不是“扛得住”，而是“回得来”。心理韧性研究里，真正的高分者不是没有情绪波动，而是波动之后能较快回到自己的基线水平。你的作答显示，你更接近弹性材料而不是刚性材料：压力来时会变形，但不碎裂；压力离开后，形状会慢慢回来。这种吹弹不破的质地，来自对不确定性的耐受度，而不是单纯的意志力。",
+      manual:[
+        "别在你刚被批评完的十分钟里要结论——你需要一点时间回弹。",
+        "你说“没事”的时候，通常是真的在消化，不是在憋。",
+        "给你明确的坏消息，比给你模糊的好消息更能让你安心。"
+      ],
+      partnerKey:"CM",
+      partnerWhy:"你负责稳住，他负责把话说明白。一个把局面撑住，一个把人心接住。",
+      pitfall:"弹性太好的人，容易被当成“怎么压都行”，久而久之连你自己都忘了会疼。记得偶尔让人看见你的形变——那不是示弱，是校准。",
+      quote:"你可以被压扁，但你有权要求一段时间恢复原状。",
+      tip:"练习说一句：“我现在有点满，晚点回你。”弹性也需要边界。",
+      low:"抗压这一项目前偏低。这不等于你脆弱——弹性会被疲劳压低，也会被睡眠、支持和掌控感重新养回来。近期先别用“我是不是不行”来评价自己。",
+      items:[
+        {t:"计划突然被打乱时，我通常先想怎么办，而不是先烦。"},
+        {t:"被批评之后，我很快能回到自己的节奏里。"},
+        {t:"压力大的时候，我容易整晚翻来覆去想同一件事。", r:1}
+      ]
+    },
+    CM:{
+      name:"沟通力", en:"Communication", emoji:"☕", food:"会拉花的拿铁", short:"拿铁", color:"#4f9d95",
+      texture:"温热，有奶泡的层次",
+      tag:"你能把苦的部分，做成好看的形状。",
+      ref:"参考构念 · 心理理论（Theory of Mind）／受众调整能力",
+      why:"沟通力的核心不是“会说”，而是能推测对方此刻知道什么、想听什么，再调整自己的说法——这在心理学里叫受众调整，底层是心理理论能力。你的作答说明你会主动做这层翻译：同一件事，对老板说结论，对朋友说感受。像拉花一样，本质都是那杯浓缩，但呈现方式决定了别人愿不愿意喝下去。",
+      manual:[
+        "你怕的不是冲突，是“说了没用”，所以给你反馈请具体一点。",
+        "你会自动翻译别人的话，但你也希望有人翻译你。",
+        "别让你一直当那个把话说清楚的人，你也会累。"
+      ],
+      partnerKey:"EX",
+      partnerWhy:"你说清方向，他负责落地。你怕想法烂在嘴上，他怕计划停在纸上。",
+      pitfall:"太会表达的人，容易把“说通了”当成“解决了”。语言能抵达，但只有行动能落地。",
+      quote:"你不是圆滑，你只是不愿意让一句话白白浪费。",
+      tip:"沟通前先问自己一句：这次我是想被理解，还是想推进事情？",
+      low:"沟通这一项目前偏低。很多时候不是你不会说，而是你把“说错”的代价估得太高。先从低风险的小事开始表达偏好，表达是可以练的肌肉。",
+      items:[
+        {t:"我能把一件复杂的事，讲得让别人愿意听下去。"},
+        {t:"意见不同时，我会先确认对方的重点，再说自己的。"},
+        {t:"我常常话说完了，才发现对方其实没听懂。", r:1}
+      ]
+    },
+    CO:{
+      name:"协作力", en:"Collaboration", emoji:"🍕", food:"刚出炉的披萨", short:"披萨", color:"#f0a03c",
+      texture:"能拉丝，分成很多块却还连在一起",
+      tag:"一个人一块，合起来还是一个圆。",
+      ref:"参考构念 · 宜人性（Agreeableness）／角色弹性",
+      why:"协作力高的人，通常在宜人性上得分不低，但更关键的是角色弹性——需要补位时能上，别人更擅长时能退。披萨这个隐喻的重点不是配料多丰富，而是所有不同的部分共享同一个饼底。你贡献的往往是让整体成立的那一层，不一定是最抢眼的那一块。",
+      manual:[
+        "你在意公平，但不会当场算账；别让你的沉默被误读成没意见。",
+        "你需要被明确地需要。含糊的“随便都行”会让你悄悄消耗。",
+        "你能补位，但别默认补位的人永远是你。"
+      ],
+      partnerKey:"EM",
+      partnerWhy:"你搭框架，他照顾人。一个让事情转起来，一个让里面的人待得住。",
+      pitfall:"过度协作会变成“什么都我来”，最后既不协作，也不开心。好的协作里，包含“我不做”这一项。",
+      quote:"你不是没有棱角，你只是把棱角朝向了自己。",
+      tip:"下次分工时，先说一次自己的偏好，哪怕只有一句“我想做这块”。",
+      low:"协作这一项目前偏低。可能是你过去吃过“多做多错”的亏，于是选择先保护自己。这不是自私，是经验。可以从一次小的、明确的合作开始，重建“配合是安全的”这种感觉。",
+      items:[
+        {t:"分工不清楚时，我宁愿自己全做完，也不想开口协调。", r:1},
+        {t:"团队里没人牵头时，我愿意先把框架搭起来。"},
+        {t:"别人做得比我好，我能真心夸出来，而不是暗暗比较。"}
+      ]
+    },
+    HU:{
+      name:"幽默力", en:"Humor", emoji:"🍬", food:"跳跳糖", short:"跳跳糖", color:"#ef6a4c",
+      texture:"噼里啪啦，不知道下一颗什么时候炸",
+      tag:"你是气氛里那颗突然响的糖。",
+      ref:"参考构念 · 情绪调节／认知重评与自我解嘲",
+      why:"幽默在心理学里是一种高级的情绪调节策略：通过认知重评，把有威胁的情境重新框定成不危险的。你的分数说明你切换框架的速度比较快，也愿意用自嘲换取关系的安全感。跳跳糖的妙处在于——它不改变味道，只改变体验。你也是这样，事情没变，但别人的感受变了。",
+      manual:[
+        "你的玩笑多半是自嘲。别把“我很好笑”当成“我不需要被安慰”。",
+        "你会在冷场时救场，但救完场，也需要有人接你的话。",
+        "认真夸你一句，比跟你开玩笑更能打动你。"
+      ],
+      partnerKey:"ST",
+      partnerWhy:"你负责让它响，他负责接住。有弹性的搭档，才敢让你随便炸。",
+      pitfall:"幽默是最容易被误用的防御机制：笑着带过的情绪不会消失，只会沉底。你值得有几个“不用好笑”的场合。",
+      quote:"你让别人笑，是因为你太清楚不笑的时候有多难。",
+      tip:"找一个不用开玩笑也能待着的人，练一次“不好笑也没关系”。",
+      low:"幽默这一项目前偏低。不是你没趣，可能是你在场合里更习惯先观察、先确保安全。幽默需要放松作为前提，而放松需要安全感——先找到对的人，再谈好笑。",
+      items:[
+        {t:"尴尬的场合，我常能用一句话把气氛救回来。"},
+        {t:"我很少能让身边的人真的笑出来。", r:1},
+        {t:"我擅长把自己遇到的倒霉事，讲成别人愿意听的段子。"}
+      ]
+    },
+    EM:{
+      name:"共情力", en:"Empathy", emoji:"🍳", food:"溏心蛋", short:"溏心蛋", color:"#e9c454",
+      texture:"外壳克制，中间是流动的",
+      tag:"你有壳，但壳里是流动的。",
+      ref:"参考构念 · 共情双通道／边界与情绪感染",
+      why:"共情有两条通道：认知共情（我知道你在想什么）和情感共情（我也感受到了）。你的分数偏高，说明两条都在线。而溏心蛋对应的是比较健康的共情结构：有壳，也有流动。完全没壳的人会被别人的情绪淹没，完全凝固的人则无法共振。你恰好停在那层还能流动、但不会散掉的温度上。",
+      manual:[
+        "你会吸收别人的情绪，所以需要独处来沥水。",
+        "你不喜欢被追问“你到底怎么了”，你更习惯自己开口。",
+        "别把你的体谅当成理所当然，你也会希望有人先问你。"
+      ],
+      partnerKey:"CO",
+      partnerWhy:"你感受气氛，他推动事情。你让团队有温度，他让温度有去处。",
+      pitfall:"共情过度会变成替别人负责情绪，最后自己那一份没人管。你不是所有人的情绪垃圾桶，你也有权说“我接不住了”。",
+      quote:"你能感觉到所有人的天气，但你不必为每一场雨负责。",
+      tip:"关心别人之前，先给自己三秒：这是他的情绪，还是我的？",
+      low:"共情这一项目前偏低。可能是你在有意保护自己，也可能你更习惯用解决问题来表达关心——那也是一种在意，只是不说出口。两种都成立。",
+      items:[
+        {t:"别人还没说完，我大概就能感觉到他真正的情绪。"},
+        {t:"朋友难过时，我更想陪着他，而不是急着给建议。"},
+        {t:"别人情绪激动时，我第一反应是觉得他有点夸张。", r:1}
+      ]
+    },
+    EX:{
+      name:"执行力", en:"Execution", emoji:"🥖", food:"手作法棍", short:"法棍", color:"#a97c5a",
+      texture:"外壳很硬，里面是扎实的孔洞",
+      tag:"配料只有三样，靠的是时间和手劲。",
+      ref:"参考构念 · 尽责性（Conscientiousness）／延迟满足与坚持性",
+      why:"执行力的心理底层，是尽责性里的秩序与坚持，再加上对延迟满足的耐受。法棍只有面粉、水、盐三样东西，却需要反复折叠和长时间发酵——你的优势不在灵感，而在愿意重复那些不性感的部分。别人看到的是成品，你自己记得的是那几次折叠。",
+      manual:[
+        "你讨厌被打断，因为对你来说重启成本很高。",
+        "给模糊的目标，你会自己拆成步骤；但请给一个截止时间。",
+        "你不太会邀功，所以容易被当成“本来就应该做好”。"
+      ],
+      partnerKey:"HU",
+      partnerWhy:"你负责走到终点，他负责让路上不无聊。一个稳住节奏，一个调节气压。",
+      pitfall:"执行型的人容易把“完成”当成“休息许可”，于是永远活在下一件事里。完成本身也值得庆祝，它不是新的起点。",
+      quote:"你不是慢，你是把每一步都真的走完了。",
+      tip:"把“做完”改成“做到这里先停”，你会走得更远。",
+      low:"执行这一项目前偏低。这不等于懒——更常见的原因是任务太模糊，或者你根本不想做这件事。把目标切到“小到不好意思拖”的程度，动力才会重新出现。",
+      items:[
+        {t:"我定下的计划，大部分能落到具体的下一步。"},
+        {t:"我经常拖到最后一刻才开始。", r:1},
+        {t:"事情做到一半变无聊了，我也能把它收尾。"}
+      ]
+    },
+    CR:{
+      name:"创造力", en:"Creativity", emoji:"🍦", food:"限定口味冰淇淋", short:"限定冰淇淋", color:"#6f9fd8",
+      texture:"每天一个限定口味，连自己都猜不到",
+      tag:"你每天的口味，连你自己都猜不到。",
+      ref:"参考构念 · 开放性（Openness）／认知闭合需求",
+      why:"创造力高通常对应开放性里的想象与求新，以及较低的认知闭合需求——你能忍受一件事暂时没有答案，而很多人受不了这种悬空感。限定冰淇淋的隐喻是：不是每次配方都成功，但你愿意每天试一个新的，而惊喜本身就是回报。",
+      manual:[
+        "你的想法需要先被接住，而不是被评估。先说“有意思”，再说“但是”。",
+        "你怕的不是失败，是重复。",
+        "你会突然消失去搞一件新事，那不是不负责，是充电。"
+      ],
+      partnerKey:"EX",
+      partnerWhy:"你点火，他添柴。你负责“还能这样”，他负责“那就这样做完”。",
+      pitfall:"创意过剩而收口不足，会留下一堆百分之七十的作品。给每个新想法配一个最小完成版，让它至少落地一次。",
+      quote:"你不是三分钟热度，你只是不愿意把好奇心浪费在重复上。",
+      tip:"每个新点子配一个 48 小时内能做完的最小版本。",
+      low:"创造这一项目前偏低。你更信任被验证过的路径，这在多数时候是优点而非缺陷——稳定本身就是一种稀缺能力。需要灵感时，试着把两个不相关的东西强行放在一起。",
+      items:[
+        {t:"我更愿意用已经验证过的方法，不太想折腾新的。", r:1},
+        {t:"我常把两个看起来不相关的东西，想到一起。"},
+        {t:"规则明显行不通时，我会想试试别的做法。"}
+      ]
+    },
+    CU:{
+      name:"好奇心", en:"Curiosity", emoji:"🍜", food:"螺蛳粉", short:"螺蛳粉", color:"#8fae5f",
+      texture:"闻着犹豫，吃着上头",
+      tag:"闻着劝退，吃着上头。",
+      ref:"参考构念 · 行为激活系统／不确定性奖赏敏感度",
+      why:"好奇心是行为激活系统活跃的表现，也和对不确定性的奖赏敏感度有关。你的作答显示，你对未知的默认反应是靠近而不是回避——即使它闻起来有点怪。螺蛳粉式的好奇：不追求优雅，只追求“我想知道那是什么味道”。这种人对世界的默认设定是“还没试过”，而不是“大概没意思”。",
+      manual:[
+        "你对“没试过”的容忍度很高，但也会因此同时开太多坑。",
+        "别用“这有什么好玩的”评价你，那会瞬间把你关掉。",
+        "你需要有人陪你一起第一次，哪怕只是站在旁边。"
+      ],
+      partnerKey:"EM",
+      partnerWhy:"你往外跑，他让你有地方回。探索需要一条能回去的路。",
+      pitfall:"好奇心容易被误认成不专注，其实你只是在收集素材。但素材也需要归档，否则永远只是素材。",
+      quote:"你愿意为了一点点“万一很好吃”，忍受一整段“闻起来好怪”。",
+      tip:"每月留一个纯好奇时段：不产出、不汇报，只探索。",
+      low:"好奇这一项目前偏低。可能是精力被现实占满了——好奇心是最先被牺牲的那部分，也是最容易被养回来的。从一件很小、很没用的新鲜事开始。",
+      items:[
+        {t:"看到没吃过的口味，我第一反应是“试试”。"},
+        {t:"我会因为一个奇怪的问题，查资料查到很晚。"},
+        {t:"跟自己无关的领域，我通常懒得去了解。", r:1}
+      ]
+    },
+    ER:{
+      name:"情绪调节", en:"Emotion Regulation", emoji:"🍮", food:"冰镇双皮奶", short:"双皮奶", color:"#c77ba8",
+      texture:"表面平得像镜子，勺子一碰才知道有没有颤",
+      tag:"你不喊，但你有自己的波纹。",
+      ref:"参考构念 · 情绪调节（Emotion Regulation）／情绪波动幅度",
+      why:"情绪调节和抗压不是一回事：抗压看的是被打倒之后多久起来，情绪调节看的是日常波动有多大。你的分数说明你的情绪基线比较稳——不是没有情绪，而是情绪不容易越级。双皮奶的妙处在于，表面那层平静是自然结出来的，不是压出来的；但它也不是一块固体，勺子下去还是会有微微的颤。",
+      manual:[
+        "你不太会在当下爆发，但会记得很久，所以别让你一直攒着。",
+        "你需要独处来恢复，那不是冷淡，是充电。",
+        "别人情绪大时你不会跟着起伏，但可能会被误读成不在乎。"
+      ],
+      partnerKey:"HU",
+      partnerWhy:"一碗双皮奶配一包跳跳糖：你稳住水面，他制造气泡。他让生活有响动，你让响动不至于翻船。",
+      pitfall:"太稳的人容易被忽略——你不说，别人就以为你没事。稳定不是无感，也不是不需要被问。",
+      quote:"你表面没有波纹，不代表水底没有水流。",
+      tip:"情绪来时先给它一个名字：是委屈、是累，还是被冒犯。命名本身就能降温。",
+      low:"情绪调节这一项目前偏低。波动大不是缺点，它常常意味着你对刺激更敏感、感受更细。先从睡够、吃好、少熬夜这类生理底层开始修，比逼自己“想开点”有用得多。",
+      items:[
+        {t:"我的情绪起落不算大，很少从很高兴一下掉到很低。"},
+        {t:"一点小事就能影响我一整天的心情。", r:1},
+        {t:"心情不好时，我知道做什么能让自己缓过来。"}
+      ]
+    },
+    AS:{
+      name:"自我主张", en:"Assertiveness", emoji:"🌰", food:"带壳板栗", short:"板栗", color:"#8b7ec8",
+      texture:"外壳扎手，剥开是甜的",
+      tag:"你有刺，但刺是朝外的。",
+      ref:"参考构念 · 自我主张（Assertiveness）／边界清晰度",
+      why:"自我主张不是攻击性，而是能在不伤害关系的前提下说“不”。心理学把它看作边界清晰度的行为指标：能表达需求、能拒绝、也能要求被公平对待。你的分数说明你不太靠讨好来换安全感。带壳板栗的隐喻是——壳的存在不是为了扎人，是为了让里面的甜不被随便拿走。",
+      manual:[
+        "你能接受直接，也请用直接对你，别绕。",
+        "你拒绝时不需要长篇解释，一句“这次不行”就够。",
+        "你其实很在意关系，只是不愿意用委屈来换。"
+      ],
+      partnerKey:"EM",
+      partnerWhy:"一把带壳板栗配一枚溏心蛋：你有边界，他懂分寸。你负责说“不”，他负责让“不”不伤人。",
+      pitfall:"边界太硬会变成防御：把所有靠近都当成入侵。刺可以对外的同时，留一个能敲门的缝。",
+      quote:"你不是难相处，你只是不打算靠委屈自己来好相处。",
+      tip:"拒绝时用“我”开头：“我现在接不了”，比“你这样很过分”更容易被听见。",
+      low:"自我主张这一项目前偏低。很多人的“不敢拒绝”来自早期经验：说不会带来惩罚。可以从最小的一次开始——比如对一次不合理的请求说“我看下时间，晚点回你”。",
+      items:[
+        {t:"别人越过我的边界时，我会当场说出来。"},
+        {t:"拒绝别人对我来说不算太难。"},
+        {t:"我常常答应自己并不想做的事，事后又后悔。", r:1}
+      ]
+    },
+    LS:{
+      name:"学习力", en:"Learning Agility", emoji:"🍲", food:"一锅老卤", short:"老卤", color:"#4aa3b8",
+      texture:"每卤一次留一勺，越用越厚",
+      tag:"你不是学得快，你是学得住。",
+      ref:"参考构念 · 成长型思维（Growth Mindset）／反馈寻求行为",
+      why:"学习力的关键不在记忆力，而在两件事：把失败解释成“还没会”而不是“我不行”，这是成长型思维；以及主动去要反馈，这叫反馈寻求。这两件事都有社交成本，所以很少有人真的做。老卤的隐喻是——它不靠一次加料变香，靠的是每次用完都留一勺，日积月累地厚起来。",
+      manual:[
+        "你能接受批评，但希望批评里有具体信息，而不是态度。",
+        "你不怕从零开始，怕的是学到一半被叫停。",
+        "你会把学到的东西存起来，等一个用得上的时机。"
+      ],
+      partnerKey:"CR",
+      partnerWhy:"一锅老卤配一支限定冰淇淋：你负责沉淀，他负责翻新。他给你新原料，你把它熬成底味。",
+      pitfall:"一直吸收却很少输出，会变成永远在准备的人。学到的东西要用一次，才算真的学会。",
+      quote:"你不急着证明自己会，你在慢慢真的会。",
+      tip:"每学一件事，逼自己产出一次：讲给别人听，或者做个小东西。",
+      low:"学习这一项目前偏低。可能是你过去的努力没被看见，于是不再愿意投入。学习力对回报很敏感——先找一个能给你即时反馈的小领域，把它练出成就感。",
+      items:[
+        {t:"我不太愿意在别人面前承认自己不会。", r:1},
+        {t:"被人指出问题时，我第一反应是想知道具体该怎么改。"},
+        {t:"我会主动去学那些现在还用不上的东西。"}
+      ]
+    },
+    DM:{
+      name:"决策力", en:"Decisiveness", emoji:"🍣", food:"现切刺身", short:"刺身", color:"#b8486b",
+      texture:"一刀下去，不能来回拉",
+      tag:"你想清楚了就下刀。",
+      ref:"参考构念 · 决策风格（Decisiveness）／最大化者与满足者",
+      why:"决策力的心理分野，常常是“最大化者”和“满足者”：前者要找到最优解，因此反复比较；后者找到够好的就停。你的分数更接近后者——不是不在乎，而是知道继续找下去的边际收益已经很低。刺身师傅的刀法就是这样：犹豫会让切口变毛，一刀到底才是对食材的尊重。",
+      manual:[
+        "你讨厌反复确认已经定下的事。",
+        "给你选项时请给两三个，太多反而让你失去兴趣。",
+        "你做完决定就不回头，所以别用“要不要再想想”来动摇你。"
+      ],
+      partnerKey:"EX",
+      partnerWhy:"一份刺身配一根法棍：你负责下刀，他负责把这条鱼做完。决策最怕的不是错，是没人执行。",
+      pitfall:"决断太快，会漏掉“这件事其实不该做”。快是优势，但方向错了，快只会让你更快到错的地方。",
+      quote:"你不是草率，你只是不愿意用犹豫来假装认真。",
+      tip:"大决定给自己设一个最晚决定时间，小决定 30 秒内解决。",
+      low:"决策这一项目前偏低。犹豫通常不是能力问题，而是怕承担后果——尤其当你曾经为选择付过代价。把决定拆小：先决定下一步，而不是决定一生。",
+      items:[
+        {t:"信息差不多够了，我就能做决定，不会一直等更多。"},
+        {t:"我常常在两个差不多的选项之间卡很久。", r:1},
+        {t:"做完决定后，我很少反复回头看。"}
+      ]
+    }
+  };
+
+  /* ================= 四大能力域 ================= */
+  var DOMAINS = [
+    {name:"内在稳定", dims:["ST","ER","AS"], desc:"被压到、被冒犯、被情绪追上时，你还剩多少自己。"},
+    {name:"关系连接", dims:["CM","CO","EM","HU"], desc:"你和别人之间那条线，是绷紧的、松的，还是通的。"},
+    {name:"任务推进", dims:["EX","DM","LS"], desc:"把想法变成结果的那一段路，你走得稳不稳。"},
+    {name:"开拓探索", dims:["CR","CU"], desc:"面对没见过的东西，你靠近，还是后退。"}
+  ];
+
+  /* ================= 题库：3 轮 × 12 维度 ================= */
+  var ROUNDS = [
+    ["ST","CO","EM","CR","AS","CM","HU","EX","CU","ER","LS","DM"],
+    ["CM","ST","EX","CO","CR","EM","DM","HU","AS","CU","ER","LS"],
+    ["CR","EM","LS","ST","HU","AS","DM","CO","CM","ER","EX","CU"]
+  ];
+
+  var QUESTIONS = [];
+  ROUNDS.forEach(function(round, ri){
+    round.forEach(function(key){
+      var it = DIMS[key].items[ri];
+      QUESTIONS.push({d:key, t:it.t, r:it.r ? 1 : 0});
+    });
+  });
+
+  var OPTIONS = [
+    {v:1,label:"完全不像我",tip:"几乎不会"},
+    {v:2,label:"不太像我",tip:"偶尔"},
+    {v:3,label:"有一点像",tip:"看情况"},
+    {v:4,label:"比较像我",tip:"大多数时候"},
+    {v:5,label:"非常像我",tip:"就是我本人"}
+  ];
+
+  /* ================= 状态 ================= */
+  var idx = 0;
+  var answers = new Array(QUESTIONS.length).fill(0);
+  var result = null;
+  var locked = false;
+  var autoTimer = null;
+
+  function $(id){ return document.getElementById(id); }
+
+  function show(id){
+    var list = document.querySelectorAll(".screen");
+    for (var i = 0; i < list.length; i++) list[i].classList.remove("active");
+    $(id).classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  function toast(msg){
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ t.classList.remove("show"); }, 1900);
+  }
+
+  /* ================= 答题 ================= */
+  function renderQ(){
+    var q = QUESTIONS[idx];
+    $("qCount").textContent = "第 " + (idx + 1) + " / " + QUESTIONS.length + " 题";
+    var pct = Math.round(idx / QUESTIONS.length * 100);
+    $("qPct").textContent = pct + "%";
+    $("progressBar").style.width = pct + "%";
+    $("backBtn").disabled = (idx === 0);
+
+    var nb = $("nextBtn");
+    nb.textContent = (idx === QUESTIONS.length - 1) ? "查看结果" : "下一题 →";
+    nb.classList.toggle("ready", !!answers[idx]);
+    nb.classList.remove("pulse");
+
+    var wrap = $("qWrap");
+    wrap.style.animation = "none";
+    void wrap.offsetWidth;
+    wrap.style.animation = "rise .38s cubic-bezier(.22,.9,.3,1) both";
+
+    $("qText").textContent = q.t;
+
+    var box = $("opts");
+    box.innerHTML = "";
+    OPTIONS.forEach(function(o, i){
+      var el = document.createElement("div");
+      el.className = "opt" + (answers[idx] === o.v ? " on" : "");
+      el.setAttribute("role", "button");
+      el.setAttribute("tabindex", "0");
+      el.innerHTML = '<span class="idx">' + (i + 1) + '</span><span>' + o.label + '</span><span class="bar">' + o.tip + '</span>';
+      el.addEventListener("click", function(){ pick(o.v); });
+      el.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(o.v); }
+      });
+      box.appendChild(el);
+    });
+  }
+
+  function pick(v){
+    if (locked) return;
+    answers[idx] = v;
+    var opts = $("opts").children;
+    for (var i = 0; i < opts.length; i++) opts[i].classList.remove("on");
+    if (opts[v - 1]) opts[v - 1].classList.add("on");
+    $("nextBtn").classList.add("ready");
+
+    // 选中后自动进入下一题；最后一题保留手动确认，避免误触直接出结果
+    clearTimeout(autoTimer);
+    if (idx < QUESTIONS.length - 1){
+      autoTimer = setTimeout(function(){ goNext(); }, 340);
+    } else {
+      $("nextBtn").classList.add("pulse");
+    }
+  }
+
+  function goNext(){
+    clearTimeout(autoTimer);
+    if (idx < QUESTIONS.length - 1){
+      idx++;
+      renderQ();
+    }
+  }
+
+  function next(){
+    if (locked) return;
+    clearTimeout(autoTimer);
+    if (!answers[idx]){
+      var nb = $("nextBtn");
+      nb.classList.remove("shake");
+      void nb.offsetWidth;
+      nb.classList.add("shake");
+      toast("先选一个最像你的选项");
+      return;
+    }
+    if (idx < QUESTIONS.length - 1){
+      goNext();
+    } else {
+      locked = true;
+      finish();
+    }
+  }
+
+  function prev(){
+    clearTimeout(autoTimer);
+    if (idx > 0){ idx--; renderQ(); }
+  }
+
+  $("nextBtn").addEventListener("click", next);
+  $("backBtn").addEventListener("click", prev);
+
+  document.addEventListener("keydown", function(e){
+    if (!$("screen-quiz").classList.contains("active")) return;
+    if (e.key >= "1" && e.key <= "5"){
+      var n = parseInt(e.key, 10);
+      pick(n);
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "Enter" || e.key === "ArrowRight" || e.key === " "){
+      e.preventDefault();
+      next();
+    }
+    if (e.key === "ArrowLeft"){
+      e.preventDefault();
+      prev();
+    }
+  });
+
+  /* ================= 计分 ================= */
+  function compute(){
+    var sum = {}, cnt = {};
+    QUESTIONS.forEach(function(q, i){
+      var raw = answers[i] || 3;
+      var v = q.r ? (6 - raw) : raw;
+      sum[q.d] = (sum[q.d] || 0) + v;
+      cnt[q.d] = (cnt[q.d] || 0) + 1;
+    });
+    var arr = ORDER.map(function(k){
+      var avg = sum[k] / cnt[k];
+      return { key:k, pct: Math.round((avg - 1) / 4 * 100), avg: avg, meta: DIMS[k] };
+    });
+    arr.sort(function(a, b){ return b.pct - a.pct; });
+    return arr;
+  }
+
+  function domainScore(d){
+    var t = 0;
+    d.dims.forEach(function(k){
+      var o = result.filter(function(x){ return x.key === k; })[0];
+      t += o.pct;
+    });
+    return Math.round(t / d.dims.length);
+  }
+
+  /* ================= 加载 ================= */
+  var LOAD_TEXTS = ["称量 12 项能力刻度…", "比对 36 组作答模式…", "校准 4 个能力域…", "正在摆盘…"];
+  var LOAD_EMOJI = ["🍳", "🥣", "🍥", "🍱"];
+
+  function finish(){
+    show("screen-loading");
+    var i = 0;
+    $("loadingText").textContent = LOAD_TEXTS[0];
+    $("loaderEmoji").textContent = LOAD_EMOJI[0];
+    var timer = setInterval(function(){
+      i++;
+      if (i < LOAD_TEXTS.length){
+        $("loadingText").textContent = LOAD_TEXTS[i];
+        $("loaderEmoji").textContent = LOAD_EMOJI[i];
+      }
+    }, 520);
+
+    result = compute();
+
+    setTimeout(function(){
+      clearInterval(timer);
+      renderResult();
+      show("screen-result");
+    }, 2200);
+  }
+
+  /* ================= 雷达图（12 轴） ================= */
+  function radarSVG(scores){
+    var cx = 200, cy = 178, R = 102, n = scores.length;
+    function pt(i, r){
+      var a = -Math.PI / 2 + i * 2 * Math.PI / n;
+      return [cx + Math.cos(a) * r, cy + Math.sin(a) * r];
+    }
+    var s = '<svg class="radar" viewBox="0 0 400 372" xmlns="http://www.w3.org/2000/svg">';
+
+    [0.25, 0.5, 0.75, 1].forEach(function(k){
+      var pts = scores.map(function(_, i){
+        return pt(i, R * k).map(function(v){ return v.toFixed(1); }).join(",");
+      }).join(" ");
+      s += '<polygon points="' + pts + '" fill="none" stroke="#f1e2d9" stroke-width="1"/>';
+    });
+
+    scores.forEach(function(_, i){
+      var p = pt(i, R);
+      s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p[0].toFixed(1) + '" y2="' + p[1].toFixed(1) + '" stroke="#f1e2d9" stroke-width="1"/>';
+    });
+
+    var shape = scores.map(function(o, i){
+      var r = Math.max(7, R * o.pct / 100);
+      return pt(i, r).map(function(v){ return v.toFixed(1); }).join(",");
+    }).join(" ");
+
+    s += '<defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">' +
+         '<stop offset="0%" stop-color="#ffb07a" stop-opacity="0.5"/>' +
+         '<stop offset="100%" stop-color="#ff6f9c" stop-opacity="0.38"/>' +
+         '</linearGradient></defs>';
+    s += '<polygon points="' + shape + '" fill="url(#rg)" stroke="#ff8585" stroke-width="2" stroke-linejoin="round"/>';
+
+    scores.forEach(function(o, i){
+      var r = Math.max(7, R * o.pct / 100);
+      var p = pt(i, r);
+      s += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.2" fill="' + o.meta.color + '" stroke="#fff" stroke-width="1.4"/>';
+
+      var lp = pt(i, R + 22);
+      var a = -Math.PI / 2 + i * 2 * Math.PI / n;
+      var cos = Math.cos(a), sin = Math.sin(a);
+      var anchor = cos > 0.28 ? "start" : (cos < -0.28 ? "end" : "middle");
+      var dy = sin > 0.4 ? 6 : (sin < -0.4 ? -6 : 3);
+
+      s += '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + dy).toFixed(1) + '" text-anchor="' + anchor + '" font-size="11.5" font-weight="600" fill="#8b7268">' + o.meta.name + '</text>';
+      s += '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + dy + 12).toFixed(1) + '" text-anchor="' + anchor + '" font-size="10.2" fill="#c2a99b">' + o.pct + '</text>';
+    });
+
+    s += '</svg>';
+    return s;
+  }
+
+  /* ================= 结果渲染 ================= */
+  function renderResult(){
+    var p = result[0], sec = result[1], third = result[2];
+    var low = result[result.length - 1];
+
+    var match = Math.min(98, Math.max(78, 60 + Math.round(p.pct * 0.36)));
+    $("matchPct").textContent = match + "%";
+    $("rEmoji").textContent = p.meta.emoji;
+    $("rName").textContent = p.meta.food;
+    $("rTag").textContent = "「" + p.meta.tag + "」";
+
+    $("rChips").innerHTML = [p, sec, third].map(function(o){
+      return '<span class="chip">' + o.meta.name + "　" + o.pct + '</span>';
+    }).join("");
+
+    $("rArchive").textContent = "档案编号 " + new Date().getFullYear() + "-" + String(Math.floor(Math.random() * 90) + 10) + " · " + p.meta.short;
+
+    $("radarBox").innerHTML = radarSVG(result);
+
+    $("domainsBox").innerHTML = DOMAINS.map(function(d){
+      return '<div class="domain"><div class="dn"><b>' + d.name + '</b><i>' + domainScore(d) + '</i></div><p>' + d.desc + '</p></div>';
+    }).join("");
+
+    $("barsBox").innerHTML = ORDER.map(function(k){
+      var o = result.filter(function(x){ return x.key === k; })[0];
+      var col = o.pct >= 75 ? "linear-gradient(90deg,#ffb07a,#ff7f8f)"
+              : (o.pct >= 55 ? "linear-gradient(90deg,#ffd8a8,#ffbe7d)" : "linear-gradient(90deg,#eee1d9,#e3d0c6)");
+      return '<div class="bar-row"><span class="lb">' + o.meta.name + '</span>' +
+             '<span class="track"><span class="fill" data-w="' + o.pct + '" style="background:' + col + '"></span></span>' +
+             '<span class="vl">' + o.pct + '</span></div>';
+    }).join("");
+
+    $("whySub").textContent = "为什么「" + p.meta.food + "」最像你 —— 质地、结构与行为模式的对应。";
+    $("whyBody").textContent = p.meta.why;
+    $("refTag").textContent = p.meta.ref;
+
+    $("formulaBox").innerHTML =
+      '<span class="fx">' + p.meta.food + " × " + sec.meta.food + '</span>' +
+      "你的底色是「" + p.meta.texture + "」；而在靠近「" + sec.meta.name + "」的地方，还藏着「" + sec.meta.texture + "」。最外面那层味道来自「" + third.meta.food + "」——它不常出场，但一出手就很有辨识度。" +
+      "<br><br>换句话说：<b>" + p.meta.name + "</b>是你最省力的武器，<b>" + sec.meta.name + "</b>是你最容易被低估的底牌，<b>" + third.meta.name + "</b>是你偶尔漏出来的惊喜。";
+
+    var items = p.meta.manual.concat([p.meta.tip]);
+    $("manualList").innerHTML = items.map(function(t, i){
+      return '<li><span class="dot">' + (i + 1) + '</span><span>' + t + '</span></li>';
+    }).join("");
+
+    $("partnerText").textContent = "最搭的是「" + DIMS[p.meta.partnerKey].food + "」型的人。" + p.meta.partnerWhy;
+    $("pitfallText").textContent = p.meta.pitfall;
+    $("quoteText").textContent = p.meta.quote;
+
+    if (low.pct < 55){
+      $("lowNote").textContent = "▸ 可充电区 · " + low.meta.name + "（" + low.pct + " 分）：" + low.meta.low;
+    } else {
+      $("lowNote").textContent = "▸ 你最低的一项「" + low.meta.name + "」也有 " + low.pct + " 分——十二项能力全部落在中位以上，没有明显短板。这很罕见，也意味着你不太容易被一眼看穿。";
+    }
+
+    setTimeout(function(){
+      var fills = document.querySelectorAll(".fill");
+      for (var i = 0; i < fills.length; i++){
+        fills[i].style.width = fills[i].getAttribute("data-w") + "%";
+      }
+    }, 220);
+  }
+
+  /* ================= 复制 / 重测 ================= */
+  function buildText(){
+    var p = result[0], sec = result[1];
+    return "【食品匹配测试】我的食物人格是「" + p.meta.food + "」" + p.meta.emoji + "\n" +
+      "「" + p.meta.tag + "」\n" +
+      "隐藏配方：" + p.meta.food + " × " + sec.meta.food + "\n" +
+      "十二项能力刻度：" + result.map(function(o){ return o.meta.name + " " + o.pct; }).join(" · ") + "\n" +
+      "— 来自《食品匹配测试》";
+  }
+
+  $("copyBtn").addEventListener("click", function(){
+    var text = buildText();
+    function done(){ toast("已复制，去分享给你的饭搭子吧"); }
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); done(); } catch(e){}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  $("retryBtn").addEventListener("click", function(){
+    clearTimeout(autoTimer);
+    idx = 0;
+    locked = false;
+    answers = new Array(QUESTIONS.length).fill(0);
+    result = null;
+    show("screen-intro");
+  });
+
+  $("startBtn").addEventListener("click", function(){
+    clearTimeout(autoTimer);
+    idx = 0;
+    locked = false;
+    answers = new Array(QUESTIONS.length).fill(0);
+    show("screen-quiz");
+    renderQ();
+  });
+
+  /* ================= 预览用：自动填答 ================= */
+  if (location.hash === "#demo"){
+    for (var i = 0; i < answers.length; i++) answers[i] = (i % 7 === 3 ? 2 : 4 + (i % 2));
+    show("screen-quiz");
+    renderQ();
+    setTimeout(function(){ locked = false; finish(); }, 300);
+  }
+
+})();
+</script>
+</body>
+</html>
